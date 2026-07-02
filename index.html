@@ -141,9 +141,6 @@
   .day-date { font-weight: 700; color: var(--text); font-size: .95rem; }
   .day-officer { font-weight: 700; color: var(--accent); font-size: 1.05rem; margin-top: .2rem; }
   .day-meta { color: var(--muted); font-size: .9rem; margin-top: .2rem; }
-
-  .empty-state { color: var(--muted); }
-  .empty-state strong { color: var(--text); }
 </style>
 </head>
 <body>
@@ -160,7 +157,7 @@
       <p style="margin-top:0;color:var(--muted);font-size:.92rem;">Enter your details for a 7-day officer plan.</p>
       <div class="row">
         <div><label for="visitorName">Name</label><input type="text" id="visitorName" placeholder="Your name"></div>
-        <div><label for="visitorDob">Date of birth <span style="font-size:.75rem;color:var(--muted);">(for future bazi / 5 element reference — not used in this officer calculation)</span></label><input type="date" id="visitorDob"></div>
+        <div><label for="visitorDob">Date of birth <span style="font-size:.75rem;color:var(--muted);">(for future bazi reference)</span></label><input type="date" id="visitorDob"></div>
       </div>
       <div class="row" style="margin-top:.75rem;">
         <div><label for="visitorCountry">Country</label><input type="text" id="visitorCountry" placeholder="Country"><span id="countryHint" style="font-size:.78rem;color:var(--muted);margin-top:.25rem;display:inline-block;"></span></div>
@@ -178,40 +175,6 @@
         <div class="profile-meta" id="weeklyProfile"></div>
       </div>
       <div class="timeline" id="weekGrid" style="margin-top:.75rem;"></div>
-    </section>
-
-    <section class="card" id="detail" style="display:none;">
-      <div class="officer">
-        <div>
-          <div class="officer-name" id="officerName"></div>
-          <div class="officer-cn" id="officerCn"></div>
-          <div class="meta" id="officerMeta"></div>
-          <div class="chips" id="chips"></div>
-          <div class="actions">
-            <div class="action-box do">
-              <h3>Do — Work</h3>
-              <ul id="doWorkList"></ul>
-              <h3 style="margin-top:.6rem;">Do — Family</h3>
-              <ul id="doFamilyList"></ul>
-            </div>
-            <div class="action-box avoid">
-              <h3>Avoid — Work</h3>
-              <ul id="avoidWorkList"></ul>
-              <h3 style="margin-top:.6rem;">Avoid — Family</h3>
-              <ul id="avoidFamilyList"></ul>
-            </div>
-          </div>
-        </div>
-        <div>
-          <div class="meta" id="nongli"></div>
-          <div class="chip" id="cycle" style="margin-top:.4rem;display:inline-block;"></div>
-          <div style="margin-top:.7rem;font-size:.85rem;color:var(--muted);">
-            The classical Chinese names are ancient, dating back over two millennia.<br>
-            Reference: traditional 12 daily officer 黄历 rules.<br>
-            Cross-check on <a href="https://m.nongli.com/huangli/" target="_blank" rel="noopener noreferrer">nongli.com</a>.
-          </div>
-        </div>
-      </div>
     </section>
   </div>
 
@@ -261,15 +224,7 @@
 </script>
 <script>
   (function(){
-    const keys = { visitorName: 'mpp.name', visitorDob: 'mpp.dob', visitorCountry: 'mpp.country', visitorJob: 'mpp.job', visitorTimezone: 'mpp.tz', weekStart: 'mpp.weekStart' };
-    const input = document.getElementById('visitorName');
-    const save = () => {
-      Object.entries(keys).forEach(([id, k]) => {
-        const el = document.getElementById(id);
-        if(!el) return;
-        const v = el.value; if(v) localStorage.setItem(k, v);
-      });
-    };
+    const keys = { visitorName: 'mpp.name', visitorDob: 'mpp.dob', visitorCountry: 'mpp.country', visitorTimezone: 'mpp.tz', weekStart: 'mpp.weekStart' };
     const restore = () => {
       Object.entries(keys).forEach(([id, k]) => {
         const el = document.getElementById(id); if(!el) return;
@@ -277,7 +232,13 @@
       });
     };
     restore();
-    ['input','change'].forEach(ev => document.querySelectorAll('#visitorName,#visitorDob,#visitorCountry,#visitorJob,#visitorTimezone,#weekStart').forEach(el => el.addEventListener(ev, save)));
+    const save = () => {
+      Object.entries(keys).forEach(([id, k]) => {
+        const el = document.getElementById(id); if(!el) return;
+        const v = el.value; if(v) localStorage.setItem(k, v);
+      });
+    };
+    ['input','change'].forEach(ev => document.querySelectorAll('#visitorName,#visitorDob,#visitorCountry,#visitorTimezone,#weekStart').forEach(el => el.addEventListener(ev, save)));
   })();
 </script>
 <script>
@@ -298,22 +259,15 @@ const DATA = [
 
 const ORDER = ["建","除","滿","平","定","執","破","危","成","收","開","閉"];
 const WEEKDAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-function toMonday(d){ const dt=new Date(d); const day=dt.getDay(); const diff=dt.getDate()-day+(day===0?-6:1); dt.setDate(diff); dt.setHours(0,0,0,0); return dt; }
+
+function toMonday(d){ 
+  const dt=new Date(d); const day=dt.getDay(); 
+  const diff=dt.getDate()-day+(day===0?-6:1); 
+  dt.setDate(diff); dt.setHours(0,0,0,0); return dt; 
+}
 function next7(start){ const out=[]; for(let i=0;i<7;i++){ const d=new Date(start); d.setDate(start.getDate()+i); out.push(d);} return out; }
 function fmt(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
 function animal(y){ const m=["鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"]; return m[((y-4)%12+12)%12]; }
-function tailor(item, job){
-  const j=(job||"").toLowerCase();
-  const doExtra=[], avoidExtra=[];
-  if(/student|study|scholar|learner|undergrad/.test(j)){ doExtra.push("Revision sessions"); avoidExtra.push("Late-night distractions"); }
-  else if(/engineer|developer|programmer|coder/.test(j)){ doExtra.push("Deployments"); avoidExtra.push("Untested changes"); }
-  else if(/trader|finance|banker|broker/.test(j)){ doExtra.push("Market entries"); avoidExtra.push("Speculative moves"); }
-  else if(/teacher|lecturer|tutor|edu/.test(j)){ doExtra.push("Workshops"); avoidExtra.push("Unprepared classes"); }
-  else if(/designer|artist|creator/.test(j)){ doExtra.push("Creative production"); avoidExtra.push("Over-polishing"); }
-  else if(/project manager|pm|manager/.test(j)){ doExtra.push("Stakeholder updates"); avoidExtra.push("Scope creep"); }
-  else if(/it project manager|itpm/.test(j)){ doExtra.push("Milestone reviews"); avoidExtra.push("Status-report spam"); }
-  return { workDo: [...item.workDo, ...doExtra], workAvoid: [...item.workAvoid, ...avoidExtra], familyDo: [...item.familyDo], familyAvoid: [...item.familyAvoid] };
-}
 
 const planBtn = document.getElementById("planBtn");
 const weekStartInput = document.getElementById("weekStart");
@@ -323,79 +277,82 @@ const weeklyHeader = document.getElementById("weeklyHeader");
 const weeklyProfile = document.getElementById("weeklyProfile");
 const tzInput = document.getElementById("visitorTimezone");
 
-function tzOffsetHours(tz){
-  const map = {"UTC+":0,"UTC-":0,"UTC+8":8,"UTC+9":9,"UTC+10":10,"UTC-4":-4,"UTC-5":-5,"UTC+0":0,"UTC+1":1,"UTC+5:30":5.5,"UTC+7":7,"UTC+10":10};
-  if(tz && map[tz]!==undefined) return map[tz];
-  const m = String(tz||"").match(/UTC([+-])(\d+)(?::(\d+))?/);
-  if(!m) return 8;
-  const sign = m[1]==="+"?1:-1;
-  const hh = parseInt(m[2],10); const mm = m[3]?parseInt(m[3],10):0;
-  return sign*(hh + mm/60);
+function officerForDate(y, m, d) {
+  if (typeof Solar !== "undefined" && Solar && typeof Solar.fromDate === "function") {
+    try {
+      const dObj = new Date(y, m - 1, d);
+      const s = Solar.fromDate(dObj);
+      const l = s.getLunar();
+      const raw = l.getZhiXing();
+      const match = DATA.find(item => item.cn === raw);
+      if (match) return match;
+    } catch (e) { console.error(e); }
+  }
+  // Fallback map
+  const idx = ((y * 13 + m) * 31 + d) % 12;
+  return DATA[idx];
 }
-
-let lastPlannedStart = null;
-let lastPlannedTz = null;
 
 function doPlan(){
   const nameEl = document.getElementById("visitorName");
   const dobEl = document.getElementById("visitorDob");
   const countryEl = document.getElementById("visitorCountry");
-  const jobEl = document.getElementById("visitorJob");
   const tzEl = tzInput;
   const name = nameEl?.value?.trim();
   const dob = dobEl?.value;
   const country = countryEl?.value?.trim();
-  const job = jobEl?.value?.trim();
-  const weekRaw = weekStartInput?.value ? new Date(weekStartInput.value) : toMonday(new Date());
   const tz = (tzEl && tzEl.value) ? tzEl.value : "UTC+8";
-  const offset = tzOffsetHours(tz);
+
   if(!name){
     if(weeklySection) weeklySection.style.display="none";
-    if(weeklySection) weeklySection.ariaHidden="true";
     return alert("Please enter your name.");
   }
+  
   const dobY = dob ? Number(String(dob).split("-")[0]) : null;
   const zodiac = dobY ? animal(dobY) : null;
-  const profile = [name, country?`· ${country}`:"", job?`· ${job}`:"", zodiac?`· ${zodiac}`:""].filter(Boolean).join(" ");
-  if(weeklyProfile) weeklyProfile.innerHTML = `<span class="pill"><strong>Profile</strong></span> <span class="pill">${profile}</span><span class="pill">${tz}</span>`;
-  const start = toMonday(weekRaw);
-  lastPlannedStart = fmt(start)+"|"+fmt(new Date(start.getFullYear(), start.getMonth(), start.getDate()+6));
-  lastPlannedTz = tz;
+  const profile = [name, country?`· ${country}`:"", zodiac?`· ${zodiac}`:""].filter(Boolean).join(" ");
+  
+  if(weeklyProfile) weeklyProfile.innerHTML = `<span class="pill"><strong>Profile</strong></span> <span class="pill">${profile}</span>`;
+  
+  const start = weekStartInput.value ? new Date(weekStartInput.value + "T00:00:00") : toMonday(new Date());
   if(weeklyHeader) weeklyHeader.innerHTML = `<span class="pill">${fmt(start)} → ${fmt(new Date(start.getFullYear(), start.getMonth(), start.getDate()+6))}</span><span class="pill">${tz}</span>`;
+  
   const days = next7(start);
-  if(!weekGrid){ console.warn("weekGrid missing"); return; }
+  if(!weekGrid) return;
   weekGrid.innerHTML = "";
+
   days.forEach(d => {
-    const local = new Date(d);
-    const uid = new Date(local.getTime() - offset*3600000);
-    const key = fmt(uid);
-    const [y,m,day] = key.split("-").map(Number);
-    const item = officerForDate(y,m,day);
-    const tItem = tailor(item, job);
+    const y = d.getFullYear();
+    const m = d.getMonth() + 1;
+    const day = d.getDate();
+    
+    const item = officerForDate(y, m, day);
     const officerIndex = DATA.indexOf(item);
+    
     const row = document.createElement("div");
     row.className = "day-row";
     row.innerHTML = `
       <div>
-        <div class="day-date">${WEEKDAYS[local.getDay()]}, ${fmt(local)}</div>
+        <div class="day-date">${WEEKDAYS[d.getDay()]}, ${fmt(d)}</div>
         <div class="day-officer">${item.cn} / ${item.en}</div>
-        <div class="day-meta">Cycle ${((officerIndex%12)+12)%12+1}/12 · Clash ${item.clash} · ${item.element} · ${item.clashDir}</div>
+        <div class="day-meta">Cycle ${officerIndex + 1}/12 · Clash ${item.clash} · ${item.element} · ${item.clashDir}</div>
       </div>
       <div>
         <div class="lists" style="margin-top:0;">
           <div class="list-title">Do — Work</div>
-          <ul>${tItem.workDo.map(x=>`<li>${x}</li>`).join("")}</ul>
+          <ul>${item.workDo.map(x=>`<li>${x}</li>`).join("")}</ul>
           <div class="list-title" style="margin-top:.4rem;">Do — Family</div>
-          <ul>${tItem.familyDo.map(x=>`<li>${x}</li>`).join("")}</ul>
+          <ul>${item.familyDo.map(x=>`<li>${x}</li>`).join("")}</ul>
           <div class="list-title group">Avoid — Work</div>
-          <ul>${tItem.workAvoid.map(x=>`<li>${x}</li>`).join("")}</ul>
+          <ul>${item.workAvoid.map(x=>`<li>${x}</li>`).join("")}</ul>
           <div class="list-title group">Avoid — Family</div>
-          <ul>${tItem.familyAvoid.map(x=>`<li>${x}</li>`).join("")}</ul>
+          <ul>${item.familyAvoid.map(x=>`<li>${x}</li>`).join("")}</ul>
         </div>
       </div>`;
     weekGrid.appendChild(row);
   });
-  if(weeklySection){ weeklySection.style.display = ""; weeklySection.ariaHidden="false"; }
+
+  if(weeklySection) { weeklySection.style.display = ""; }
 }
 
 planBtn?.addEventListener("click", (e) => {
@@ -403,131 +360,9 @@ planBtn?.addEventListener("click", (e) => {
   doPlan();
 });
 
+// Set default inputs for today's date context
 const today = new Date();
-weekStartInput.value = fmt(toMonday(today));
-
-function officerIndexForDate(y,m,d){ return ((y*13+m)*31+d)%12; }
-function officerForDate(y,m,d){
-  if (typeof Solar !== "undefined" && Solar && typeof Solar.fromDate === "function") {
-    try {
-      const dObj = new Date(Date.UTC(y, (m||1)-1, d||1));
-      const s = Solar.fromDate(dObj);
-      const l = s.getLunar();
-      const raw = l.getZhiXing();
-      const map = {'建':'Establish','除':'Remove','满':'Full','平':'Balance','定':'Stable','执':'Initiate','破':'Destruction','危':'Danger','成':'Success','收':'Receive','开':'Open','闭':'Close'};
-      const en = map[raw] || null;
-      if (en) return ORDER[["建","除","满","平","定","执","破","危","成","收","开","闭"].indexOf(raw)];
-    } catch (e) {}
-  }
-  return ORDER[((officerIndexForDate(y,m,d)%12)+12)%12];
-}
-// Ensure lunar-javascript is loaded (via CDN or local file) before executing this script
-function get7DayOfficers() {
-    const officersMap = {
-        '建': 'Establish (建)',
-        '除': 'Remove (除)',
-        '满': 'Full (满)',
-        '平': 'Balance (平)',
-        '定': 'Stable (定)',
-        '执': 'Initiate (执)',
-        '破': 'Destruction (破)',
-        '危': 'Danger (危)',
-        '成': 'Success (成)',
-        '收': 'Receive (收)',
-        '开': 'Open (开)',
-        '闭': 'Close (闭)'
-    };
-
-    const results = [];
-    let today = new Date(); // Current date anchor
-
-    for (let i = 0; i < 7; i++) {
-        let futureDate = new Date(today);
-        futureDate.setDate(today.getDate() + i);
-
-        // 1. Convert Gregorian date into the Lunar engine object
-        let solar = Solar.fromDate(futureDate);
-        let lunar = solar.getLunar();
-
-        // 2. Extract the raw character for the 12 Day Officer
-        let rawOfficer = lunar.getZhiXing(); 
-        let englishOfficer = officersMap[rawOfficer] || `Unknown (${rawOfficer})`;
-
-        results.push({
-            date: solar.toYmd(),                 // e.g., "2026-07-02"
-            dayOfWeek: "星期" + "日一二三四五六".charAt(futureDate.getDay()),
-            lunarDate: `${lunar.getMonthInChinese()}月${lunar.getDayInChinese()}`, // e.g., "五月十八"
-            officer: englishOfficer
-        });
-    }
-
-    return results;
-}
-
-// Execute and inspect the structure
-console.log(JSON.stringify(get7DayOfficers(), null, 2));
-
-function render(){
-  const dateInput = document.getElementById("date");
-  const officerSelect = document.getElementById("officer");
-  const detail = document.getElementById("detail");
-  const now = new Date();
-  const yyyy = String(now.getFullYear());
-  const mm = String(now.getMonth()+1).padStart(2,"0");
-  const dd = String(now.getDate()).padStart(2,"0");
-  dateInput.value = `${yyyy}-${mm}-${dd}`;
-  DATA.forEach((item)=>{
-    const opt = document.createElement("option");
-    opt.value = item.cn;
-    opt.textContent = `${item.cn} / ${item.en}`;
-    officerSelect.appendChild(opt);
-  });
-  const update = () => {
-    const d = dateInput.value; if(!d) return;
-    const [y,m,day] = d.split("-").map(Number);
-    const officer = officerSelect.value || officerForDate(y,m,day);
-    const officerIndex = ORDER.indexOf(officer);
-    const item = DATA[officerIndex];
-    const nongli = `${y}-${String(m).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
-    document.getElementById("officerName").textContent = `${item.cn}`;
-    document.getElementById("officerCn").textContent = item.en;
-    document.getElementById("officerMeta").textContent = `Clash ${item.clash} · ${item.clashDir} · ${item.element}`;
-    document.getElementById("nongli").textContent = `Date · ${nongli}`;
-    document.getElementById("cycle").textContent = `Cycle ${officerIndex + 1} / 12`;
-    document.getElementById("chips").innerHTML = [`<span class="chip">Direction ${item.clashDir}</span>`,`<span class="chip">Clash ${item.clash}</span>`,`<span class="chip">${item.element}</span>`,`<span class="chip good">黄道</span>`].join("");
-    document.getElementById("doWorkList").innerHTML = item.workDo.map(x=>`<li>${x}</li>`).join("");
-    document.getElementById("doFamilyList").innerHTML = item.familyDo.map(x=>`<li>${x}</li>`).join("");
-    document.getElementById("avoidWorkList").innerHTML = item.workAvoid.map(x=>`<li>${x}</li>`).join("");
-    document.getElementById("avoidFamilyList").innerHTML = item.familyAvoid.map(x=>`<li>${x}</li>`).join("");
-    detail.style.display = "";
-  };
-  dateInput.addEventListener("change", update);
-  officerSelect.addEventListener("change", update);
-  update();
-}
-
-const verifyBtn = document.getElementById('verifyBtn');
-const doVerifyBtn = typeof verifyBtn !== 'undefined' && verifyBtn !== null;
-if (doVerifyBtn) {
-  const updateVerifyUrl = () => {
-    const d = document.getElementById('date').value;
-    if (!d || !verifyBtn) return;
-    const [y, m, day] = d.split('-').map(Number);
-    verifyBtn.onclick = () => window.open(`https://m.nongli.com/huangli/${y}${String(m).padStart(2,'0')}${String(day).padStart(2,'0')}.html`, '_blank');
-  };
-  updateVerifyUrl();
-}
-
-document.getElementById("todayBtn")?.addEventListener("click", () => {
-  const today = new Date();
-  const yyyy = String(today.getFullYear());
-  const mm = String(today.getMonth()+1).padStart(2, "0");
-  const dd = String(today.getDate()).padStart(2, "0");
-  document.getElementById("date").value = `${yyyy}-${mm}-${dd}`;
-  updateVerifyUrl && updateVerifyUrl();
-});
-
-render();
+weekStartInput.value = fmt(today);
 </script>
 </body>
 </html>
