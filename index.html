@@ -241,8 +241,8 @@
     const defaultTz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
     let matched = "";
     const tzToOffset = {"Asia/Singapore":"UTC+8","America/New_York":"UTC-4","US/Eastern":"UTC-4","America/Chicago":"UTC-5","US/Central":"UTC-5","Europe/London":"UTC+0","Asia/Kolkata":"UTC+5:30","Asia/Bangkok":"UTC+7","Asia/Shanghai":"UTC+8","Asia/Hong_Kong":"UTC+8","Asia/Tokyo":"UTC+9","Australia/Sydney":"UTC+10","Pacific/Auckland":"UTC+12"};
-    matched = tzToOffset[defaultTz] || defaultTz;
-    tz.innerHTML = zones.map(x=>`<option value="${x}" ${x===matched?"selected":""}>${x}</option>`).join("");
+    matched = tzToOffset[defaultTz] || "UTC+8";
+    tz.innerHTML = zones.map(x=>`<option value="${x}" ${x===(matched||"UTC+8")?"selected":""}>${x}</option>`).join("");
     try {
       const res = await fetch("https://ipwho.is/", { signal: AbortSignal.timeout(4000) });
       if(!res.ok) throw new Error("non-200");
