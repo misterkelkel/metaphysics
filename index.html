@@ -148,20 +148,23 @@
 </head>
 <body>
   <header>
+  <div style="display:flex;align-items:center;gap:.75rem;">
+    <img src="mascot.png" alt="mascot" style="width:56px;height:56px;border-radius:18px;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.12), rgba(255,255,255,.02));border:1px solid var(--border);box-shadow:0 8px 20px rgba(0,0,0,.35);">
     <h1>metaphysics<span>.</span>it<span>.com</span></h1>
-    <p class="subtitle">12 Daily Officers · Weekly Planner</p>
-  </header>
+  </div>
+  <p class="subtitle">12 Daily Officers · Weekly Planner</p>
+</header>
 
   <div class="wrap">
     <section class="card">
       <p style="margin-top:0;color:var(--muted);font-size:.92rem;">Enter your details for a 7-day officer plan.</p>
       <div class="row">
         <div><label for="visitorName">Name</label><input type="text" id="visitorName" placeholder="Your name"></div>
-        <div><label for="visitorDob">Date of birth</label><input type="date" id="visitorDob"></div>
+        <div><label for="visitorDob">Date of birth <span style="font-size:.75rem;color:var(--muted);">(for future bazi / 5 element reference — not used in this officer calculation)</span></label><input type="date" id="visitorDob"></div>
       </div>
       <div class="row" style="margin-top:.75rem;">
-        <div><label for="visitorCountry">Country</label><input type="text" id="visitorCountry" placeholder="Country"></div>
-        <div><label for="visitorJob">Job</label><input type="text" id="visitorJob" placeholder="Job / role"></div>
+        <div><label for="visitorCountry">Country</label><input type="text" id="visitorCountry" placeholder="Country"><span id="countryHint" style="font-size:.78rem;color:var(--muted);margin-top:.25rem;display:inline-block;"></span></div>
+        <div><label for="visitorTimezone">Timezone</label><select id="visitorTimezone"></select></div>
       </div>
       <div class="row" style="margin-top:.75rem;">
         <div><label for="weekStart">Week starting</label><input type="date" id="weekStart"></div>
@@ -228,13 +231,52 @@
 <script>
   (async function(){
     const input = document.getElementById("visitorCountry");
-    if(!input) return;
+    const tz = document.getElementById("visitorTimezone");
+    const hint = document.getElementById("countryHint");
+    window.countryHint = hint;
+    if(!input || !tz) return;
+    if(hint) hint.style.display = "none";
+    input.addEventListener("input", () => { if(hint && input.dataset.auto==="1") hint.style.display=""; });
+    const zones = ["UTC+8","UTC-4","UTC-5","UTC+0","UTC+1","UTC+5:30","UTC+7","UTC+9","UTC+10"];
+    const defaultTz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    let matched = "";
+    const tzToOffset = {"Asia/Singapore":"UTC+8","America/New_York":"UTC-4","US/Eastern":"UTC-4","America/Chicago":"UTC-5","US/Central":"UTC-5","Europe/London":"UTC+0","Asia/Kolkata":"UTC+5:30","Asia/Bangkok":"UTC+7","Asia/Shanghai":"UTC+8","Asia/Hong_Kong":"UTC+8","Asia/Tokyo":"UTC+9","Australia/Sydney":"UTC+10","Pacific/Auckland":"UTC+12"};
+    matched = tzToOffset[defaultTz] || defaultTz;
+    tz.innerHTML = zones.map(x=>`<option value="${x}" ${x===matched?"selected":""}>${x}</option>`).join("");
     try {
       const res = await fetch("https://ipwho.is/", { signal: AbortSignal.timeout(4000) });
       if(!res.ok) throw new Error("non-200");
       const data = await res.json();
-      if(data?.country_name) { input.value = data.country_name; input.dataset.auto = "1"; }
+      const countryName = data?.country_name || data?.country || data?.nation;
+      if(countryName) {
+        input.value = countryName;
+        input.dataset.auto = "1";
+        if(hint) { hint.textContent = hint.textContent ? `Detected: ${countryName} — editable` : `Detected: ${countryName}`; hint.style.display = ""; }
+      }
+      const mapped = data?.timezone && tzToOffset[data.timezone] ? tzToOffset[data.timezone] : matched;
+      tz.value = mapped;
     } catch(e) { /* keep empty */ }
+  })();
+</script>
+<script>
+  (function(){
+    const keys = { visitorName: 'mpp.name', visitorDob: 'mpp.dob', visitorCountry: 'mpp.country', visitorJob: 'mpp.job', visitorTimezone: 'mpp.tz', weekStart: 'mpp.weekStart' };
+    const input = document.getElementById('visitorName');
+    const save = () => {
+      Object.entries(keys).forEach(([id, k]) => {
+        const el = document.getElementById(id);
+        if(!el) return;
+        const v = el.value; if(v) localStorage.setItem(k, v);
+      });
+    };
+    const restore = () => {
+      Object.entries(keys).forEach(([id, k]) => {
+        const el = document.getElementById(id); if(!el) return;
+        const v = localStorage.getItem(k); if(v) el.value = v;
+      });
+    };
+    restore();
+    ['input','change'].forEach(ev => document.querySelectorAll('#visitorName,#visitorDob,#visitorCountry,#visitorJob,#visitorTimezone,#weekStart').forEach(el => el.addEventListener(ev, save)));
   })();
 </script>
 <script>
@@ -278,53 +320,98 @@ const weeklySection = document.getElementById("weekly");
 const weekGrid = document.getElementById("weekGrid");
 const weeklyHeader = document.getElementById("weeklyHeader");
 const weeklyProfile = document.getElementById("weeklyProfile");
+const tzInput = document.getElementById("visitorTimezone");
 
-planBtn?.addEventListener("click", () => {
-  const name = document.getElementById("visitorName").value.trim();
-  const dob = document.getElementById("visitorDob").value;
-  const country = document.getElementById("visitorCountry").value.trim();
-  const job = document.getElementById("visitorJob").value.trim();
-  const weekRaw = weekStartInput.value ? new Date(weekStartInput.value) : toMonday(new Date());
-  if(!name || !dob){ weeklySection.style.display="none"; alert("Please enter your name and date of birth."); return; }
-  const dobY = Number(String(dob).split("-")[0]);
-  const zodiac = animal(dobY);
-  const profile = [name, country?`· ${country}`:"", job?`· ${job}`:"", `· ${zodiac}`].join(" ");
-  weeklyProfile.innerHTML = `<span class="pill"><strong>Profile</strong></span> <span class="pill">${profile}</span>`;
+function tzOffsetHours(tz){
+  const map = {"UTC+":0,"UTC-":0,"UTC+8":8,"UTC+9":9,"UTC+10":10,"UTC-4":-4,"UTC-5":-5,"UTC+0":0,"UTC+1":1,"UTC+5:30":5.5,"UTC+7":7,"UTC+10":10};
+  if(tz && map[tz]!==undefined) return map[tz];
+  const m = String(tz||"").match(/UTC([+-])(\d+)(?::(\d+))?/);
+  if(!m) return 8;
+  const sign = m[1]==="+"?1:-1;
+  const hh = parseInt(m[2],10); const mm = m[3]?parseInt(m[3],10):0;
+  return sign*(hh + mm/60);
+}
+
+let lastPlannedStart = null;
+let lastPlannedTz = null;
+
+function doPlan(){
+  const nameEl = document.getElementById("visitorName");
+  const dobEl = document.getElementById("visitorDob");
+  const countryEl = document.getElementById("visitorCountry");
+  const jobEl = document.getElementById("visitorJob");
+  const tzEl = tzInput;
+  const name = nameEl?.value?.trim();
+  const dob = dobEl?.value;
+  const country = countryEl?.value?.trim();
+  const job = jobEl?.value?.trim();
+  const weekRaw = weekStartInput?.value ? new Date(weekStartInput.value) : toMonday(new Date());
+  const tz = (tzEl && tzEl.value) ? tzEl.value : "UTC+8";
+  const offset = tzOffsetHours(tz);
+  if(!name){
+    if(weeklySection) weeklySection.style.display="none";
+    if(weeklySection) weeklySection.ariaHidden="true";
+    return alert("Please enter your name.");
+  }
+  const dobY = dob ? Number(String(dob).split("-")[0]) : null;
+  const zodiac = dobY ? animal(dobY) : null;
+  const profile = [name, country?`· ${country}`:"", job?`· ${job}`:"", zodiac?`· ${zodiac}`:""].filter(Boolean).join(" ");
+  if(weeklyProfile) weeklyProfile.innerHTML = `<span class="pill"><strong>Profile</strong></span> <span class="pill">${profile}</span><span class="pill">${tz}</span>`;
   const start = toMonday(weekRaw);
-  weeklyHeader.innerHTML = `<span class="pill">${fmt(start)} → ${fmt(new Date(start.getFullYear(), start.getMonth(), start.getDate()+6))}</span>`;
+  lastPlannedStart = fmt(start)+"|"+fmt(new Date(start.getFullYear(), start.getMonth(), start.getDate()+6));
+  lastPlannedTz = tz;
+  if(weeklyHeader) weeklyHeader.innerHTML = `<span class="pill">${fmt(start)} → ${fmt(new Date(start.getFullYear(), start.getMonth(), start.getDate()+6))}</span><span class="pill">${tz}</span>`;
   const days = next7(start);
+  if(!weekGrid){ console.warn("weekGrid missing"); return; }
   weekGrid.innerHTML = "";
   days.forEach(d => {
-    const key = fmt(d);
+    const local = new Date(d);
+    const uid = new Date(local.getTime() - offset*3600000);
+    const key = fmt(uid);
     const [y,m,day] = key.split("-").map(Number);
     const idx = ((y*13+m)*31+day)%12;
     const officer = ORDER[((idx%12)+12)%12];
     const item = DATA[((idx%12)+12)%12];
-    const t = tailor(item, job);
+    const tItem = tailor(item, job);
     const row = document.createElement("div");
     row.className = "day-row";
     row.innerHTML = `
       <div>
-        <div class="day-date">${WEEKDAYS[d.getDay()]}, ${key}</div>
+        <div class="day-date">${WEEKDAYS[local.getDay()]}, ${fmt(local)}</div>
         <div class="day-officer">${item.cn} / ${item.en}</div>
         <div class="day-meta">Cycle ${((idx%12)+12)%12+1}/12 · Clash ${item.clash} · ${item.element} · ${item.clashDir}</div>
       </div>
       <div>
         <div class="lists" style="margin-top:0;">
           <div class="list-title">Do — Work</div>
-          <ul>${t.workDo.map(x=>`<li>${x}</li>`).join("")}</ul>
+          <ul>${tItem.workDo.map(x=>`<li>${x}</li>`).join("")}</ul>
           <div class="list-title" style="margin-top:.4rem;">Do — Family</div>
-          <ul>${t.familyDo.map(x=>`<li>${x}</li>`).join("")}</ul>
+          <ul>${tItem.familyDo.map(x=>`<li>${x}</li>`).join("")}</ul>
           <div class="list-title group">Avoid — Work</div>
-          <ul>${t.workAvoid.map(x=>`<li>${x}</li>`).join("")}</ul>
+          <ul>${tItem.workAvoid.map(x=>`<li>${x}</li>`).join("")}</ul>
           <div class="list-title group">Avoid — Family</div>
-          <ul>${t.familyAvoid.map(x=>`<li>${x}</li>`).join("")}</ul>
+          <ul>${tItem.familyAvoid.map(x=>`<li>${x}</li>`).join("")}</ul>
         </div>
       </div>`;
     weekGrid.appendChild(row);
   });
-  weeklySection.style.display = "";
+  if(weeklySection){ weeklySection.style.display = ""; weeklySection.ariaHidden="false"; }
+}
+
+planBtn?.addEventListener("click", () => {
+  doPlan();
 });
+
+function autoPlanIfReady(){
+  const name = document.getElementById("visitorName")?.value?.trim();
+  const dob = document.getElementById("visitorDob")?.value;
+  if(name && dob){ doPlan(); }
+}
+const weekStartObs = new MutationObserver(autoPlanIfReady);
+if(weekStartInput){ weekStartObs.observe(document.body, {childList:true, subtree:true, attributes:true, attributeFilter:['style','class']}); }
+document.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="visible") autoPlanIfReady(); });
+setTimeout(autoPlanIfReady, 800);
+setTimeout(autoPlanIfReady, 2000);
 
 const today = new Date();
 weekStartInput.value = fmt(toMonday(today));
