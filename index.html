@@ -169,7 +169,7 @@
       <div class="row" style="margin-top:.75rem;">
         <div><label for="weekStart">Week starting</label><input type="date" id="weekStart"></div>
       </div>
-      <button id="planBtn" class="secondary" style="margin-top:.6rem;">Plan my week</button>
+      <button id="planBtn" class="secondary" style="margin-top:.6rem;" type="button">Plan my week</button>
     </section>
 
     <section class="card" id="weekly" style="display:none;">
@@ -228,6 +228,7 @@
     </div>
   </footer>
 
+<script src="lunar.js"></script>
 <script>
   (async function(){
     const input = document.getElementById("visitorCountry");
@@ -369,17 +370,16 @@ function doPlan(){
     const uid = new Date(local.getTime() - offset*3600000);
     const key = fmt(uid);
     const [y,m,day] = key.split("-").map(Number);
-    const idx = ((y*13+m)*31+day)%12;
-    const officer = ORDER[((idx%12)+12)%12];
-    const item = DATA[((idx%12)+12)%12];
+    const item = officerForDate(y,m,day);
     const tItem = tailor(item, job);
+    const officerIndex = DATA.indexOf(item);
     const row = document.createElement("div");
     row.className = "day-row";
     row.innerHTML = `
       <div>
         <div class="day-date">${WEEKDAYS[local.getDay()]}, ${fmt(local)}</div>
         <div class="day-officer">${item.cn} / ${item.en}</div>
-        <div class="day-meta">Cycle ${((idx%12)+12)%12+1}/12 · Clash ${item.clash} · ${item.element} · ${item.clashDir}</div>
+        <div class="day-meta">Cycle ${((officerIndex%12)+12)%12+1}/12 · Clash ${item.clash} · ${item.element} · ${item.clashDir}</div>
       </div>
       <div>
         <div class="lists" style="margin-top:0;">
@@ -398,26 +398,75 @@ function doPlan(){
   if(weeklySection){ weeklySection.style.display = ""; weeklySection.ariaHidden="false"; }
 }
 
-planBtn?.addEventListener("click", () => {
+planBtn?.addEventListener("click", (e) => {
+  e.preventDefault();
   doPlan();
 });
-
-function autoPlanIfReady(){
-  const name = document.getElementById("visitorName")?.value?.trim();
-  const dob = document.getElementById("visitorDob")?.value;
-  if(name && dob){ doPlan(); }
-}
-const weekStartObs = new MutationObserver(autoPlanIfReady);
-if(weekStartInput){ weekStartObs.observe(document.body, {childList:true, subtree:true, attributes:true, attributeFilter:['style','class']}); }
-document.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="visible") autoPlanIfReady(); });
-setTimeout(autoPlanIfReady, 800);
-setTimeout(autoPlanIfReady, 2000);
 
 const today = new Date();
 weekStartInput.value = fmt(toMonday(today));
 
 function officerIndexForDate(y,m,d){ return ((y*13+m)*31+d)%12; }
-function officerForDate(y,m,d){ return ORDER[((officerIndexForDate(y,m,d)%12)+12)%12]; }
+function officerForDate(y,m,d){
+  if (typeof Solar !== "undefined" && Solar && typeof Solar.fromDate === "function") {
+    try {
+      const dObj = new Date(Date.UTC(y, (m||1)-1, d||1));
+      const s = Solar.fromDate(dObj);
+      const l = s.getLunar();
+      const raw = l.getZhiXing();
+      const map = {'建':'Establish','除':'Remove','满':'Full','平':'Balance','定':'Stable','执':'Initiate','破':'Destruction','危':'Danger','成':'Success','收':'Receive','开':'Open','闭':'Close'};
+      const en = map[raw] || null;
+      if (en) return ORDER[["建","除","满","平","定","执","破","危","成","收","开","闭"].indexOf(raw)];
+    } catch (e) {}
+  }
+  return ORDER[((officerIndexForDate(y,m,d)%12)+12)%12];
+}
+// Ensure lunar-javascript is loaded (via CDN or local file) before executing this script
+function get7DayOfficers() {
+    const officersMap = {
+        '建': 'Establish (建)',
+        '除': 'Remove (除)',
+        '满': 'Full (满)',
+        '平': 'Balance (平)',
+        '定': 'Stable (定)',
+        '执': 'Initiate (执)',
+        '破': 'Destruction (破)',
+        '危': 'Danger (危)',
+        '成': 'Success (成)',
+        '收': 'Receive (收)',
+        '开': 'Open (开)',
+        '闭': 'Close (闭)'
+    };
+
+    const results = [];
+    let today = new Date(); // Current date anchor
+
+    for (let i = 0; i < 7; i++) {
+        let futureDate = new Date(today);
+        futureDate.setDate(today.getDate() + i);
+
+        // 1. Convert Gregorian date into the Lunar engine object
+        let solar = Solar.fromDate(futureDate);
+        let lunar = solar.getLunar();
+
+        // 2. Extract the raw character for the 12 Day Officer
+        let rawOfficer = lunar.getZhiXing(); 
+        let englishOfficer = officersMap[rawOfficer] || `Unknown (${rawOfficer})`;
+
+        results.push({
+            date: solar.toYmd(),                 // e.g., "2026-07-02"
+            dayOfWeek: "星期" + "日一二三四五六".charAt(futureDate.getDay()),
+            lunarDate: `${lunar.getMonthInChinese()}月${lunar.getDayInChinese()}`, // e.g., "五月十八"
+            officer: englishOfficer
+        });
+    }
+
+    return results;
+}
+
+// Execute and inspect the structure
+console.log(JSON.stringify(get7DayOfficers(), null, 2));
+
 function render(){
   const dateInput = document.getElementById("date");
   const officerSelect = document.getElementById("officer");
