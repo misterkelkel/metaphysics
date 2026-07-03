@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="mascot.png">
 <title>metaphysics.it.com — 12 Daily Officers</title>
+<meta name="description" content="Free 12 Daily Officers weekly planner and BaZi 5 Elements profile. Mobile-first tool for local travellers and expats to plan each day by traditional 黄历 daily officers.">
+<link rel="canonical" href="https://metaphysics.it.com/">
+<meta property="og:title" content="metaphysics.it.com — 12 Daily Officers">
+<meta property="og:description" content="Plan your week with the traditional 12 Daily Officers. Simple, fast, mobile-first.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://metaphysics.it.com/">
+<meta property="og:image" content="https://metaphysics.it.com/mascot.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="metaphysics.it.com — 12 Daily Officers">
+<meta name="twitter:description" content="Plan your week with the traditional 12 Daily Officers. Simple, fast, mobile-first.">
+<meta name="twitter:image" content="https://metaphysics.it.com/mascot.png">
 <style>
   :root {
     --bg: #0f0f14;
@@ -153,6 +164,9 @@
     <h1>metaphysics<span>.</span>it<span>.com</span></h1>
   </div>
   <p class="subtitle">12 Daily Officers · Weekly Planner</p>
+  <p style="max-width:720px;margin:.6rem auto 0;color:var(--muted);font-size:.92rem;">
+    <strong>What are the 12 Daily Officers?</strong> In traditional 黄历, each day is guided by one of 12 cycling officers — such as Establish, Remove, Full, Balance, Stable, Initiate, Destruction, Danger, Success, Receive, Open and Close. They date back over two millennia and are still used today to choose better timing for decisions, launches, agreements, travel, and family matters. This tool gives you a simple 7-day view so you can plan your week with that traditional rhythm.
+  </p>
 </header>
 
   <div class="wrap">
@@ -160,8 +174,9 @@
       <p style="margin-top:0;color:var(--muted);font-size:.92rem;">Enter your details for a 7-day officer plan.</p>
       <div class="row">
         <div><label for="visitorName">Name</label><input type="text" id="visitorName" placeholder="Your name"></div>
-        <div><label for="visitorDob">Date of birth</label><input type="date" id="visitorDob"><a href="bazi.html" style="font-size:.75rem;color:var(--muted);text-decoration:underline;margin-left:.4rem;">(bazi / 5 elements)</a></div>
+        <div><label for="visitorDob">Date of birth</label><input type="date" id="visitorDob"></div>
       </div>
+      <a href="bazi.html" style="display:inline-flex;align-items:center;gap:.4rem;margin-top:.5rem;padding:.45rem .7rem;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);text-decoration:none;font-size:.85rem;">BaZi / 5 Elements profile →</a>
       <div class="row" style="margin-top:.75rem;">
         <div><label for="visitorCountry">Country</label><input type="text" id="visitorCountry" placeholder="Country"><span id="countryHint" style="font-size:.78rem;color:var(--muted);margin-top:.25rem;display:inline-block;"></span></div>
         <div><label for="visitorTimezone">Timezone</label><select id="visitorTimezone"></select></div>
@@ -374,6 +389,8 @@ function doPlan(){
     
     const row = document.createElement("div");
     row.className = "day-row";
+    row.style.cursor = "pointer";
+    row.title = "Click to set this week as the week start";
     row.innerHTML = `
       <div>
         <div class="day-date">${WEEKDAYS[local.getDay()]}, ${fmt(local)}</div>
@@ -392,6 +409,11 @@ function doPlan(){
           <ul>${(Array.isArray(tItem?.familyAvoid)?tItem.familyAvoid:[]).map(x=>`<li>${x}</li>`).join("")}</ul>
         </div>
       </div>`;
+    row.addEventListener("click", ()=>{
+      weekStartInput.value = fmt(start);
+      weekStartInput.dispatchEvent(new Event('change'));
+      doPlan();
+    });
     weekGrid.appendChild(row);
   });
   if(weeklySection){ weeklySection.style.display = ""; weeklySection.ariaHidden="false"; }
