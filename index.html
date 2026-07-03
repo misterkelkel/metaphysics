@@ -176,7 +176,12 @@
         <div><label for="visitorName">Name</label><input type="text" id="visitorName" placeholder="Your name"></div>
         <div><label for="visitorDob">Date of birth</label><input type="date" id="visitorDob"></div>
       </div>
+      <div class="row" style="margin-top:.75rem;">
+        <div><label for="gender">Gender</label><select id="gender"><option value="">— select —</option><option value="male">Male</option><option value="female">Female</option></select></div>
+        <div></div>
+      </div>
       <a href="bazi.html" style="display:inline-flex;align-items:center;gap:.4rem;margin-top:.5rem;padding:.45rem .7rem;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);text-decoration:none;font-size:.85rem;">BaZi / 5 Elements profile →</a>
+      <a href="flying-stars.html" style="display:inline-flex;align-items:center;gap:.4rem;margin-top:.5rem;padding:.45rem .7rem;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);text-decoration:none;font-size:.85rem;margin-left:.4rem;">Flying Stars / 9 Star Ki →</a>
       <div class="row" style="margin-top:.75rem;">
         <div><label for="visitorCountry">Country</label><input type="text" id="visitorCountry" placeholder="Country"><span id="countryHint" style="font-size:.78rem;color:var(--muted);margin-top:.25rem;display:inline-block;"></span></div>
         <div><label for="visitorTimezone">Timezone</label><select id="visitorTimezone"></select></div>
@@ -276,7 +281,7 @@
 </script>
 <script>
   (function(){
-    const keys = { visitorName: 'mpp.name', visitorDob: 'mpp.dob', visitorCountry: 'mpp.country', visitorJob: 'mpp.job', visitorTimezone: 'mpp.tz', weekStart: 'mpp.weekStart' };
+    const keys = { visitorName: 'mpp.name', visitorDob: 'mpp.dob', visitorCountry: 'mpp.country', visitorJob: 'mpp.job', visitorTimezone: 'mpp.tz', weekStart: 'mpp.weekStart', gender: 'mpp.gender' };
     const input = document.getElementById('visitorName');
     const save = () => {
       Object.entries(keys).forEach(([id, k]) => {
@@ -292,7 +297,7 @@
       });
     };
     restore();
-    ['input','change'].forEach(ev => document.querySelectorAll('#visitorName,#visitorDob,#visitorCountry,#visitorJob,#visitorTimezone,#weekStart').forEach(el => el.addEventListener(ev, save)));
+    ['input','change'].forEach(ev => document.querySelectorAll('#visitorName,#visitorDob,#visitorCountry,#visitorJob,#visitorTimezone,#weekStart,#gender').forEach(el => el.addEventListener(ev, save)));
   })();
 </script>
 <script>
