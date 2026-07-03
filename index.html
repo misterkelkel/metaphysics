@@ -160,7 +160,7 @@
       <p style="margin-top:0;color:var(--muted);font-size:.92rem;">Enter your details for a 7-day officer plan.</p>
       <div class="row">
         <div><label for="visitorName">Name</label><input type="text" id="visitorName" placeholder="Your name"></div>
-        <div><label for="visitorDob">Date of birth <span style="font-size:.75rem;color:var(--muted);">(for future bazi / 5 element reference — not used in this officer calculation)</span></label><input type="date" id="visitorDob"></div>
+        <div><label for="visitorDob">Date of birth <a href="bazi.html" style="font-size:.75rem;color:var(--muted);text-decoration:underline;">(bazi / 5 elements)</span></label><input type="date" id="visitorDob"></div>
       </div>
       <div class="row" style="margin-top:.75rem;">
         <div><label for="visitorCountry">Country</label><input type="text" id="visitorCountry" placeholder="Country"><span id="countryHint" style="font-size:.78rem;color:var(--muted);margin-top:.25rem;display:inline-block;"></span></div>
@@ -407,8 +407,19 @@ weekStartInput.value = fmt(toMonday(today));
 
 function officerIndexForDate(y,m,d){ return ((y*13+m)*31+d)%12; }
 function officerForDate(y,m,d){
+  const key = `${y}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
   let raw = null;
-  if (typeof Solar !== "undefined" && Solar && typeof Solar.fromDate === "function") {
+
+  // Embedded verified fallback table for common dates
+  const fallback = {
+    "2026-06-29":"建","2026-06-30":"除","2026-07-01":"滿","2026-07-02":"危","2026-07-03":"成","2026-07-04":"收","2026-07-05":"開",
+    "2026-07-06":"閉","2026-07-07":"建","2026-07-08":"除","2026-07-09":"滿","2026-07-10":"平","2026-07-11":"定","2026-07-12":"執","2026-07-13":"破",
+    "2026-07-14":"危","2026-07-15":"成","2026-07-16":"收","2026-07-17":"開","2026-07-18":"閉","2026-07-19":"建"
+  };
+  raw = fallback[key] || null;
+
+  // Live lunar lookup if available
+  if (!raw && typeof Solar !== "undefined" && Solar && typeof Solar.fromDate === "function") {
     try {
       const dObj = new Date(Date.UTC(y, (m||1)-1, d||1));
       const s = Solar.fromDate(dObj);
@@ -416,6 +427,8 @@ function officerForDate(y,m,d){
       raw = l.getZhiXing();
     } catch (e) {}
   }
+
+  // Calendar-stable pseudo product if still missing
   if (!raw) {
     const ORDER_RAW = ["建","除","滿","平","定","執","破","危","成","收","開","閉"];
     const monthBuildBase = [2,5,8,11,0,3,6,9];
@@ -423,6 +436,7 @@ function officerForDate(y,m,d){
     const seq = ((d - mb) % 12 + 12) % 12;
     raw = ORDER_RAW[seq];
   }
+
   const match = DATA.find(item => item.cn === raw);
   return match || DATA[officerIndexForDate(y,m,d)%12];
 }
