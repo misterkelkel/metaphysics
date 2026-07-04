@@ -237,4 +237,13 @@
       handle(text);
     }
   });
+window.mppSpeak = function(text){
+  if(!('speechSynthesis' in window)) return alert('Speech is not supported in this browser.');
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = 1;
+  u.pitch = 1;
+  window.speechSynthesis.speak(u);
+};
+
 })();

@@ -242,7 +242,7 @@
       </div>
       <button id="readPlanBtn" class="secondary" style="margin-top:.6rem;" type="button">Read my week aloud</button>
       <button id="readBaziBtn" class="secondary" style="margin-top:.5rem;" type="button">Read BaZi summary</button>
-      <p class="intro" style="margin-top:.5rem;margin-bottom:0;">Uses the browser's built-in speech. No audio file needed.</p>
+      </div>
     </section>
   </div>
 
@@ -586,6 +586,42 @@ document.getElementById("todayBtn")?.addEventListener("click", () => {
 });
 
 render();
+
+(function(){
+  const planBtn = document.getElementById('readPlanBtn');
+  const baziBtn = document.getElementById('readBaziBtn');
+  const status = document.getElementById('speakStatus');
+  if(planBtn){
+    planBtn.addEventListener('click', ()=>{
+      const name = (document.getElementById('visitorName')?.value || '').trim();
+      const rows = [];
+      document.querySelectorAll('#weekGrid .day-row').forEach(row=>{
+        const date = row.querySelector('.day-date')?.textContent || '';
+        const officer = row.querySelector('.day-officer')?.textContent || '';
+        const doText = row.querySelector('.lists .list-title, .lists .intro')?.textContent || '';
+        rows.push(date + '. ' + officer + '. ' + doText.replace(/\s+/g, ' ').trim());
+      });
+      const text = (name ? name + ', your 7 day plan. ' : 'Your 7 day plan. ') + (rows.join('. ') || 'Tap Plan my 7 days first.');
+      if(status) status.textContent = 'Speaking…';
+      window.mppSpeak(text);
+      setTimeout(()=>{ if(status) status.textContent = 'Ready'; }, 1000);
+    });
+  }
+  if(baziBtn){
+    baziBtn.addEventListener('click', ()=>{
+      const name = (document.getElementById('visitorName')?.value || '').trim();
+      const dob = document.getElementById('visitorDob')?.value || '';
+      const gender = document.getElementById('gender')?.value || '';
+      const guidance = document.getElementById('guidanceText')?.textContent || '';
+      const strongest = document.querySelector('.strongest')?.textContent || '';
+      const weakest = document.querySelector('.weakest')?.textContent || '';
+      const text = (name ? name + ', BaZi summary. ' : 'BaZi summary. ') + (dob ? 'Birthday ' + dob + '. ' : '') + (gender ? 'Gender ' + gender + '. ' : '') + guidance.replace(/\s+/g, ' ').trim() + '. Strong: ' + strongest + '. Weak: ' + weakest + '.';
+      if(status) status.textContent = 'Speaking…';
+      window.mppSpeak(text);
+      setTimeout(()=>{ if(status) status.textContent = 'Ready'; }, 1000);
+    });
+  }
+})();
 </script>
 <script src="chatbot.js"></script>
 </body>
