@@ -201,7 +201,12 @@
     </div>
   </footer>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
+<script src="../firebase-config.js"></script>
 <script>
+  const firebaseReady = typeof firebase !== "undefined";
   (function(){
     const STARS = [
       { n:1, cn:"一", en:"White", el:"Metal", dir:"Center", trait:"Leadership, vision, foresight", bestNew:"Start something new", avoid:"Reckless speed", tone:"#e0e0e0" },

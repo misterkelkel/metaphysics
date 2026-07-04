@@ -194,6 +194,16 @@
         <p class="intro" id="guidanceText"></p>
       </div>
     </section>
+
+    <section class="card" id="audioSection">
+      <div class="bar">
+        <div class="bar-meta"><strong>Listen</strong></div>
+        <div class="pill" id="speakStatus">Ready</div>
+      </div>
+      <button id="readPlanBtn" class="secondary" style="margin-top:.6rem;" type="button">Read my week aloud</button>
+      <button id="readBaziBtn" class="secondary" style="margin-top:.5rem;" type="button">Read BaZi summary</button>
+      <p class="intro" style="margin-top:.5rem;margin-bottom:0;">Uses the browser's built-in speech. No audio file needed.</p>
+    </section>
   </div>
 
   <div class="footer-spacer"></div>
@@ -210,7 +220,12 @@
   </footer>
 
 <script src="lunar.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
+<script src="../firebase-config.js"></script>
 <script>
+  const firebaseReady = typeof firebase !== "undefined";
   (async function(){
     const input = document.getElementById("visitorCountry");
     const tz = document.getElementById("visitorTimezone");
