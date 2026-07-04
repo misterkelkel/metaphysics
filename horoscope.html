@@ -153,6 +153,10 @@
         <div><label for="gender">Gender</label><select id="gender"><option value="">— select —</option><option value="male">Male</option><option value="female">Female</option></select></div>
         <div><label for="country">Country</label><input type="text" id="country" placeholder="Country"></div>
       </div>
+      <div class="row" style="margin-top:.75rem;">
+        <div><label for="job">Job</label><input type="text" id="job" placeholder="Job"></div>
+        <div><label for="tob">Time of birth</label><input type="time" id="tob"></div>
+      </div>
       <button id="showBtn" class="secondary" style="margin-top:.6rem;" type="button">Show my signs</button>
     </section>
 
@@ -246,6 +250,8 @@
     const dobEl = document.getElementById("visitorDob");
     const genderEl = document.getElementById("gender");
     const countryEl = document.getElementById("country");
+    const jobEl = document.getElementById("job");
+    const tobEl = document.getElementById("tob");
     const eastCard = document.getElementById("eastCard");
     const westCard = document.getElementById("westCard");
 
@@ -255,10 +261,14 @@
         const dob = localStorage.getItem("mpp.dob");
         const gender = localStorage.getItem("mpp.gender");
         const country = localStorage.getItem("mpp.country");
+        const job = localStorage.getItem("mpp.job");
+        const tob = localStorage.getItem("mpp.tob");
         if(nameEl && name) nameEl.value = name;
         if(dobEl && dob) dobEl.value = dob;
         if(genderEl && gender) genderEl.value = gender;
         if(countryEl && country) countryEl.value = country;
+        if(jobEl && job) jobEl.value = job;
+        if(tobEl && tob) tobEl.value = tob;
       } catch(e){}
     };
     prefill();
@@ -298,12 +308,14 @@
       westCard.style.display = "";
     });
 
-    ['input','change'].forEach(ev => document.querySelectorAll('#visitorName,#visitorDob,#gender,#country').forEach(el => el.addEventListener(ev, ()=>{
+    ['input','change'].forEach(ev => document.querySelectorAll('#visitorName,#visitorDob,#gender,#country,#job,#tob').forEach(el => el.addEventListener(ev, ()=>{
       try {
         if(el.id==='visitorName') localStorage.setItem("mpp.name", el.value);
         if(el.id==='visitorDob') localStorage.setItem("mpp.dob", el.value);
         if(el.id==='gender') localStorage.setItem("mpp.gender", el.value);
         if(el.id==='country') localStorage.setItem("mpp.country", el.value);
+        if(el.id==='job') localStorage.setItem("mpp.job", el.value);
+        if(el.id==='tob') localStorage.setItem("mpp.tob", el.value);
       } catch(e){}
     })));
   })();
