@@ -65,6 +65,8 @@
 
   .row { display: grid; gap: .75rem; grid-template-columns: repeat(2, 1fr); }
   @media (max-width: 760px) { .row { grid-template-columns: 1fr; } }
+  .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 760px) { .wrap { grid-template-columns: 1fr; } }
 
   label { display: block; font-size: .82rem; color: var(--muted); margin-bottom: .25rem; }
   input, select {
@@ -164,33 +166,36 @@
     <h1>metaphysics<span>.</span>it<span>.com</span></h1>
   </div>
   <p class="subtitle">12 Daily Officers · Weekly Planner</p>
+  <div style="max-width:720px;margin:.5rem auto 0;display:flex;justify-content:flex-end;">
+    <div><label for="visitorLang" style="font-size:.85rem;color:var(--muted);">Language</label><select id="visitorLang" style="background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:.35rem .5rem;font-size:.85rem;"><option value="en">English</option><option value="zh">中文</option><option value="both">中英</option></select></div>
+  </div>
   <p style="max-width:720px;margin:.6rem auto 0;color:var(--muted);font-size:.92rem;">
-    <strong>What are the 12 Daily Officers?</strong> In traditional 黄历, each day is guided by one of 12 cycling officers — such as Establish, Remove, Full, Balance, Stable, Initiate, Destruction, Danger, Success, Receive, Open and Close. They date back over two millennia and are still used today to choose better timing for decisions, launches, agreements, travel, and family matters. This tool gives you a simple 7-day view so you can plan your week with that traditional rhythm.
+    <strong data-i18n="index_officer_intro">What are the 12 Daily Officers?</strong> <span data-i18n="index_officer_intro_desc" data-i18n-html="1">In traditional 黄历, each day is guided by one of 12 cycling officers — such as Establish, Remove, Full, Balance, Stable, Initiate, Destruction, Danger, Success, Receive, Open and Close. They date back over two millennia and are still used today to choose better timing for decisions, launches, agreements, travel, and family matters. This tool gives you a simple 7-day view so you can plan your week with that traditional rhythm.</span>
   </p>
 </header>
 
   <div class="wrap">
     <section class="card">
-      <p style="margin-top:0;color:var(--muted);font-size:.92rem;">Enter your details for a 7-day officer plan.</p>
+      <p style="margin-top:0;color:var(--muted);font-size:.92rem;" data-i18n="index_plan_intro">Enter your details for a 7-day officer plan.</p>
       <div class="row">
-        <div><label for="visitorName">Name</label><input type="text" id="visitorName" placeholder="Your name"></div>
-        <div><label for="visitorDob">Date of birth</label><input type="date" id="visitorDob"></div>
+        <div><label for="visitorName" data-i18n="index_name">Name</label><input type="text" id="visitorName" placeholder="Your name" data-i18n-placeholder="index_name_placeholder"></div>
+        <div><label for="visitorDob" data-i18n="index_dob">Date of birth</label><input type="date" id="visitorDob"></div>
       </div>
       <div class="row" style="margin-top:.75rem;">
-        <div><label for="gender">Gender</label><select id="gender"><option value="">— select —</option><option value="male">Male</option><option value="female">Female</option></select></div>
-        <div></div>
+        <div><label for="gender" data-i18n="index_gender">Gender</label><select id="gender"><option value="" data-i18n="index_gender_select">— select —</option><option value="male" data-i18n="index_male">Male</option><option value="female" data-i18n="index_female">Female</option></select></div>
+        <div><label for="visitorJob" data-i18n="index_job">Job</label><input type="text" id="visitorJob" placeholder="Job title" data-i18n-placeholder="index_job_placeholder"></div>
       </div>
       <a href="bazi.html" style="display:inline-flex;align-items:center;gap:.4rem;margin-top:.5rem;padding:.45rem .7rem;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);text-decoration:none;font-size:.85rem;">BaZi / 5 Elements profile →</a>
       <a href="flying-stars.html" style="display:inline-flex;align-items:center;gap:.4rem;margin-top:.5rem;padding:.45rem .7rem;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);text-decoration:none;font-size:.85rem;margin-left:.4rem;">Flying Stars / 9 Star Ki →</a>
       <a href="horoscope.html" style="display:inline-flex;align-items:center;gap:.4rem;margin-top:.5rem;padding:.45rem .7rem;border-radius:12px;border:1px solid var(--border);background:var(--surface);color:var(--text);text-decoration:none;font-size:.85rem;margin-left:.4rem;">Horoscope · East + West →</a>
       <div class="row" style="margin-top:.75rem;">
-        <div><label for="visitorCountry">Country</label><input type="text" id="visitorCountry" placeholder="Country"><span id="countryHint" style="font-size:.78rem;color:var(--muted);margin-top:.25rem;display:inline-block;"></span></div>
-        <div><label for="visitorTimezone">Timezone</label><select id="visitorTimezone"></select></div>
+        <div><label for="visitorCountry" data-i18n="index_country">Country</label><input type="text" id="visitorCountry" placeholder="Country" data-i18n-placeholder="index_country_placeholder"><span id="countryHint" style="font-size:.78rem;color:var(--muted);margin-top:.25rem;display:inline-block;"></span></div>
+        <div><label for="visitorTimezone" data-i18n="index_timezone">Timezone</label><select id="visitorTimezone"></select></div>
       </div>
       <div class="row" style="margin-top:.75rem;">
-        <div><label for="weekStart">Starting from</label><input type="date" id="weekStart"></div>
+        <div><label for="weekStart" data-i18n="index_week_start">Starting from</label><input type="date" id="weekStart"></div>
       </div>
-      <button id="planBtn" class="secondary" style="margin-top:.6rem;" type="button">Plan my 7 days</button>
+      <button id="planBtn" class="secondary" style="margin-top:.6rem;" type="button" data-i18n="index_plan_btn">Plan my 7 days</button>
     </section>
 
     <section class="card" id="weekly" style="display:none;">
@@ -210,15 +215,15 @@
           <div class="chips" id="chips"></div>
           <div class="actions">
             <div class="action-box do">
-              <h3>Do — Work</h3>
+              <h3 data-i18n="index_do_work">Do — Work</h3>
               <ul id="doWorkList"></ul>
-              <h3 style="margin-top:.6rem;">Do — Family</h3>
+              <h3 style="margin-top:.6rem;" data-i18n="index_do_family">Do — Family</h3>
               <ul id="doFamilyList"></ul>
             </div>
             <div class="action-box avoid">
-              <h3>Avoid — Work</h3>
+              <h3 data-i18n="index_avoid_work">Avoid — Work</h3>
               <ul id="avoidWorkList"></ul>
-              <h3 style="margin-top:.6rem;">Avoid — Family</h3>
+              <h3 style="margin-top:.6rem;" data-i18n="index_avoid_family">Avoid — Family</h3>
               <ul id="avoidFamilyList"></ul>
             </div>
           </div>
@@ -227,23 +232,15 @@
           <div class="meta" id="nongli"></div>
           <div class="chip" id="cycle" style="margin-top:.4rem;display:inline-block;"></div>
           <div style="margin-top:.7rem;font-size:.85rem;color:var(--muted);">
-            The classical Chinese names are ancient, dating back over two millennia.<br>
-            Reference: traditional 12 daily officer 黄历 rules.<br>
-            Cross-check on <a href="https://m.nongli.com/huangli/" target="_blank" rel="noopener noreferrer">nongli.com</a>.
+            <span data-i18n="index_classical_note_1">The classical Chinese names are ancient, dating back over two millennia.</span><br>
+            <span data-i18n="index_classical_note_2">Reference: traditional 12 daily officer 黄历 rules.</span><br>
+            <span data-i18n="index_classical_note_3">Cross-check on</span> <a href="https://m.nongli.com/huangli/" target="_blank" rel="noopener noreferrer">nongli.com</a>.
           </div>
         </div>
       </div>
     </section>
 
-    <section class="card" id="audioSection">
-      <div class="bar">
-        <div class="bar-meta"><strong>Listen</strong></div>
-        <div class="pill" id="speakStatus">Ready</div>
-      </div>
-      <button id="readPlanBtn" class="secondary" style="margin-top:.6rem;" type="button">Read my week aloud</button>
-      <button id="readBaziBtn" class="secondary" style="margin-top:.5rem;" type="button">Read BaZi summary</button>
-      </div>
-    </section>
+
   </div>
 
   <div class="footer-spacer"></div>
@@ -290,7 +287,7 @@
 </script>
 <script>
   (function(){
-    const keys = { visitorName: 'mpp.name', visitorDob: 'mpp.dob', visitorCountry: 'mpp.country', visitorJob: 'mpp.job', visitorTimezone: 'mpp.tz', weekStart: 'mpp.weekStart', gender: 'mpp.gender' };
+    const keys = { visitorName: 'mpp.name', visitorDob: 'mpp.dob', visitorCountry: 'mpp.country', visitorJob: 'mpp.job', visitorTimezone: 'mpp.tz', weekStart: 'mpp.weekStart', gender: 'mpp.gender', visitorLang: 'mpp.lang' };
     const input = document.getElementById('visitorName');
     const save = () => {
       Object.entries(keys).forEach(([id, k]) => {
@@ -306,26 +303,38 @@
       });
     };
     restore();
-    ['input','change'].forEach(ev => document.querySelectorAll('#visitorName,#visitorDob,#visitorCountry,#visitorJob,#visitorTimezone,#weekStart,#gender').forEach(el => el.addEventListener(ev, save)));
+    ['input','change'].forEach(ev => document.querySelectorAll('#visitorName,#visitorDob,#visitorCountry,#visitorJob,#visitorTimezone,#weekStart,#gender,#visitorLang').forEach(el => el.addEventListener(ev, save)));
   })();
 </script>
 <script>
 const DATA = [
-  { en: "Establish", cn: "建", workDo: ["Start projects","Important decisions","Contracts","Meetings","Planning"], workAvoid: ["Arguments","Untested launches","Scope creep"], familyDo: ["Family meetings","Set goals together","Assign chores"], familyAvoid: ["Confrontation","Rushed travel"], clash: "豬", clashDir: "West", element: "Wood", note: "Good for beginnings and structure. Avoid confrontation." },
-  { en: "Remove", cn: "除", workDo: ["Cancel bad plans","Clear backlog","Pay debts","Habits reset"], workAvoid: ["Celebrations","Grand openings"], familyDo: ["Declutter home","End bad patterns","Short trips"], familyAvoid: ["Big parties"], clash: "鼠", clashDir: "South", element: "Wood", note: "Best for removal, healing, and endings." },
-  { en: "Full", cn: "滿", workDo: ["Deliver results","Collect payments","Celebrate wins"], workAvoid: ["New contracts","Overcommit"], familyDo: ["Gather together","Celebrate milestones","Share meals"], familyAvoid: ["Long trips","Big spending"], clash: "牛", clashDir: "East", element: "Earth", note: "Auspicious for rewards and abundance." },
-  { en: "Balance", cn: "平", workDo: ["Routine work","Maintenance","Study","Publishing"], workAvoid: ["High-stakes deals","Construction start"], familyDo: ["Steady routine","Home projects","Together time"], familyAvoid: ["Big events","Weddings"], clash: "虎", clashDir: "North", element: "Earth", note: "Neutral day; stay steady and avoid risks." },
-  { en: "Stable", cn: "定", workDo: ["Agreements","Scheduling","Steady investments","Meetings"], workAvoid: ["Funerals","Risky bets","Disputes"], familyDo: ["Resolve commitments","Plan ahead","Quality time"], familyAvoid: ["Risk-taking","Arguments"], clash: "兔", clashDir: "West", element: "Metal", note: "Good for settling matters and commitments." },
-  { en: "Initiate", cn: "執", workDo: ["Follow-through","Approvals","Administrative work","Offerings"], workAvoid: ["Travel","Funerals","Moving"], familyDo: ["Family rituals","House rules","Planning"], familyAvoid: ["Travel","Moving homes"], clash: "龍", clashDir: "South", element: "Metal", note: "Favors discipline and steady effort." },
-  { en: "Destruction", cn: "破", workDo: ["Problem-solving","Audits","Release old tools","End bad projects"], workAvoid: ["Weddings","Promises","Celebrations"], familyDo: ["Resolve conflicts","Release grudges","Clean up"], familyAvoid: ["New promises","Celebrations"], clash: "蛇", clashDir: "East", element: "Earth", note: "Use carefully; good for endings, not beginnings." },
-  { en: "Danger", cn: "危", workDo: ["Risk review","Defensive planning","Keep low profile"], workAvoid: ["New contracts","Long journeys","Big launches"], familyDo: ["Safety checks","Low-key time","Support"], familyAvoid: ["Big ceremonies","Travel"], clash: "馬", clashDir: "North", element: "Water", note: "Keep caution. Do not take chances." },
-  { en: "Success", cn: "成", workDo: ["Business deals","Seal agreements","Completion","Deliveries"], workAvoid: ["Lawsuits","Surgery","Conflict"], familyDo: ["Celebrations","Mergers","Gatherings"], familyAvoid: ["Conflict","Surgery timing"], clash: "羊", clashDir: "West", element: "Water", note: "Auspicious for outcomes and celebrations." },
-  { en: "Receive", cn: "收", workDo: ["Inventory","Collections","Filing","Returns"], workAvoid: ["Investments","Moving","Marriage timing"], familyDo: ["Sorting home","Harvesting together","Bonding"], familyAvoid: ["Investments","Moving"], clash: "猴", clashDir: "South", element: "Metal", note: "Best for closure and consolidation." },
-  { en: "Open", cn: "開", workDo: ["New business","Opening events","Public launches","Travel"], workAvoid: ["Big repairs","Funerals at family"], familyDo: ["Travel together","New beginnings","Public events with family"], familyAvoid: ["Burying memories","Ignoring repairs"], clash: "雞", clashDir: "East", element: "Metal", note: "Great for openings, fortune, and travel." },
-  { en: "Close", cn: "閉", workDo: ["Finish old tasks","Solo work","Quiet focus"], workAvoid: ["Public events","Meetings","New openings"], familyDo: ["Rest at home","Quiet time","Close out family matters"], familyAvoid: ["Big meetings","Starting new ventures"], clash: "狗", clashDir: "North", element: "Earth", note: "Time to finish quietly, not to begin." }
+  { en: "Establish", cn: "建", workDo: ["Start projects","Important decisions","Contracts","Meetings","Planning"], workAvoid: ["Arguments","Untested launches","Scope creep"], familyDo: ["Family meetings","Set goals together","Assign chores"], familyAvoid: ["Confrontation","Rushed travel"], clash: "猪", clashDir: "West", element: "Wood", note: "Good for beginnings and structure. Avoid confrontation.",
+    workDoZh: ["启动项目","重要决策","合同","会议","规划"], workAvoidZh: ["争执","未经验证的启动","范围蔓延"], familyDoZh: ["家庭会议","共同定目标","分配家务"], familyAvoidZh: ["对抗","仓促出行"] },
+  { en: "Remove", cn: "除", workDo: ["Cancel bad plans","Clear backlog","Pay debts","Habits reset"], workAvoid: ["Celebrations","Grand openings"], familyDo: ["Declutter home","End bad patterns","Short trips"], familyAvoid: ["Big parties"], clash: "鼠", clashDir: "South", element: "Wood", note: "Best for removal, healing, and endings.",
+    workDoZh: ["取消不良计划","清理积压","偿还债务","习惯重启"], workAvoidZh: ["庆祝","盛大开业"], familyDoZh: ["整理家居","终止坏习惯","短途出行"], familyAvoidZh: ["大型派对"] },
+  { en: "Full", cn: "满", workDo: ["Deliver results","Collect payments","Celebrate wins"], workAvoid: ["New contracts","Overcommit"], familyDo: ["Gather together","Celebrate milestones","Share meals"], familyAvoid: ["Long trips","Big spending"], clash: "牛", clashDir: "East", element: "Earth", note: "Auspicious for rewards and abundance.",
+    workDoZh: ["交付成果","收款","庆祝胜利"], workAvoidZh: ["新合同","过度承诺"], familyDoZh: ["团聚","庆祝里程碑","共进餐"], familyAvoidZh: ["长途旅行","大额消费"] },
+  { en: "Balance", cn: "平", workDo: ["Routine work","Maintenance","Study","Publishing"], workAvoid: ["High-stakes deals","Construction start"], familyDo: ["Steady routine","Home projects","Together time"], familyAvoid: ["Big events","Weddings"], clash: "虎", clashDir: "North", element: "Earth", note: "Neutral day; stay steady and avoid risks.",
+    workDoZh: ["常规工作","维护","学习","发表"], workAvoidZh: ["高风险交易","开工动土"], familyDoZh: ["稳定日常","家庭项目","共处时光"], familyAvoidZh: ["大型活动","婚礼"] },
+  { en: "Stable", cn: "定", workDo: ["Agreements","Scheduling","Steady investments","Meetings"], workAvoid: ["Funerals","Risky bets","Disputes"], familyDo: ["Resolve commitments","Plan ahead","Quality time"], familyAvoid: ["Risk-taking","Arguments"], clash: "兔", clashDir: "West", element: "Metal", note: "Good for settling matters and commitments.",
+    workDoZh: ["签约","排期","稳健投资","会议"], workAvoidZh: ["葬礼","高风险赌注","争端"], familyDoZh: ["履行承诺","提前规划","优质时光"], familyAvoidZh: ["冒险","争吵"] },
+  { en: "Initiate", cn: "执", workDo: ["Follow-through","Approvals","Administrative work","Offerings"], workAvoid: ["Travel","Funerals","Moving"], familyDo: ["Family rituals","House rules","Planning"], familyAvoid: ["Travel","Moving homes"], clash: "龙", clashDir: "South", element: "Metal", note: "Favors discipline and steady effort.",
+    workDoZh: ["跟进","审批","行政工作","供奉"], workAvoidZh: ["出行","葬礼","搬家"], familyDoZh: ["家庭仪式","家规","规划"], familyAvoidZh: ["出行","搬家"] },
+  { en: "Destruction", cn: "破", workDo: ["Problem-solving","Audits","Release old tools","End bad projects"], workAvoid: ["Weddings","Promises","Celebrations"], familyDo: ["Resolve conflicts","Release grudges","Clean up"], familyAvoid: ["New promises","Celebrations"], clash: "蛇", clashDir: "East", element: "Earth", note: "Use carefully; good for endings, not beginnings.",
+    workDoZh: ["解决问题","审计","淘汰旧工具","终止坏项目"], workAvoidZh: ["婚礼","承诺","庆祝"], familyDoZh: ["化解冲突","放下怨恨","清理"], familyAvoidZh: ["新承诺","庆祝"] },
+  { en: "Danger", cn: "危", workDo: ["Risk review","Defensive planning","Keep low profile"], workAvoid: ["New contracts","Long journeys","Big launches"], familyDo: ["Safety checks","Low-key time","Support"], familyAvoid: ["Big ceremonies","Travel"], clash: "马", clashDir: "North", element: "Water", note: "Keep caution. Do not take chances.",
+    workDoZh: ["风险审查","防御规划","保持低调"], workAvoidZh: ["新合同","长途旅行","大型发布"], familyDoZh: ["安全检查","低调相处","支持家人"], familyAvoidZh: ["大型活动","旅行"] },
+  { en: "Success", cn: "成", workDo: ["Business deals","Seal agreements","Completion","Deliveries"], workAvoid: ["Lawsuits","Surgery","Conflict"], familyDo: ["Celebrations","Mergers","Gatherings"], familyAvoid: ["Conflict","Surgery timing"], clash: "羊", clashDir: "West", element: "Water", note: "Auspicious for outcomes and celebrations.",
+    workDoZh: ["商业谈判","签署协议","完工","交付"], workAvoidZh: ["诉讼","外科手术","冲突"], familyDoZh: ["庆祝","合并","聚会"], familyAvoidZh: ["冲突","手术时机"] },
+  { en: "Receive", cn: "收", workDo: ["Inventory","Collections","Filing","Returns"], workAvoid: ["Investments","Moving","Marriage timing"], familyDo: ["Sorting home","Harvesting together","Bonding"], familyAvoid: ["Investments","Moving"], clash: "猴", clashDir: "South", element: "Metal", note: "Best for closure and consolidation.",
+    workDoZh: ["盘点","收款","归档","退货"], workAvoidZh: ["投资","搬家","婚嫁时机"], familyDoZh: ["整理家居","共同收获","增进感情"], familyAvoidZh: ["投资","搬家"] },
+  { en: "Open", cn: "开", workDo: ["New business","Opening events","Public launches","Travel"], workAvoid: ["Big repairs","Funerals at family"], familyDo: ["Travel together","New beginnings","Public events with family"], familyAvoid: ["Burying memories","Ignoring repairs"], clash: "鸡", clashDir: "East", element: "Metal", note: "Great for openings, fortune, and travel.",
+    workDoZh: ["新业务","开业典礼","公开发布","出行"], workAvoidZh: ["大型维修","家庭葬礼"], familyDoZh: ["共同出行","新的开始","家庭公开活动"], familyAvoidZh: ["回避回忆","忽视维修"] },
+  { en: "Close", cn: "闭", workDo: ["Finish old tasks","Solo work","Quiet focus"], workAvoid: ["Public events","Meetings","New openings"], familyDo: ["Rest at home","Quiet time","Close out family matters"], familyAvoid: ["Big meetings","Starting new ventures"], clash: "狗", clashDir: "North", element: "Earth", note: "Time to finish quietly, not to begin.",
+    workDoZh: ["完成旧任务","独处工作","安静专注"], workAvoidZh: ["公共活动","会议","新的开启"], familyDoZh: ["在家休息","安静时光","收尾家庭事务"], familyAvoidZh: ["大型会议","开启新事业"] }
 ];
 
-const ORDER = ["建","除","滿","平","定","執","破","危","成","收","開","閉"];
+const ORDER = ["建","除","满","平","定","执","破","危","成","收","开","闭"];
 const WEEKDAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 function toMonday(d){ const dt=new Date(d); const day=dt.getDay(); const diff=dt.getDate()-day+(day===0?-6:1); dt.setDate(diff); dt.setHours(0,0,0,0); return dt; }
 function next7(start){ const out=[]; for(let i=0;i<7;i++){ const d=new Date(start); d.setDate(start.getDate()+i); out.push(d);} return out; }
@@ -333,15 +342,63 @@ function fmt(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,
 function animal(y){ const m=["鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"]; return m[((y-4)%12+12)%12]; }
 function tailor(item, job){
   const j=(job||"").toLowerCase();
-  const doExtra=[], avoidExtra=[];
-  if(/student|study|scholar|learner|undergrad/.test(j)){ doExtra.push("Revision sessions"); avoidExtra.push("Late-night distractions"); }
-  else if(/engineer|developer|programmer|coder/.test(j)){ doExtra.push("Deployments"); avoidExtra.push("Untested changes"); }
-  else if(/trader|finance|banker|broker/.test(j)){ doExtra.push("Market entries"); avoidExtra.push("Speculative moves"); }
-  else if(/teacher|lecturer|tutor|edu/.test(j)){ doExtra.push("Workshops"); avoidExtra.push("Unprepared classes"); }
-  else if(/designer|artist|creator/.test(j)){ doExtra.push("Creative production"); avoidExtra.push("Over-polishing"); }
-  else if(/project manager|pm|manager/.test(j)){ doExtra.push("Stakeholder updates"); avoidExtra.push("Scope creep"); }
-  else if(/it project manager|itpm/.test(j)){ doExtra.push("Milestone reviews"); avoidExtra.push("Status-report spam"); }
-  return { workDo: [...item.workDo, ...doExtra], workAvoid: [...item.workAvoid, ...avoidExtra], familyDo: [...item.familyDo], familyAvoid: [...item.familyAvoid] };
+  const doExtra=[], avoidExtra=[], doZhExtra=[], avoidZhExtra=[];
+  if(/student|study|scholar|learner|undergrad|學生|研究生|碩士|博士/.test(j)){
+    doExtra.push("Revision sessions","Research deep dives","Essay drafting");
+    avoidExtra.push("Late-night distractions","Unstructured browsing");
+  }
+  else if(/engineer|developer|programmer|coder|工程師|开发者|程序员|工程师/.test(j)){
+    doExtra.push("Deployments","Code reviews","Bug triage");
+    avoidExtra.push("Untested changes","Context switching mid-task");
+  }
+  else if(/trader|finance|banker|broker|交易員|金融|銀行|投资/.test(j)){
+    doExtra.push("Market entries","Portfolio reviews","Risk checks");
+    avoidExtra.push("Speculative moves","Emotional trading");
+  }
+  else if(/teacher|lecturer|tutor|edu|教師|老師|導師|講師|教授/.test(j)){
+    doExtra.push("Workshops","Lesson planning","Marking and feedback");
+    avoidExtra.push("Unprepared classes","Last-minute material changes");
+  }
+  else if(/designer|artist|creator|設計師|画家|创作/.test(j)){
+    doExtra.push("Creative production","Concept sketches","Client iterations");
+    avoidExtra.push("Over-polishing","Deadline scope creep");
+  }
+  else if(/project manager|pm|manager|項目經理|产品經理|經理|主管/.test(j)){
+    doExtra.push("Stakeholder updates","Sprint reviews","Dependency checks");
+    avoidExtra.push("Scope creep","Meeting without agenda");
+  }
+  else if(/it project manager|itpm|IT項目經理/.test(j)){
+    doExtra.push("Milestone reviews","Resource rebalancing","Stakeholder alignment");
+    avoidExtra.push("Status-report spam","Unplanned emergency pivots");
+  }
+  else if(/retail|sales|store|shop|零售|銷售|店員/.test(j)){
+    doExtra.push("Stock replenishment","Customer follow-ups","Promo planning");
+    avoidExtra.push("Overpromising delivery","Unsorted merchandise");
+  }
+  else if(/writer|author|blogger|copywriter|作家|編輯|文案/.test(j)){
+    doExtra.push("Drafting","Editing passes","Publishing schedules");
+    avoidExtra.push("Perfectionism paralysis","Unresearched topics");
+  }
+  else if(/marketer|campaign|seo|growth|行銷|市场|增长/.test(j)){
+    doExtra.push("Campaign tracking","A/B test reviews","Audience research");
+    avoidExtra.push("Vanity metrics","Copy churn without insight");
+  }
+  if (/工程师|工程师|software|developer|开发/.test(j)) {
+    doExtra.push("Code reviews","Deployments","Incident reviews");
+    avoidExtra.push("Big feature launches","Untested migrations"); 
+    if(tItem?.workDoZh) doZhExtra.push("代码审查","部署","事故复盘");
+    if(tItem?.workAvoidZh) avoidZhExtra.push("大型功能上线","未经验证的迁移");
+  }
+  return {
+    workDo: [...item.workDo, ...doExtra],
+    workAvoid: [...item.workAvoid, ...avoidExtra],
+    familyDo: [...item.familyDo],
+    familyAvoid: [...item.familyAvoid],
+    workDoZh: [...(item.workDoZh||[]), ...doZhExtra],
+    workAvoidZh: [...(item.workAvoidZh||[]), ...avoidZhExtra],
+    familyDoZh: [...(item.familyDoZh||[])],
+    familyAvoidZh: [...(item.familyDoZh||[])]
+  };
 }
 
 const planBtn = document.getElementById("planBtn");
@@ -387,46 +444,91 @@ function doPlan(){
   const zodiac = dobY ? animal(dobY) : null;
   const profile = [name, country?`· ${country}`:"", job?`· ${job}`:"", zodiac?`· ${zodiac}`:""].filter(Boolean).join(" ");
   if(weeklyProfile) weeklyProfile.innerHTML = `<span class="pill"><strong>Profile</strong></span> <span class="pill">${profile}</span><span class="pill">${tz}</span>`;
+  if (dob && typeof Lunar !== "undefined" && typeof Solar !== "undefined") {
+    try {
+      const parts = String(dob).split("-").map(Number);
+      const birthSolar = Solar.fromYmdHms(parts[0], parts[1], parts[2], 12, 0, 0);
+      const birthLunar = birthSolar.getLunar();
+      const bazi = birthLunar.getBaZi();
+      const yearPillar = bazi?.[0] || "";
+      const monthPillar = bazi?.[1] || "";
+      const dayPillar = bazi?.[2] || "";
+      const dayMaster = dayPillar ? dayPillar.charAt(0) : "";
+      let leapMarker = "";
+      try {
+        if (typeof birthLunar.getMonth === "function" && /^-/.test(String(birthLunar.getMonth()))) leapMarker = "[閏]";
+      } catch (_) { leapMarker = ""; }
+      if (weeklyProfile && (yearPillar || monthPillar || dayPillar)) {
+        weeklyProfile.innerHTML += ` <span class="pill">BaZi: ${leapMarker}${yearPillar}年 ${monthPillar}月 ${dayPillar}日</span><span class="pill">Day Master: ${dayMaster}</span>`;
+      }
+    } catch (e) { /* skip bazi if lookup fails */ }
+  }
   const start = new Date(weekRaw);
   lastPlannedStart = fmt(start)+"|"+fmt(new Date(start.getFullYear(), start.getMonth(), start.getDate()+6));
   lastPlannedTz = tz;
   if(weeklyHeader) weeklyHeader.innerHTML = `<span class="pill">${fmt(start)} → ${fmt(new Date(start.getFullYear(), start.getMonth(), start.getDate()+6))}</span><span class="pill">${tz}</span>`;
   const days = next7(start);
-  if(!weekGrid){ console.warn("weekGrid missing"); return; }
-  weekGrid.innerHTML = "";
+  const safeGrid = document.getElementById('weekGrid') || weekGrid;
+  if(!safeGrid){ console.warn("weekGrid missing"); return; }
+  safeGrid.innerHTML = '';
   days.forEach(d => {
     const local = new Date(d);
     const item = officerForDate(local.getFullYear(), local.getMonth()+1, local.getDate());
-    const stable = item || (DATA.find(x=>x.cn==='Initialize') || DATA[0]);
+    const stable = item || (DATA.find(x=>x.cn==='执') || DATA[0]);
     const tItem = tailor(stable, job || "");
     const officerIndex = DATA.indexOf(stable);
-    
+    let leapTag = "";
+    try {
+      if (typeof Solar !== "undefined" && Solar && typeof Solar.fromDate === "function") {
+        const ss = Solar.fromDate(local);
+        const ll = ss.getLunar();
+        if (typeof ll.getMonth === "function" && /^-/.test(String(ll.getMonth()))) leapTag = " · [閏月]";
+      }
+    } catch (_) {}
     const row = document.createElement("div");
     row.className = "day-row";
     row.style.cursor = "pointer";
     row.title = "Click to set this week as the week start";
+    const doText = (tItem?.workDo || stable?.workDo || []).join('. ');
+    const avoidText = (tItem?.workAvoid || stable?.workAvoid || []).join('. ');
+    const doTextZh = ((tItem && tItem.workDoZh) || (stable && stable.workDoZh) || []).join('。');
+    const avoidTextZh = ((tItem && tItem.workAvoidZh) || (stable && stable.workAvoidZh) || []).join('。');
+    const familyDoText = (tItem?.familyDo || stable?.familyDo || []).join('. ');
+    const familyDoTextZh = ((tItem && tItem.familyDoZh) || (stable && stable.familyDoZh) || []).join('。');
+    const familyAvoidText = (tItem?.familyAvoid || stable?.familyAvoid || []).join('. ');
+    const familyAvoidTextZh = ((tItem && tItem.familyAvoidZh) || (stable && stable.familyAvoidZh) || []).join('。');
+
+    const doBlock = (typeof window !== 'undefined' && window.mppLang && typeof window.mppLang.getLang === 'function' && window.mppLang.getLang()==='both') ? `${doText || 'Make steady progress.'} / ${doTextZh || '稳步前进。'}` : doText || 'Make steady progress.';
+    const avoidBlock = (typeof window !== 'undefined' && window.mppLang && typeof window.mppLang.getLang === 'function' && window.mppLang.getLang()==='both') ? `${avoidText || 'Avoid unnecessary risk.'} / ${avoidTextZh || '避免无谓风险。'}` : avoidText || 'Avoid unnecessary risk.';
+    const familyDoBlock = (typeof window !== 'undefined' && window.mppLang && typeof window.mppLang.getLang === 'function' && window.mppLang.getLang()==='both') ? `${familyDoText || 'Steady routine.'} / ${familyDoTextZh || '稳定日常。'}` : familyDoText || 'Steady routine.';
+    const familyAvoidBlock = (typeof window !== 'undefined' && window.mppLang && typeof window.mppLang.getLang === 'function' && window.mppLang.getLang()==='both') ? `${familyAvoidText || 'Avoid arguments.'} / ${familyAvoidTextZh || '避免争吵。'}` : familyAvoidText || 'Avoid arguments.';
     row.innerHTML = `
       <div>
         <div class="day-date">${WEEKDAYS[local.getDay()]}, ${fmt(local)}</div>
-        <div class="day-officer">${stable.cn ? stable.cn : ''} / ${stable.en || ''}</div>
-        <div class="day-meta">Cycle ${(officerIndex>=0?officerIndex:(stable.cn?'0':'0'))+1}/12 · ${stable.note||''}</div>
-      </div>
-      <div>
-        <div class="lists" style="margin-top:0;">
-          <div class="list-title" style="margin-bottom:.35rem;">Do today</div>
-          <p class="intro" style="margin:0;">${(Array.isArray(tItem?.workDo)?tItem.workDo:[]).concat(Array.isArray(tItem?.familyDo)?tItem.familyDo:[]).map(x=>x).join('. ') || 'Make steady progress.'}</p>
-          <div class="list-title group" style="margin-top:.6rem;margin-bottom:.35rem;">Avoid today</div>
-          <p class="intro" style="margin:0;">${(Array.isArray(tItem?.workAvoid)?tItem.workAvoid:[]).concat(Array.isArray(tItem?.familyAvoid)?tItem.familyAvoid:[]).map(x=>x).join('. ') || 'Avoid unnecessary risk.'}</p>
+        <div class="day-officer">${stable.cn ? stable.cn + ' / ' : ''}${stable.en || ''}</div>
+        <div class="day-meta">Cycle ${(officerIndex>=0?officerIndex:(stable.cn?'0':'0'))+1}/12 · ${stable.note||''}${leapTag}</div>
+        <div class="lists" style="margin-top:.35rem;">
+          <div class="list-title" data-i18n="index_do_today" style="margin-bottom:.35rem;">Do today</div>
+          <p class="intro" style="margin:0;">${doBlock}</p>
+          <p class="intro" style="margin:.2rem 0 0;color:var(--muted);font-size:.92rem;">${familyDoBlock}</p>
+          <div class="list-title group" style="margin-top:.6rem;margin-bottom:.35rem;" data-i18n="index_avoid_today">Avoid today</div>
+          <p class="intro" style="margin:0;">${avoidBlock}</p>
+          <p class="intro" style="margin:.2rem 0 0;color:var(--muted);font-size:.92rem;">${familyAvoidBlock}</p>
         </div>
-      </div>`;
+      </div>
+    `;
     row.addEventListener("click", ()=>{
       weekStartInput.value = fmt(start);
       weekStartInput.dispatchEvent(new Event('change'));
       doPlan();
     });
-    weekGrid.appendChild(row);
+    safeGrid.appendChild(row);
   });
-  if(weeklySection){ weeklySection.style.display = ""; weeklySection.ariaHidden="false"; }
+  const section = document.getElementById('weekly');
+  if(section){
+    section.style.display = '';
+    section.ariaHidden = 'false';
+  }
 }
 
 planBtn?.addEventListener("click", (e) => {
@@ -444,9 +546,10 @@ function officerForDate(y,m,d){
 
   // Embedded verified fallback table for common dates
   const fallback = {
-    "2026-06-29":"建","2026-06-30":"除","2026-07-01":"滿","2026-07-02":"危","2026-07-03":"成","2026-07-04":"收","2026-07-05":"開",
-    "2026-07-06":"閉","2026-07-07":"建","2026-07-08":"除","2026-07-09":"滿","2026-07-10":"平","2026-07-11":"定","2026-07-12":"執","2026-07-13":"破",
-    "2026-07-14":"危","2026-07-15":"成","2026-07-16":"收","2026-07-17":"開","2026-07-18":"閉","2026-07-19":"建"
+    "2026-07-05":"开",
+    "2026-07-06":"闭",
+    "2026-07-07":"闭","2026-07-08":"建","2026-07-09":"除","2026-07-10":"满","2026-07-11":"平","2026-07-12":"定","2026-07-13":"执","2026-07-14":"破",
+    "2026-07-15":"危","2026-07-16":"成","2026-07-17":"收","2026-07-18":"开","2026-07-19":"闭","2026-07-20":"建"
   };
   raw = fallback[key] || null;
 
@@ -462,7 +565,7 @@ function officerForDate(y,m,d){
 
   // Calendar-stable pseudo product if still missing
   if (!raw) {
-    const ORDER_RAW = ["建","除","滿","平","定","執","破","危","成","收","開","閉"];
+    const ORDER_RAW = ["建","除","满","平","定","执","破","危","成","收","开","闭"];
     const monthBuildBase = [2,5,8,11,0,3,6,9];
     const mb = monthBuildBase[((m-1)%12+12)%12] || 0;
     const seq = ((d - mb) % 12 + 12) % 12;
@@ -500,7 +603,7 @@ function get7DayOfficers() {
         let solar = Solar.fromDate(futureDate);
         let lunar = solar.getLunar();
 
-        // 2. Extract the raw character for the 12 Day Officer
+        // 2. Extract the raw traditional character for the 12 Day Officer
         let rawOfficer = lunar.getZhiXing(); 
         let englishOfficer = officersMap[rawOfficer] || `Unknown (${rawOfficer})`;
 
@@ -580,42 +683,7 @@ document.getElementById("todayBtn")?.addEventListener("click", () => {
 
 render();
 
-(function(){
-  const planBtn = document.getElementById('readPlanBtn');
-  const baziBtn = document.getElementById('readBaziBtn');
-  const status = document.getElementById('speakStatus');
-  if(planBtn){
-    planBtn.addEventListener('click', ()=>{
-      const name = (document.getElementById('visitorName')?.value || '').trim();
-      const rows = [];
-      document.querySelectorAll('#weekGrid .day-row').forEach(row=>{
-        const date = row.querySelector('.day-date')?.textContent || '';
-        const officer = row.querySelector('.day-officer')?.textContent || '';
-        const doText = row.querySelector('.lists .list-title, .lists .intro')?.textContent || '';
-        rows.push(date + '. ' + officer + '. ' + doText.replace(/\s+/g, ' ').trim());
-      });
-      const text = (name ? name + ', your 7 day plan. ' : 'Your 7 day plan. ') + (rows.join('. ') || 'Tap Plan my 7 days first.');
-      if(status) status.textContent = 'Speaking…';
-      window.mppSpeak(text);
-      setTimeout(()=>{ if(status) status.textContent = 'Ready'; }, 1000);
-    });
-  }
-  if(baziBtn){
-    baziBtn.addEventListener('click', ()=>{
-      const name = (document.getElementById('visitorName')?.value || '').trim();
-      const dob = document.getElementById('visitorDob')?.value || '';
-      const gender = document.getElementById('gender')?.value || '';
-      const guidance = document.getElementById('guidanceText')?.textContent || '';
-      const strongest = document.querySelector('.strongest')?.textContent || '';
-      const weakest = document.querySelector('.weakest')?.textContent || '';
-      const text = (name ? name + ', BaZi summary. ' : 'BaZi summary. ') + (dob ? 'Birthday ' + dob + '. ' : '') + (gender ? 'Gender ' + gender + '. ' : '') + guidance.replace(/\s+/g, ' ').trim() + '. Strong: ' + strongest + '. Weak: ' + weakest + '.';
-      if(status) status.textContent = 'Speaking…';
-      window.mppSpeak(text);
-      setTimeout(()=>{ if(status) status.textContent = 'Ready'; }, 1000);
-    });
-  }
-})();
-</script>
+
   <footer>
     <div class="footer-inner">
       <div class="social-bar">
@@ -697,5 +765,6 @@ render();
   .footer-spacer{height:72px}
 </style>
 
+<script src="lang.js"></script>
 </body>
 </html>

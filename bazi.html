@@ -148,38 +148,38 @@
     <h1>
       <img src="mascot.png" alt="mascot" style="width:44px;height:44px;border-radius:14px;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.12), rgba(255,255,255,.02));border:1px solid var(--border);box-shadow:0 6px 16px rgba(0,0,0,.35);">
       metaphysics<span>.</span>it<span>.com</span>
-      <a class="back" href="index.html">← Back</a>
+      <a class="back" href="index.html" data-i18n="bazi_back" data-i18n-html="1">← Back</a>
     </h1>
-    <p class="subtitle">BaZi · 5 Elements · Simple profile</p>
+    <p class="subtitle" data-i18n="bazi_title">BaZi · 5 Elements · Simple profile</p>
   </header>
 
   <div class="wrap">
     <section class="card">
-      <p class="intro" style="margin-top:0;">
-        <strong>What this page does:</strong> It turns your birthday and birth time into a simple 5-element profile — <strong>Wood</strong>, <strong>Fire</strong>, <strong>Earth</strong>, <strong>Metal</strong>, and <strong>Water</strong>.<br><br>
-        <strong>How to read it:</strong> The percentages show which element is strongest and which needs more support. Use the guidance as a gentle nudge, not a strict rule.
+      <p class="intro" style="margin-top:0;" data-i18n="bazi_intro">
+        <strong data-i18n="bazi_intro_1">What this page does:</strong> <span data-i18n="bazi_intro_2" data-i18n-html="1">It turns your birthday and birth time into a simple 5-element profile — <strong>Wood</strong>, <strong>Fire</strong>, <strong>Earth</strong>, <strong>Metal</strong>, and <strong>Water</strong>.</span><br><br>
+        <strong data-i18n="bazi_intro_3">How to read it:</strong> <span data-i18n="bazi_intro_4">The percentages show which element is strongest and which needs more support. Use the guidance as a gentle nudge, not a strict rule.</span>
       </p>
       <div class="row">
-        <div><label for="visitorName">Name</label><input type="text" id="visitorName" placeholder="Your name"></div>
-        <div><label for="visitorDob">Date of birth</label><input type="date" id="visitorDob"></div>
+        <div><label for="visitorName" data-i18n="index_name">Name</label><input type="text" id="visitorName" placeholder="Your name" data-i18n-placeholder="index_name_placeholder"></div>
+        <div><label for="visitorDob" data-i18n="index_dob">Date of birth</label><input type="date" id="visitorDob"></div>
       </div>
       <div class="row" style="margin-top:.75rem;">
-        <div><label for="visitorTob">Time of birth</label><input type="time" id="visitorTob"></div>
-        <div><label for="gender">Gender</label><select id="gender"><option value="">— select —</option><option value="male">Male</option><option value="female">Female</option></select></div>
+        <div><label for="visitorTob" data-i18n="bazi_tob">Time of birth</label><input type="time" id="visitorTob"></div>
+        <div><label for="gender" data-i18n="index_gender">Gender</label><select id="gender"><option value="" data-i18n="index_gender_select">— select —</option><option value="male" data-i18n="index_male">Male</option><option value="female" data-i18n="index_female">Female</option></select></div>
       </div>
       <div class="row" style="margin-top:.75rem;">
-        <div><label for="visitorCountry">Country</label><input type="text" id="visitorCountry" placeholder="Country"><span id="countryHint" style="font-size:.78rem;color:var(--muted);margin-top:.25rem;display:inline-block;"></span></div>
-        <div><label for="visitorTimezone">Timezone</label><select id="visitorTimezone"></select></div>
+        <div><label for="visitorCountry" data-i18n="index_country">Country</label><input type="text" id="visitorCountry" placeholder="Country" data-i18n-placeholder="index_country_placeholder"><span id="countryHint" style="font-size:.78rem;color:var(--muted);margin-top:.25rem;display:inline-block;"></span></div>
+        <div><label for="visitorTimezone" data-i18n="index_timezone">Timezone</label><select id="visitorTimezone"></select></div>
       </div>
       <div class="row" style="margin-top:.75rem;">
-        <div><label for="visitorJob">Job</label><input type="text" id="visitorJob" placeholder="Job"></div>
+        <div><label for="visitorJob" data-i18n="index_job">Job</label><input type="text" id="visitorJob" placeholder="Job" data-i18n-placeholder="index_job_placeholder"></div>
       </div>
-      <button id="calcBtn" class="secondary" style="margin-top:.6rem;" type="button">Calculate</button>
+      <button id="calcBtn" class="secondary" style="margin-top:.6rem;" type="button" data-i18n="bazi_calc">Calculate</button>
     </section>
 
     <section class="card" id="resultCard" style="display:none;">
       <div class="bar">
-        <div class="bar-meta" id="profileBar"><strong>Profile</strong></div>
+        <div class="bar-meta" id="profileBar" data-i18n="bazi_profile"><strong>Profile</strong></div>
         <div class="bar-meta" id="elementBar"></div>
       </div>
 
@@ -188,102 +188,23 @@
       </div>
 
       <div class="card-inner" id="tipsCard" style="display:none;">
-        <p class="intro" style="margin-top:0;">
-          <strong>How to use this guidance:</strong> Think of your strongest element as your natural strength, and your weakest as an area to develop. The suggestions are practical and meant to help you balance decisions in work, family, and personal planning.
+        <p class="intro" style="margin-top:0;" data-i18n="bazi_how_use">
+          <strong>How to use this guidance:</strong> <span data-i18n="bazi_how_use_p" data-i18n-html="1">Think of your strongest element as your natural strength, and your weakest as an area to develop. The suggestions are practical and meant to help you balance decisions in work, family, and personal planning.</span>
         </p>
         <p class="intro" id="guidanceText"></p>
       </div>
     </section>
 
-    <section class="card" id="audioSection">
-      <div class="bar">
-        <div class="bar-meta"><strong>Listen</strong></div>
-        <div class="pill" id="speakStatus">Ready</div>
-      </div>
-      <button id="readPlanBtn" class="secondary" style="margin-top:.6rem;" type="button">Read my week aloud</button>
-      <button id="readBaziBtn" class="secondary" style="margin-top:.5rem;" type="button">Read BaZi summary</button>
-      </div>
     </section>
   </div>
 
   <div class="footer-spacer"></div>
 
   
-
   <div class="footer-spacer"></div>
 
-<script src="../chatbot.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics-compat.js"></script>
-<script src="../firebase-config.js"></script>
+<script src="lang.js"></script>
 <script>
-  const firebaseReady = typeof firebase !== "undefined";
-  (async function(){
-    const input = document.getElementById("visitorCountry");
-    const tz = document.getElementById("visitorTimezone");
-    const hint = document.getElementById("countryHint");
-    window.countryHint = hint;
-    if(!input || !tz) return;
-    if(hint) hint.style.display = "none";
-    input.addEventListener("input", () => { if(hint && input.dataset.auto==="1") hint.style.display=""; });
-    const zones = ["UTC+8","UTC-4","UTC-5","UTC+0","UTC+1","UTC+5:30","UTC+7","UTC+9","UTC+10"];
-    const defaultTz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
-    let matched = "";
-    const tzToOffset = {"Asia/Singapore":"UTC+8","America/New_York":"UTC-4","US/Eastern":"UTC-4","America/Chicago":"UTC-5","US/Central":"UTC-5","Europe/London":"UTC+0","Asia/Kolkata":"UTC+5:30","Asia/Bangkok":"UTC+7","Asia/Shanghai":"UTC+8","Asia/Hong_Kong":"UTC+8","Asia/Tokyo":"UTC+9","Australia/Sydney":"UTC+10","Pacific/Auckland":"UTC+12"};
-    matched = tzToOffset[defaultTz] || "UTC+8";
-    tz.innerHTML = zones.map(x=>`<option value="${x}" ${x===(matched||"UTC+8")?"selected":""}>${x}</option>`).join("");
-    try {
-      const res = await fetch("https://ipwho.is/", { signal: AbortSignal.timeout(4000) });
-      if(!res.ok) throw new Error("non-200");
-      const data = await res.json();
-      const countryName = data?.country_name || data?.country || data?.nation;
-      if(countryName) {
-        input.value = countryName;
-        input.dataset.auto = "1";
-        if(hint) { hint.textContent = hint.textContent ? `Detected: ${countryName} — editable` : `Detected: ${countryName}`; hint.style.display = ""; }
-      }
-      const mapped = data?.timezone && tzToOffset[data.timezone] ? tzToOffset[data.timezone] : matched;
-      tz.value = mapped;
-    } catch(e) { /* keep default */ }
-  })();
-</script>
-<script>
-  (function(){
-    const keys = { visitorName: 'mpp.name', visitorDob: 'mpp.dob', visitorCountry: 'mpp.country', visitorJob: 'mpp.job', visitorTimezone: 'mpp.tz', visitorGender: 'mpp.bazi.gender' };
-    const restore = () => {
-      Object.entries(keys).forEach(([id, k]) => {
-        const el = document.getElementById(id); if(!el) return;
-        const v = localStorage.getItem(k); if(v) el.value = v;
-      });
-    };
-    restore();
-    const save = () => {
-      Object.entries(keys).forEach(([id, k]) => {
-        const el = document.getElementById(id); if(!el) return;
-        const v = el.value; if(v) localStorage.setItem(k, v); else localStorage.removeItem(k);
-      });
-    };
-    ['input','change'].forEach(ev => document.querySelectorAll('#visitorName,#visitorDob,#visitorCountry,#visitorJob,#visitorTimezone,#gender').forEach(el => el.addEventListener(ev, save)));
-  })();
-</script>
-<script>
-(function(){
-  const STEM_ELEMENT = {"甲":"Wood","乙":"Wood","丙":"Fire","丁":"Fire","戊":"Earth","己":"Earth","庚":"Metal","辛":"Metal","壬":"Water","癸":"Water"};
-  const ELEMENT_COLOR = {"Wood":"var(--wood)","Fire":"var(--fire)","Earth":"var(--earth)","Metal":"var(--metal)","Water":"var(--water)"};
-  const ELEMENT_ICON = {"Wood":"🌿","Fire":"🔥","Earth":"⛰️","Metal":"⚙️","Water":"💧"};
-  const ELEMENT_DESC = {
-    Wood: "Spring energy — growth, planning, creativity, and new ideas. Balanced Wood helps you start projects and make decisions.",
-    Fire: "Summer energy — passion, visibility, energy, and warmth. Balanced Fire helps you present ideas and stay motivated.",
-    Earth: "Stability energy — grounding, nourishment, trustworthiness, and patience. Balanced Earth helps you finish what you start.",
-    Metal: "Autumn energy — precision, structure, discipline, and focus. Balanced Metal helps you refine work and follow through.",
-    Water: "Winter energy — wisdom, intuition, adaptability, and flow. Balanced Water helps you study, research, and navigate change."
-  };
-  const SEASON_ELEMENT = { 3:"Wood", 4:"Wood", 5:"Fire", 6:"Fire", 7:"Fire", 8:"Earth", 9:"Earth", 10:"Metal", 11:"Metal", 12:"Water", 1:"Water", 2:"Wood" };
-  const DAY_ELEMENT = { morning:"Fire", night:"Water", afternoon:"Fire", evening:"Metal", midnight:"Water", dawn:"Wood" };
-  const nameEl = document.getElementById("visitorName");
-  const dobEl = document.getElementById("visitorDob");
-  const tobEl = document.getElementById("visitorTob");
   const countryEl = document.getElementById("visitorCountry");
   const tzEl = document.getElementById("visitorTimezone");
   const jobEl = document.getElementById("visitorJob");
@@ -413,7 +334,6 @@
   }));
   if(dobEl) dobEl.value = localStorage.getItem("mpp.bazi.dob") || "";
   if(genderEl) genderEl.value = localStorage.getItem("mpp.bazi.gender") || "";
-})();
 </script>
 <script src="../chatbot.js"></script>
   <footer>
@@ -497,5 +417,6 @@
   .footer-spacer{height:72px}
 </style>
 
+<script src="lang.js"></script>
 </body>
 </html>

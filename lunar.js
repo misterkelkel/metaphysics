@@ -6900,7 +6900,7 @@
           return this.getYearInChinese()+'年'+this.getMonthInChinese()+'月'+this.getDayInChinese();
         },
         toFullString:function(){
-          return '道歷'+this.getYearInChinese()+'年，天運'+this._p.lunar.getYearInGanZhi()+'年，'+this._p.lunar.getMonthInGanZhi()+'月，'+this._p.lunar.getDayInGanZhi()+'日。'+this.getMonthInChinese()+'月'+this.getDayInChinese()+'日，'+this._p.lunar.getTimeZhi()+'時。';
+          return '道歷'+this.getYearInChinese()+'年，天運'+this._p.lunar.getYearInGanZhi()+'年，'+this._p.lunar.getMonthInGanZhi()+'月，'+this._p.lunar.getDayInGanZhi()+'日。'+this.getMonthInChinese()+'月'+this.getDayInChinese()+'日，'+this._p.lunar.getTimeZhi()+'时。';
         }
       };
     };
@@ -7744,16 +7744,16 @@
         'dz.you': 'You',
         'dz.xu': 'Xu',
         'dz.hai': 'Hai',
-        'zx.jian': 'Build',
+        'zx.jian': 'Establish',
         'zx.chu': 'Remove',
         'zx.man': 'Full',
-        'zx.ping': 'Flat',
+        'zx.ping': 'Balance',
         'zx.ding': 'Stable',
-        'zx.zhi': 'Hold',
-        'zx.po': 'Break',
+        'zx.zhi': 'Initiate',
+        'zx.po': 'Destruction',
         'zx.wei': 'Danger',
-        'zx.cheng': 'Complete',
-        'zx.shou': 'Collect',
+        'zx.cheng': 'Success',
+        'zx.shou': 'Receive',
         'zx.kai': 'Open',
         'zx.bi': 'Close',
         'jz.jiaZi': 'JiaZi',

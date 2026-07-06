@@ -141,30 +141,30 @@
     <h1>
       <img src="mascot.png" alt="mascot" style="width:44px;height:44px;border-radius:14px;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.12), rgba(255,255,255,.02));border:1px solid var(--border);box-shadow:0 6px 16px rgba(0,0,0,.35);">
       metaphysics<span>.</span>it<span>.com</span>
-      <a class="back" href="index.html">← Back</a>
+      <a class="back" href="index.html" data-i18n="stars_back" data-i18n-html="1">← Back</a>
     </h1>
-    <p class="subtitle">Flying Stars · 9 Star Ki · Annual chart</p>
+    <p class="subtitle" data-i18n="stars_title">Flying Stars · 9 Star Ki · Annual chart</p>
   </header>
 
   <div class="wrap">
     <section class="card">
-      <p class="intro" style="margin-top:0;">
-        <strong>Two quick views:</strong> <strong>9 Star Ki</strong> from your birth year, and the <strong>Annual Flying Stars</strong> chart for the year you choose.
+      <p class="intro" style="margin-top:0;" data-i18n="stars_intro">
+        <strong data-i18n="stars_intro_1">Two quick views:</strong> <span data-i18n="stars_intro_2" data-i18n-html="1"><strong>9 Star Ki</strong> from your birth year, and the <strong>Annual Flying Stars</strong> chart for the year you choose.</span>
       </p>
       <div class="row">
-        <div><label for="visitorName">Name</label><input type="text" id="visitorName" placeholder="Your name"></div>
-        <div><label for="birthYear">Birth year</label><input type="number" id="birthYear" placeholder="e.g. 1985"></div>
+        <div><label for="visitorName" data-i18n="stars_name">Name</label><input type="text" id="visitorName" placeholder="Your name" data-i18n-placeholder="index_name_placeholder"></div>
+        <div><label for="birthYear" data-i18n="stars_birth_year">Birth year</label><input type="number" id="birthYear" placeholder="e.g. 1985"></div>
       </div>
       <div class="row" style="margin-top:.75rem;">
-        <div><label for="gender">Gender</label><select id="gender"><option value="">— select —</option><option value="male">Male</option><option value="female">Female</option></select></div>
-        <div><label for="chartYear">Annual chart year</label><input type="number" id="chartYear" placeholder="2026"></div>
+        <div><label for="gender" data-i18n="index_gender">Gender</label><select id="gender"><option value="" data-i18n="index_gender_select">— select —</option><option value="male" data-i18n="index_male">Male</option><option value="female" data-i18n="index_female">Female</option></select></div>
+        <div><label for="chartYear" data-i18n="stars_chart_year">Annual chart year</label><input type="number" id="chartYear" placeholder="2026"></div>
       </div>
-      <button id="calcBtn" class="secondary" style="margin-top:.6rem;" type="button">Show my stars</button>
+      <button id="calcBtn" class="secondary" style="margin-top:.6rem;" type="button" data-i18n="stars_show_btn">Show my stars</button>
     </section>
 
     <section class="card" id="starKiCard" style="display:none;">
       <div class="bar">
-        <div class="bar-meta" id="profileBar"><strong>Profile</strong></div>
+        <div class="bar-meta" id="profileBar" data-i18n="stars_profile"><strong>Profile</strong></div>
         <div class="pill" id="starMeta"></div>
       </div>
       <div class="grid" id="nineStarGrid" style="margin-top:.75rem;"></div>
@@ -175,15 +175,15 @@
 
     <section class="card" id="annualCard" style="display:none;">
       <div class="bar">
-        <div class="bar-meta"><strong>Annual Flying Stars</strong></div>
+        <div class="bar-meta" data-i18n="stars_annual_title"><strong>Annual Flying Stars</strong></div>
         <div class="pill" id="annualYearPill"></div>
       </div>
-      <p class="intro" style="margin-top:.5rem;">
-        In 玄空飛星, the 9 stars cycle each year through a 3x3 Lo Shu grid. Use this as a simple yearly reference; for real placement, combine it with your actual home facing direction.
+      <p class="intro" style="margin-top:.5rem;" data-i18n="stars_annual_intro">
+        In 玄空飞星, the 9 stars cycle each year through a 3x3 Lo Shu grid. Use this as a simple yearly reference; for real placement, combine it with your actual home facing direction.
       </p>
       <div class="chart" id="annualChart"></div>
       <div class="card" style="margin-top:.75rem;background:var(--surface);border:1px solid var(--border);">
-        <p class="intro" id="annualNote" style="margin:0;"></p>
+        <p class="intro" id="annualNote" style="margin:0;" data-i18n="stars_annual_note">In East-West metaphysics, a simpler reading is used here: stars 1/6/3 are taken as stronger, 5/7/8 as caution, 9/2/4 as transitional. This is a simplified view; for real application, use a complete chart with facing direction and floor chart.</p>
       </div>
     </section>
   </div>
@@ -320,87 +320,6 @@
     if(chartYearEl) chartYearEl.value = chartYear;
   })();
 </script>
-<script src="../chatbot.js"></script>
-  <footer>
-    <div class="footer-inner">
-      <div class="social-bar">
-        <a href="about.html" aria-label="About" title="About">
-          <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-        </a>
-        <a href="faq.html" aria-label="FAQ" title="FAQ">
-          <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-        </a>
-        <a href="https://instagram.com/x.s.seow" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram">
-          <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-        </a>
-        <a href="https://www.linkedin.com/in/seow-xi-sun-kelvin-0950379" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
-          <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-        </a>
-      </div>
-    </div>
-  </footer>
-
-  <style>
-    footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      background: rgba(18, 16, 20, 0.92);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-top: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 -6px 24px rgba(0,0,0,0.35);
-      padding: 14px 22px 18px;
-      text-align: center;
-    }
-    .footer-inner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .social-bar {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-    .social-bar a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-      color: rgba(255,255,255,0.85);
-      text-decoration: none;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
-    }
-    .social-bar a:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 14px rgba(0,0,0,0.4);
-      color: #ffffff;
-    }
-    .social-icon {
-      width: 20px;
-      height: 20px;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      fill: none;
-      stroke: currentColor;
-    }
-  </style>
-
-<style>
-  .footer-spacer{height:72px}
-</style>
-
+<script src="lang.js"></script>
 </body>
 </html>

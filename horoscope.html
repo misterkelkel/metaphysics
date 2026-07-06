@@ -135,45 +135,45 @@
     <h1>
       <img src="mascot.png" alt="mascot" style="width:44px;height:44px;border-radius:14px;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.12), rgba(255,255,255,.02));border:1px solid var(--border);box-shadow:0 6px 16px rgba(0,0,0,.35);">
       metaphysics<span>.</span>it<span>.com</span>
-      <a class="back" href="index.html">← Back</a>
+      <a class="back" href="index.html" data-i18n="horo_back" data-i18n-html="1">← Back</a>
     </h1>
-    <p class="subtitle">Horoscope · East + West</p>
+    <p class="subtitle" data-i18n="horo_title">Horoscope · East + West</p>
   </header>
 
   <div class="wrap">
     <section class="card">
-      <p class="intro" style="margin-top:0;">
-        <strong>Two views from one birthday:</strong> your Eastern Chinese zodiac animal and your Western sun sign.
+      <p class="intro" style="margin-top:0;" data-i18n="horo_intro">
+        <strong data-i18n="horo_intro_1">Two views from one birthday:</strong> <span data-i18n="horo_intro_2">your Eastern Chinese zodiac animal and your Western sun sign.</span>
       </p>
       <div class="row">
-        <div><label for="visitorName">Name</label><input type="text" id="visitorName" placeholder="Your name"></div>
-        <div><label for="visitorDob">Date of birth</label><input type="date" id="visitorDob"></div>
+        <div><label for="visitorName" data-i18n="horo_name">Name</label><input type="text" id="visitorName" placeholder="Your name" data-i18n-placeholder="index_name_placeholder"></div>
+        <div><label for="visitorDob" data-i18n="horo_dob">Date of birth</label><input type="date" id="visitorDob"></div>
       </div>
       <div class="row" style="margin-top:.75rem;">
-        <div><label for="gender">Gender</label><select id="gender"><option value="">— select —</option><option value="male">Male</option><option value="female">Female</option></select></div>
-        <div><label for="country">Country</label><input type="text" id="country" placeholder="Country"></div>
+        <div><label for="gender" data-i18n="horo_gender">Gender</label><select id="gender"><option value="" data-i18n="index_gender_select">— select —</option><option value="male" data-i18n="index_male">Male</option><option value="female" data-i18n="index_female">Female</option></select></div>
+        <div><label for="country" data-i18n="horo_country">Country</label><input type="text" id="country" placeholder="Country" data-i18n-placeholder="index_country_placeholder"></div>
       </div>
       <div class="row" style="margin-top:.75rem;">
-        <div><label for="job">Job</label><input type="text" id="job" placeholder="Job"></div>
-        <div><label for="tob">Time of birth</label><input type="time" id="tob"></div>
+        <div><label for="job" data-i18n="horo_job">Job</label><input type="text" id="job" placeholder="Job" data-i18n-placeholder="index_job_placeholder"></div>
+        <div><label for="tob" data-i18n="horo_tob">Time of birth</label><input type="time" id="tob"></div>
       </div>
-      <button id="showBtn" class="secondary" style="margin-top:.6rem;" type="button">Show my signs</button>
+      <button id="showBtn" class="secondary" style="margin-top:.6rem;" type="button" data-i18n="horo_show_btn">Show my signs</button>
     </section>
 
     <section class="card" id="eastCard" style="display:none;">
       <div class="bar">
-        <div class="bar-meta"><strong>Eastern · Chinese zodiac</strong></div>
+        <div class="bar-meta" data-i18n="horo_east_title"><strong>Eastern · Chinese zodiac</strong></div>
         <div class="pill" id="eastPill"></div>
       </div>
       <div class="grid" style="margin-top:.75rem;">
         <div class="sign-card">
-          <div class="kicker">General</div>
+          <div class="kicker" data-i18n="horo_general">General</div>
           <div class="animal" id="animalEmoji"></div>
           <div class="meta" id="animalMeta"></div>
           <p class="body" id="animalBody"></p>
         </div>
         <div class="sign-card">
-          <div class="kicker">Suggested use</div>
+          <div class="kicker" data-i18n="horo_suggested">Suggested use</div>
           <div class="meta" id="animalUseTitle" style="margin-top:.25rem;"></div>
           <p class="body" id="animalUseBody"></p>
         </div>
@@ -182,18 +182,18 @@
 
     <section class="card" id="westCard" style="display:none;">
       <div class="bar">
-        <div class="bar-meta"><strong>Western · Sun sign</strong></div>
+        <div class="bar-meta" data-i18n="horo_west_title"><strong>Western · Sun sign</strong></div>
         <div class="pill" id="westPill"></div>
       </div>
       <div class="grid" style="margin-top:.75rem;">
         <div class="sign-card">
-          <div class="kicker">Element</div>
+          <div class="kicker" data-i18n="horo_element">Element</div>
           <div class="animal" id="westElement" style="font-size:1.6rem;"></div>
           <div class="meta" id="westElementLabel"></div>
           <p class="body" id="westElementBody"></p>
         </div>
         <div class="sign-card">
-          <div class="kicker">Today note</div>
+          <div class="kicker" data-i18n="horo_today_note">Today note</div>
           <div class="meta" id="westSignLabel" style="margin-top:.25rem;"></div>
           <p class="body" id="westSignBody"></p>
         </div>
@@ -214,7 +214,7 @@
       {n:"Rabbit",cn:"兔",emoji:"🐇",trait:"Gentle, elegant, alert, responsible",use:"Negotiation, rebuilding trust",tone:"var(--wood)"},
       {n:"Dragon",cn:"龍",emoji:"🐉",trait:"Confident, enthusiastic, brave, innovative",use:"Major launches or public appearance",tone:"var(--earth)"},
       {n:"Snake",cn:"蛇",emoji:"🐍",trait:"Enigmatic, intelligent, calm, shy",use:"Due diligence, quiet planning",tone:"var(--fire)"},
-      {n:"Horse",cn:"馬",emoji:"🐎",trait:"Animated, active, energetic, independent",use:"Travel, outreach, visibility",tone:"var(--fire)"},
+      {n:"Horse",cn:"马",emoji:"🐎",trait:"Animated, active, energetic, independent",use:"Travel, outreach, visibility",tone:"var(--fire)"},
       {n:"Goat",cn:"羊",emoji:"🐑",trait:"Calm, sympathetic, relaxed, creative",use:"Creative work and family matters",tone:"var(--earth)"},
       {n:"Monkey",cn:"猴",emoji:"🐒",trait:"Sharp, curious, playful, clever",use:"Problem solving and learning",tone:"var(--metal)"},
       {n:"Rooster",cn:"雞",emoji:"🐓",trait:"Observant, hardworking, courageous, talented",use:"Presentations, audits, timelines",tone:"var(--metal)"},
@@ -308,10 +308,10 @@
         if(el.id==='job') localStorage.setItem("mpp.job", el.value);
         if(el.id==='tob') localStorage.setItem("mpp.tob", el.value);
       } catch(e){}
-    })));
+    }))); 
   })();
 </script>
-<script src="../chatbot.js"></script>
+<script src="lang.js"></script>
   <footer>
     <div class="footer-inner">
       <div class="social-bar">
@@ -393,5 +393,6 @@
   .footer-spacer{height:72px}
 </style>
 
+<script src="lang.js"></script>
 </body>
 </html>
