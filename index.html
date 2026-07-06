@@ -284,9 +284,7 @@
       tz.value = mapped;
     } catch(e) { /* keep empty */ }
   })();
-</script>
-<script>
-  (function(){
+(function(){
     const keys = { visitorName: 'mpp.name', visitorDob: 'mpp.dob', visitorCountry: 'mpp.country', visitorJob: 'mpp.job', visitorTimezone: 'mpp.tz', weekStart: 'mpp.weekStart', gender: 'mpp.gender', visitorLang: 'mpp.lang' };
     const input = document.getElementById('visitorName');
     const save = () => {
@@ -423,13 +421,9 @@ let lastPlannedStart = null;
 let lastPlannedTz = null;
 
 function doPlan(){
+  window.doPlan = doPlan;
   const nameEl = document.getElementById("visitorName");
   const dobEl = document.getElementById("visitorDob");
-  const countryEl = document.getElementById("visitorCountry");
-  const jobEl = document.getElementById("visitorJob");
-  const tzEl = tzInput;
-  const name = nameEl?.value?.trim();
-  const dob = dobEl?.value;
   const country = countryEl?.value?.trim();
   const job = jobEl?.value?.trim();
   const weekRaw = weekStartInput?.value ? new Date(weekStartInput.value) : new Date();
