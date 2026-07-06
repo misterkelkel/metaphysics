@@ -6,101 +6,9 @@
   <link rel="icon" type="image/png" href="mascot.png">
   <title>About — metaphysics.it.com</title>
   <meta name="description" content="About metaphysics.it.com: a simple, independent guide to BaZi, 9 Star Ki, 12 Daily Officers, and East-West horoscope.">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <style>
-    :root {
-      --bg: #0f0f14;
-      --surface: #181820;
-      --surface-2: #1f1f29;
-      --border: rgba(255,255,255,.08);
-      --text: #f2f2f7;
-      --muted: #aaa7b3;
-      --accent: #ff8a65;
-      --accent-2: #ff6e40;
-      --good: #81c784;
-      --bad: #e57373;
-      --chip-bg: rgba(255,255,255,.06);
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: radial-gradient(1200px 600px at -10% -10%, rgba(255,110,64,.15), transparent), radial-gradient(1000px 500px at 110% 10%, rgba(255,138,101,.12), transparent), var(--bg);
-      color: var(--text);
-      line-height: 1.55;
-    }
-    header { max-width: 1100px; margin: 0 auto; padding: 28px 0 6px; }
-    header h1 {
-      font-family: "Noto Serif SC", "Songti SC", Georgia, "Times New Roman", serif;
-      font-size: 1.85rem;
-      letter-spacing: -0.02em;
-      margin: 0;
-    }
-    header h1 span { color: var(--accent); }
-    .subtitle { color: var(--muted); margin-top: .35rem; font-size: .98rem; }
-    .wrap { width: 100%; max-width: 1100px; margin: 0 auto; padding: 22px 0 110px; }
-    @media (min-width: 760px) { .wrap { padding-left: 22px; padding-right: 22px; } }
-
-    .card {
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 16px;
-      margin-top: 16px;
-      backdrop-filter: blur(8px);
-    }
-    @media (min-width: 760px) { .card { padding: 18px; } }
-    .card h2 {
-      font-size: 1.15rem;
-      margin: 0 0 .5rem;
-      color: var(--text);
-    }
-    .card p, .card li { color: var(--muted); }
-    .card ul { margin: .25rem 0 0; padding-left: 1.15rem; }
-    .card li { margin: .15rem 0; }
-
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: .4rem;
-      margin-top: .5rem;
-      padding: .45rem .7rem;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      text-decoration: none;
-      font-size: .85rem;
-    }
-
-    .footer-spacer { height: 90px; }
-    footer.footer-bar {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: rgba(20,20,26,.85);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-top: 1px solid var(--border);
-      padding: 14px 18px 16px;
-      text-align: center;
-      z-index: 100;
-    }
-    .footer-inner { display: inline-flex; align-items: center; gap: 1.2rem; }
-    .social-circle {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 44px; height: 44px; border-radius: 50%;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      color: var(--text); text-decoration: none;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 8px 18px rgba(0,0,0,.35);
-      transition: transform .15s ease, background .15s ease;
-    }
-    .social-circle:hover { transform: translateY(-2px); background: #25252f; }
-    .social-circle svg { width: 19px; height: 19px; fill: currentColor; }
-  </style>
-
   <header>
     <a class="back-link" href="index.html" data-i18n="about_back" data-i18n-html="1">← Back to tools</a>
     <h1>About<span>.</span>metaphysics<span>.it</span><span>.com</span></h1>
@@ -152,14 +60,12 @@
         <a href="faq.html" aria-label="FAQ" title="FAQ" class="social-circle">
           <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         </a>
-        <a href="bazi.html" aria-label="BaZi" title="BaZi" class="social-circle">
-          <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-        </a>
+
         <a href="https://instagram.com/x.s.seow" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram" class="social-circle">
           <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
         </a>
         <a href="https://www.linkedin.com/in/seow-xi-sun-kelvin-0950379" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn" class="social-circle">
-          <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2 2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
         </a>
       </div>
     </div>
