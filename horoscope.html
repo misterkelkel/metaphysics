@@ -189,7 +189,7 @@
       <div class="grid" style="margin-top:.75rem;">
         <div class="sign-card">
           <div class="kicker" data-i18n="horo_element">Element</div>
-          <div class="animal" id="westElement" style="font-size:1.6rem;"></div>
+          <div class="animal" id="westElement" style="font-size:2rem;"></div>
           <div class="meta" id="westElementLabel"></div>
           <p class="body" id="westElementBody"></p>
         </div>
@@ -223,18 +223,18 @@
       {n:"Pig",cn:"豬",emoji:"🐖",trait:"Generous, compassionate, patient, hardworking",use:"Celebrations, abundance planning",tone:"var(--water)"}
     ];
     const signs = [
-      {n:"Aries",from:"03-21",to:"04-19",el:"Fire",planet:"Mars",body:"Direct, energetic, and competitive. Best for action and new beginnings."},
-      {n:"Taurus",from:"04-20",to:"05-20",el:"Earth",planet:"Venus",body:"Steady, patient, and practical. Best for reliability, routine, and long-term plans."},
-      {n:"Gemini",from:"05-21",to:"06-20",el:"Air",planet:"Mercury",body:"Adaptable, curious, and social. Best for messaging, learning, and light communication."},
-      {n:"Cancer",from:"06-21",to:"07-22",el:"Water",planet:"Moon",body:"Protective, sensitive, and intuitive. Best for family, home, and private matters."},
-      {n:"Leo",from:"07-23",to:"08-22",el:"Fire",planet:"Sun",body:"Confident, expressive, and warm. Best for visibility, leadership, and celebration."},
-      {n:"Virgo",from:"08-23",to:"09-22",el:"Earth",planet:"Mercury",body:"Precise, helpful, and careful. Best for details, audits, health, and maintenance."},
-      {n:"Libra",from:"09-23",to:"10-22",el:"Air",planet:"Venus",body:"Balanced, diplomatic, and fair. Best for agreements, relationships, and design choices."},
-      {n:"Scorpio",from:"10-23",to:"11-21",el:"Water",planet:"Pluto",body:"Intense, strategic, and perceptive. Best for deep work, research, and transformation."},
-      {n:"Sagittarius",from:"11-22",to:"12-21",el:"Fire",planet:"Jupiter",body:"Adventurous, optimistic, and free. Best for travel, expansion, and new perspectives."},
-      {n:"Capricorn",from:"12-22",to:"01-19",el:"Earth",planet:"Saturn",body:"Disciplined, responsible, and structured. Best for approvals, systems, and careers."},
-      {n:"Aquarius",from:"01-20",to:"02-18",el:"Air",planet:"Uranus",body:"Independent, progressive, and inventive. Best for ideas, tech, and community work."},
-      {n:"Pisces",from:"02-19",to:"03-20",el:"Water",planet:"Neptune",body:"Compassionate, artistic, and intuitive. Best for healing, art, and quiet reflection."}
+      {n:"Aries",from:"03-21",to:"04-19",el:"Fire",planet:"Mars",icon:"🐏",body:"Direct, energetic, and competitive. Best for action and new beginnings."},
+      {n:"Taurus",from:"04-20",to:"05-20",el:"Earth",planet:"Venus",icon:"🐂",body:"Steady, patient, and practical. Best for reliability, routine, and long-term plans."},
+      {n:"Gemini",from:"05-21",to:"06-20",el:"Air",planet:"Mercury",icon:"👥",body:"Adaptable, curious, and social. Best for messaging, learning, and light communication."},
+      {n:"Cancer",from:"06-21",to:"07-22",el:"Water",planet:"Moon",icon:"🦀",body:"Protective, sensitive, and intuitive. Best for family, home, and private matters."},
+      {n:"Leo",from:"07-23",to:"08-22",el:"Fire",planet:"Sun",icon:"🦁",body:"Confident, expressive, and warm. Best for visibility, leadership, and celebration."},
+      {n:"Virgo",from:"08-23",to:"09-22",el:"Earth",planet:"Mercury",icon:"🌾",body:"Precise, helpful, and careful. Best for details, audits, health, and maintenance."},
+      {n:"Libra",from:"09-23",to:"10-22",el:"Air",planet:"Venus",icon:"⚖️",body:"Balanced, diplomatic, and fair. Best for agreements, relationships, and design choices."},
+      {n:"Scorpio",from:"10-23",to:"11-21",el:"Water",planet:"Pluto",icon:"🦂",body:"Intense, strategic, and perceptive. Best for deep work, research, and transformation."},
+      {n:"Sagittarius",from:"11-22",to:"12-21",el:"Fire",planet:"Jupiter",icon:"🏹️",body:"Adventurous, optimistic, and free. Best for travel, expansion, and new perspectives."},
+      {n:"Capricorn",from:"12-22",to:"01-19",el:"Earth",planet:"Saturn",icon:"🐐",body:"Disciplined, responsible, and structured. Best for approvals, systems, and careers."},
+      {n:"Aquarius",from:"01-20",to:"02-18",el:"Air",planet:"Uranus",icon:"🌊",body:"Independent, progressive, and inventive. Best for ideas, tech, and community work."},
+      {n:"Pisces",from:"02-19",to:"03-20",el:"Water",planet:"Neptune",icon:"🐟",body:"Compassionate, artistic, and intuitive. Best for healing, art, and quiet reflection."}
     ];
     const years = animals.map((_,i)=>i);
 
@@ -293,10 +293,10 @@
       }) || signs[signs.length-1];
       document.getElementById("westSignLabel").textContent = `${sign.n} · ${sign.el} · ${sign.planet}`;
       document.getElementById("westSignBody").textContent = `${name}, ${sign.body}`;
-      document.getElementById("westElement").textContent = sign.el;
+      document.getElementById("westElement").textContent = sign.icon;
       document.getElementById("westElementLabel").textContent = sign.planet;
       document.getElementById("westElementBody").textContent = `${sign.el} signs value ${sign.el.toLowerCase()} themes. ${sign.body}`;
-      document.getElementById("westPill").textContent = `${sign.n} · ${sign.el}`;
+      document.getElementById("westPill").textContent = `${sign.n} ${sign.icon} · ${sign.el}`;
       westCard.style.display = "";
     });
 

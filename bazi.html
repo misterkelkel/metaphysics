@@ -150,6 +150,18 @@
         <summary>How does BaZi link to the weekly planner?</summary>
         <p>Your strongest element can suggest a planning style. Metal often suits structured checklists; Wood suits new starts; Water suits conversation-heavy plans. Use the weekly planner to test small timing choices.</p>
       </details>
+      <details>
+        <summary>What are the Four Pillars?</summary>
+        <p>Year, Month, Day, and Hour each become one pillar. Each pillar has a Heavenly Stem and an Earthly Branch. Together they form eight characters: 八字. They are a symbolic snapshot, not a moral judgement. Day is usually the strongest reference point.</p>
+      </details>
+      <details>
+        <summary>What is the life cycle?</summary>
+        <p>Traditional BaZi often describes growth phases such as 十二长生. The idea is not destiny but rhythm: some stages suit starting, some suit resting, some suit review. In practice, use it as a timing lens, not a prediction.</p>
+      </details>
+      <details>
+        <summary>What should I take note of?</summary>
+        <p>Notice your strongest and weakest elements. Strongest shows your default strength; weakest shows where you may overuse effort. Watch for seasonal shifts, because environment often brings out different behaviour. Use balanced habits instead of relying on one style.</p>
+      </details>
 
     <section class="card">
       <p class="intro" style="margin-top:0;" data-i18n="bazi_intro">
@@ -219,8 +231,28 @@
   const tzEl = document.getElementById("visitorTimezone");
   const jobEl = document.getElementById("visitorJob");
   const genderEl = document.getElementById("gender");
+  const nameEl = document.getElementById("visitorName");
+  const dobEl = document.getElementById("visitorDob");
+  const tobEl = document.getElementById("visitorTob");
   const btn = document.getElementById("calcBtn");
   const resultCard = document.getElementById("resultCard");
+
+  try {
+    const savedName = localStorage.getItem("mpp.name");
+    const savedDob = localStorage.getItem("mpp.dob");
+    const savedTz = localStorage.getItem("mpp.tz");
+    const savedCountry = localStorage.getItem("mpp.country");
+    const savedJob = localStorage.getItem("mpp.job");
+    const savedGender = localStorage.getItem("mpp.gender");
+    const savedTob = localStorage.getItem("mpp.tob");
+    if (nameEl && savedName) nameEl.value = savedName;
+    if (dobEl && savedDob) dobEl.value = savedDob;
+    if (tzEl && savedTz) tzEl.value = savedTz;
+    if (countryEl && savedCountry) countryEl.value = savedCountry;
+    if (jobEl && savedJob) jobEl.value = savedJob;
+    if (genderEl && savedGender) genderEl.value = savedGender;
+    if (tobEl && savedTob) tobEl.value = savedTob;
+  } catch (e) {}
 
   function hourLabel(h){
     if (h >= 23 || h < 1) return "midnight";
@@ -245,6 +277,13 @@
     const idx = ((gy - 4) % 60 + 60) % 60;
     return STEMS[idx % 10];
   }
+
+  const SEASON_ELEMENT = { 1: 'Wood', 2: 'Wood', 3: 'Wood', 4: 'Fire', 5: 'Fire', 6: 'Fire', 7: 'Fire', 8: 'Earth', 9: 'Earth', 10: 'Metal', 11: 'Metal', 12: 'Water' };
+  const DAY_ELEMENT = { midnight: 'Water', dawn: 'Wood', morning: 'Wood', afternoon: 'Fire', evening: 'Metal', night: 'Water' };
+  const ELEMENT_ICON = { Wood: '🌿', Fire: '🔥', Earth: '🌏', Metal: '⚙️', Water: '💧' };
+  const ELEMENT_COLOR = { Wood: '#81c784', Fire: '#ff8a65', Earth: '#ffd54f', Metal: '#e0e0e0', Water: '#64b5f6' };
+  const STEM_ELEMENT = { 甲:'Wood', 乙:'Wood', 丙:'Fire', 丁:'Fire', 戊:'Earth', 己:'Earth', 庚:'Metal', 辛:'Metal', 壬:'Water', 癸:'Water' };
+  const ELEMENT_DESC = { Wood: 'Growth & planning', Fire: 'Visibility & connection', Earth: 'Stability & process', Metal: 'Clarity & decisions', Water: 'Reflection & communication' };
 
   function calc(){
     const name = nameEl?.value?.trim();
@@ -337,13 +376,23 @@
   }
 
   btn && btn.addEventListener("click", calc);
-  [nameEl, dobEl, tobEl, countryEl, tzEl, jobEl, genderEl].forEach(el => el && el.addEventListener("input", ()=>{
-    if(!el) return;
-    const k = el.id==="dob"?"mpp.bazi.dob":el.id==="gender"?"mpp.bazi.gender":"mpp."+el.id;
-    if (el.value) localStorage.setItem(k, el.value); else localStorage.removeItem(k);
-  }));
-  if(dobEl) dobEl.value = localStorage.getItem("mpp.bazi.dob") || "";
-  if(genderEl) genderEl.value = localStorage.getItem("mpp.bazi.gender") || "";
+  const baziPersist = (key, value) => {
+    try { if (value) localStorage.setItem(key, value); else localStorage.removeItem(key); } catch (e) {}
+  };
+  [nameEl, dobEl, tobEl, countryEl, tzEl, jobEl, genderEl].forEach(el => {
+    if (!el) return;
+    const save = () => {
+      if (el.id === 'visitorDob') return baziPersist('mpp.dob', el.value);
+      if (el.id === 'visitorTimezone') return baziPersist('mpp.tz', el.value);
+      if (el.id === 'visitorName') return baziPersist('mpp.name', el.value);
+      if (el.id === 'visitorCountry') return baziPersist('mpp.country', el.value);
+      if (el.id === 'visitorJob') return baziPersist('mpp.job', el.value);
+      if (el.id === 'gender') return baziPersist('mpp.gender', el.value);
+      if (el.id === 'visitorTob') return baziPersist('mpp.tob', el.value);
+    };
+    el.addEventListener('input', save);
+    el.addEventListener('change', save);
+  });
 </script>
 <script src="../chatbot.js"></script>
 <footer class="footer-bar">
