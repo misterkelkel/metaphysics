@@ -120,13 +120,42 @@
     .guide-box { border-radius: 16px; padding: 14px; border: 1px solid var(--border); background: rgba(255,255,255,.025); }
     .guide-box { border-radius: 16px; padding: 14px; border: 1px solid var(--border); background: rgba(255,255,255,.025); }
     .intro strong { color: var(--text); }
+    .pillar-card { margin-top: .75rem; }
+    .pillar-head { font-weight: 700; margin-bottom: .5rem; }
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .5rem;
+    }
+    @media (max-width: 760px) {
+      .pillar-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 440px) {
+      .pillar-grid { grid-template-columns: 1fr; }
+    }
+    .pillar-cell {
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.025);
+      padding: .7rem .6rem;
+      text-align: center;
+      display: grid;
+      gap: .2rem;
+    }
+    .pillar-cell .p-label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+    .pillar-cell .p-stem { font-weight: 800; font-size: 1.1rem; color: var(--text); }
+    .pillar-cell .p-branch { font-weight: 700; font-size: 1rem; color: var(--accent); }
+    .pillar-cell.unknown .p-stem,
+    .pillar-cell.unknown .p-branch { color: var(--muted); font-weight: 600; }
   </style>
 </head>
 <body>
   <header>
     <h1>
-      <img src="mascot.png" alt="mascot" style="width:44px;height:44px;border-radius:14px;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.12), rgba(255,255,255,.02));border:1px solid var(--border);box-shadow:0 6px 16px rgba(0,0,0,.35);">
-      metaphysics<span>.</span>it<span>.com</span>
+      <a class="brand" href="index.html">
+        <img src="mascot.png" alt="mascot" class="logo brand-img">
+        <span class="brand">metaphysics<span>.</span>it<span>.com</span>
+      </a>
       <a class="back" href="index.html" data-i18n="bazi_back" data-i18n-html="1">← Back</a>
     </h1>
     <p class="subtitle" data-i18n="bazi_title">BaZi · 5 Elements · Simple profile</p>
@@ -194,6 +223,11 @@
 
       <div class="card-inner">
         <div class="grid" id="elementGrid" style="margin-top:.75rem;"></div>
+      </div>
+
+      <div class="card-inner pillar-card" id="pillarCard" style="display:none;">
+        <div class="pillar-head" data-i18n="bazi_pillars_title">Four Pillars</div>
+        <div class="pillar-grid" id="pillarGrid"></div>
       </div>
 
       <div class="card-inner" id="tipsCard" style="display:none;">
@@ -320,8 +354,8 @@
     const weakest = Object.entries(elementCounts).sort((a,b)=>a[1]-b[1])[0];
 
     const profile = [name, country?`· ${country}`:"", gender?`· ${gender}`:"", job?`· ${job}`:"", zodiacAnimal?`· ${zodiacAnimal}`:""].filter(Boolean).join(" ");
-    document.getElementById("profileBar").innerHTML = `<strong>Profile</strong> · ${profile || 'BaZi profile'}`;
-    document.getElementById("elementBar").innerHTML = `<span class="pill">${ELEMENT_ICON[strongest[0]]} Strongest: ${strongest[0]}</span><span class="pill">${ELEMENT_ICON[weakest[0]]} Weakest: ${weakest[0]}</span>`;
+    document.getElementById("profileBar").innerHTML = `<strong data-i18n="bazi_profile">Profile</strong> · ${profile || 'BaZi profile'}`;
+    document.getElementById("elementBar").innerHTML = `<span class="pill">${ELEMENT_ICON[strongest[0]]} <span data-i18n="bazi_strongest">Strongest</span>: ${strongest[0]}</span><span class="pill">${ELEMENT_ICON[weakest[0]]} <span data-i18n="bazi_weakest">Weakest</span>: ${weakest[0]}</span>`;
 
     const grid = document.getElementById("elementGrid");
     grid.innerHTML = "";
@@ -337,9 +371,11 @@
       grid.appendChild(card);
     });
 
+    renderPillars(dob, tob, tz, name);
+
     const tipsCard = document.getElementById("tipsCard");
     tipsCard.style.display = "";
-    document.getElementById("guidanceText").innerHTML = `<strong>Guidance:</strong> ${guidance(strongest[0], weakest[0])}`;
+    document.getElementById("guidanceText").innerHTML = `<strong data-i18n="bazi_guidance">Guidance:</strong> ${guidance(strongest[0], weakest[0])}`;
 
     if(resultCard){ resultCard.style.display = ""; }
   }
@@ -370,7 +406,114 @@
     return map[key1] || map[key2] || "Balance the extremes of your profile through small, consistent habits.";
   }
 
-  function animal(y){
+  function renderPillars(dob, tob, tz, name){
+    const card = document.getElementById("pillarCard");
+    const grid = document.getElementById("pillarGrid");
+    if(!card || !grid) return;
+    grid.innerHTML = "";
+    card.style.display = "";
+    const lang = (window.mppLang && typeof window.mppLang.getLang === 'function') ? window.mppLang.getLang() : 'en';
+    const headers = {
+      en: ['Hour Pillar','Day Pillar','Month Pillar','Year Pillar'],
+      zh: ['时柱','日柱','月柱','年柱'],
+      both: ['Hour Pillar / 时柱','Day Pillar / 日柱','Month Pillar / 月柱','Year Pillar / 年柱']
+    };
+    const labels = headers[lang] || headers.en;
+    const t = (window.mppLang && typeof window.mppLang.t === 'function') ? window.mppLang.t : ((k)=>k);
+
+    const year = new Date(dob).getFullYear();
+    const month = new Date(dob).getMonth()+1;
+    const date = new Date(dob).getDate();
+    let hour = 12, minute = 0;
+    if(tob){
+      const parts = String(tob).split(':');
+      if(parts[0]) hour = parseInt(parts[0],10);
+      if(parts[1]) minute = parseInt(parts[1],10);
+    }
+
+    const yearStem = getYearStem(year);
+    const monthStem = getMonthStem(year, month);
+    const dayStem = getDayStem(year, month, date);
+    const hourStem = getHourStem(dayStem, hour);
+
+    const yearBranch = getYearBranch(year);
+    const monthBranch = getMonthBranch(month);
+    const dayBranch = getDayBranch(year, month, date);
+    const hourBranch = getHourBranch(hour);
+
+    const stems = [hourStem, dayStem, monthStem, yearStem];
+    const branches = [hourBranch, dayBranch, monthBranch, yearBranch];
+
+    const stemNames = { 甲:'Jia',乙:'Yi',丙:'Bing',丁:'Ding',戊:'Wu',己:'Ji',庚:'Geng',辛:'Xin',壬:'Ren',癸:'Gui' };
+    const branchNames = { 子:'Zi',丑:'Chou',寅:'Yin',卯:'Mao',辰:'Chen',巳:'Si',午:'Wu',未:'Wei',申:'Shen',酉:'You',戌:'Xu',亥:'Hai' };
+    const branchNamesZh = { 子:'子',丑:'丑',寅:'寅',卯:'卯',辰:'辰',巳:'巳',午:'午',未:'未',申:'申',酉:'酉',戌:'戌',亥:'亥' };
+
+    const hasTob = !!tob;
+    labels.forEach((label, i) => {
+      const cell = document.createElement('div');
+      cell.className = 'pillar-cell' + (i===0 && !hasTob ? ' unknown' : '');
+      const stem = stems[i];
+      const branch = branches[i];
+      const stemText = stem ? (stemNames[stem] || stem) + ' · ' + stem : 'Unknown / 未知';
+      const branchText = branch ? (branchNames[branch] || branch) + ' · ' + (branchNamesZh[branch] || branch) : '';
+      if(i===0 && !hasTob){
+        cell.innerHTML = `<div class="p-label">${label}</div><div class="p-stem">Unknown / 未知</div><div class="p-branch"></div>`;
+      } else {
+        cell.innerHTML = `<div class="p-label">${label}</div><div class="p-stem">${stemText}</div><div class="p-branch">${branchText}</div>`;
+      }
+      grid.appendChild(cell);
+    });
+  }
+
+  function getYearStem(gy){
+    const STEMS = "甲乙丙丁戊己庚辛壬癸";
+    const idx = ((gy - 4) % 60 + 60) % 60;
+    return STEMS[idx % 10];
+  }
+  function getMonthStem(gy, m){
+    const STEMS = "甲乙丙丁戊己庚辛壬癸";
+    const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
+    const yearStemIdx = STEMS.indexOf(getYearStem(gy));
+    const monthBranchIdx = (m % 12);
+    const idx = (yearStemIdx * 12 + monthBranchIdx) % 60;
+    return STEMS[idx % 10];
+  }
+  function getDayStem(gy, m, d){
+    const base = new Date(1900, 0, 1);
+    const target = new Date(gy, m-1, d);
+    const diff = Math.floor((target - base) / 86400000);
+    const STEMS = "甲乙丙丁戊己庚辛壬癸";
+    const idx = ((diff + 9) % 60 + 60) % 60;
+    return STEMS[idx % 10];
+  }
+  function getHourStem(dayStem, h){
+    const STEMS = "甲乙丙丁戊己庚辛壬癸";
+    const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
+    const dayStemIdx = STEMS.indexOf(dayStem);
+    const hourBranchIdx = Math.floor(((h + 1) % 24) / 2);
+    const idx = (dayStemIdx * 12 + hourBranchIdx) % 60;
+    return STEMS[idx % 10];
+  }
+  function getYearBranch(gy){
+    const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
+    return BRANCHES[((gy - 4) % 12 + 12) % 12];
+  }
+  function getMonthBranch(m){
+    const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
+    return BRANCHES[(m % 12)];
+  }
+  function getDayBranch(gy, m, d){
+    const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
+    const base = new Date(1900, 0, 1);
+    const target = new Date(gy, m-1, d);
+    const diff = Math.floor((target - base) / 86400000);
+    const idx = ((diff + 11) % 60 + 60) % 60;
+    return BRANCHES[idx % 12];
+  }
+  function getHourBranch(h){
+    const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
+    return BRANCHES[Math.floor(((h + 1) % 24) / 2)];
+  }
     const m=["鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"];
     return m[((y-4)%12+12)%12];
   }
@@ -398,17 +541,16 @@
 <footer class="footer-bar">
   <div class="footer-inner">
     <div class="social-bar">
-      <a href="index.html" aria-label="Home" title="Home" class="social-circle">
+      <a href="index.html" aria-label="Home" title="Home" class="social-circle social-home">
         <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       </a>
       <a href="about.html" aria-label="About" title="About" class="social-circle">
         <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
       </a>
-      <a href="faq.html" aria-label="FAQ" title="FAQ" class="social-circle">
+      <a href="faq.html" aria-label="FAQ" title="FAQ" class="social-circle social-faq">
         <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
       </a>
-
-      <a href="https://instagram.com/x.s.seow" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram" class="social-circle">
+      <a href="https://instagram.com/x.s.seow" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram" class="social-circle social-ig">
         <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
       </a>
       <a href="https://www.linkedin.com/in/seow-xi-sun-kelvin-0950379" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn" class="social-circle">
@@ -417,6 +559,5 @@
     </div>
   </div>
 </footer>
-<script src="lang.js"></script>
 </body>
 </html>

@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategic Date Selection / 择日 — metaphysics.it.com</title>
+<style>
+  :root {
+    bg: #0f0f14;
+    card: #161622;
+    text: #f0f0f5;
+    muted: #8a8a9e;
+    border: #2a2a3a;
+    accent: #d4af37;
+    accent-2: #f5d78e;
+    bad: #e57a7a;
+    success: #7ae5a0;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+    line-height: 1.55;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 840px;
+    margin: 0 auto;
+    padding: 2rem 1rem 6rem;
+  }
+
+  /* Brand */
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    text-decoration: none;
+    color: var(--text);
+    margin-bottom: 1.2rem;
+  }
+  .brand img {
+    width: 40px; height: 40px; border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent);
+  }
+  .brand strong { letter-spacing: .04em; }
+
+  /* Header */
+  .site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1.2rem;
+    margin-bottom: 1.4rem;
+    flex-wrap: wrap;
+  }
+  .header-text { min-width: 0; }
+  .header-text h1 {
+    margin: 0 0 .25rem;
+    font-size: clamp(1.25rem, 5vw, 1.6rem);
+    font-weight: 800;
+    letter-spacing: .02em;
+  }
+  .header-text .subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-size: .92rem;
+    line-height: 1.4;
+  }
+  .lang-toggle {
+    appearance: none;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: .45rem .8rem;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: .82rem;
+    letter-spacing: .06em;
+    transition: all .2s ease;
+    white-space: nowrap;
+  }
+  .lang-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(212,175,55,.12);
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1rem 1.1rem;
+    margin-bottom: 1rem;
+  }
+  .card h2 {
+    margin: 0 0 .6rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  /* Fields */
+  .field {
+    display: grid;
+    gap: .35rem;
+    margin-bottom: .8rem;
+  }
+  .field label {
+    font-size: .82rem;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .field select,
+  .field input[type="date"] {
+    width: 100%;
+    background: #0c0c12;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: .65rem .75rem;
+    font-size: 1rem;
+    outline: none;
+  }
+  .field select:focus,
+  .field input[type="date"]:focus {
+    border-color: var(--accent);
+  }
+  .field select { padding-right: 2rem; }
+
+  /* Row */
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .75rem;
+  }
+  @media (max-width: 520px) {
+    .row { grid-template-columns: 1fr; }
+  }
+
+  /* Buttons */
+  button.primary {
+    appearance: none;
+    border: 0;
+    background: linear-gradient(180deg, var(--accent), #b8952e);
+    color: #0b0a0a;
+    font-weight: 800;
+    letter-spacing: .06em;
+    padding: .75rem 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+  }
+  button.primary:active { transform: translateY(1px); }
+
+  /* Results */
+  .results {
+    display: grid;
+    gap: .9rem;
+    margin-top: 1.1rem;
+  }
+  .result-card {
+    background: linear-gradient(180deg, rgba(212,175,55,.12), rgba(22,22,34,.6));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1rem;
+    display: grid;
+    gap: .3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .result-card .rank {
+    position: absolute;
+    top: .7rem; right: .8rem;
+    background: var(--accent);
+    color: #0a0a0c;
+    font-weight: 900;
+    font-size: .75rem;
+    width: 28px; height: 28px;
+    display: grid; place-items: center;
+    border-radius: 999px;
+  }
+  .result-card .date {
+    font-weight: 800;
+    font-size: 1.05rem;
+    padding-right: 2rem;
+    color: var(--text);
+  }
+  .result-card .officer {
+    color: var(--accent-2);
+    font-weight: 700;
+  }
+  .result-card .desc {
+    color: var(--muted);
+    font-size: .9rem;
+  }
+  .result-card .score {
+    color: var(--accent);
+    font-size: .82rem;
+    font-weight: 700;
+  }
+  .empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 1rem;
+    font-size: .92rem;
+  }
+
+  /* Privacy */
+  .privacy {
+    margin-top: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    color: var(--muted);
+    font-size: .82rem;
+  }
+  .privacy .lock { color: var(--accent); font-size: .95rem; }
+  .privacy strong { color: var(--text); }
+
+  /* Tools row */
+  .tools {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+    margin-top: .6rem;
+  }
+  .tools a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: .88rem;
+  }
+  .tools a:hover { text-decoration: underline; }
+  .tools .sep { color: var(--border); }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="index.html" class="brand">
+      <img src="mascot.png" alt="mascot" />
+      <strong>metaphysics.it.com</strong>
+    </a>
+
+    <div class="site-header">
+      <div class="header-text">
+        <h1 id="pageTitle">Strategic Date Selection</h1>
+        <div class="subtitle" id="profileSubtitle">Guest Practitioner / 访客 — No profile data saved yet</div>
+      </div>
+      <button id="langToggle" class="lang-toggle" type="button">ENG / CHI</button>
+    </div>
+
+    <section class="card">
+      <h2 id="selectIntention">Select Your Intention</h2>
+      <form id="zeForm" autocomplete="off">
+        <div class="field">
+          <label for="activity" id="activityLabel">Activity</label>
+          <select id="activity" required>
+            <option value="" disabled selected id="activityPlaceholder">Choose an activity…</option>
+            <optgroup label="💼 Business & Career / 商业与事业" data-i18n-group="business">
+              <option value="business-grand-opening" data-i18n="business-grand-opening">Grand Opening / Business Launch — 开张大吉</option>
+              <option value="business-incorporation" data-i18n="business-incorporation">Company Incorporation / Signing Contracts — 公司注册/签约</option>
+              <option value="business-negotiation" data-i18n="business-negotiation">Partnership Pitches & Key Negotiations — 商务谈判</option>
+              <option value="product-launch" data-i18n="product-launch">Product Launch / Marketing Campaign Go-Live — 产品发布/营销上线</option>
+              <option value="hiring" data-i18n="hiring">Hiring Key Personnel / Onboarding — 招聘核心人才</option>
+            </optgroup>
+            <optgroup label="🏠 Property & Asset Mobility / 置业与移徙" data-i18n-group="property">
+              <option value="moving-house" data-i18n="moving-house">Moving House (Grand Entering) — 入宅安床</option>
+              <option value="renovation" data-i18n="renovation">Commencing Renovation / Breaking Ground — 动土修造</option>
+              <option value="property-deed" data-i18n="property-deed">Signing Property Deeds / Real Estate Purchase — 签约置业</option>
+              <option value="space-clearing" data-i18n="space-clearing">Space Clearing / Energy Purification — 净宅除秽</option>
+            </optgroup>
+            <optgroup label="💍 Personal & Vital Milestones / 个人重大事项" data-i18n-group="personal">
+              <option value="marriage" data-i18n="marriage">Marriage Registration / Wedding — 结婚嫁娶</option>
+              <option value="proposal" data-i18n="proposal">Proposal / Betrothal Ceremony — 纳采订盟</option>
+              <option value="medical" data-i18n="medical">Medical Procedures / Wellness Retreat Initiation — 祈福疗养</option>
+              <option value="travel" data-i18n="travel">Commencing Long-Distance Travel — 出行远行</option>
+            </optgroup>
+            <optgroup label="🛠️ Production & Creative Build / 技术与生产线" data-i18n-group="production">
+              <option value="production-deploy" data-i18n="production-deploy">Mainnet/Production Code Deployment — 生产环境部署</option>
+              <option value="security-audit" data-i18n="security-audit">Security Audits & Vulnerability Assessments — 安全审计</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="dateFrom" id="dateFromLabel">Search From</label>
+            <input type="date" id="dateFrom" required />
+          </div>
+          <div class="field">
+            <label for="dateUntil" id="dateUntilLabel">Search Until</label>
+            <input type="date" id="dateUntil" required />
+          </div>
+        </div>
+        <button type="submit" class="primary" id="submitBtn">Find Auspicious Dates</button>
+      </form>
+    </section>
+
+    <section id="results" class="results hidden">
+      <div class="card">
+        <h2 id="top3Title">Top 3 Strategic Dates</h2>
+        <div id="upcoming" class="results"></div>
+      </div>
+    </section>
+
+    <div class="privacy">
+      <span class="lock">🔒</span>
+      <div>
+        <strong id="privacyTitle">Zero Backend Footprint.</strong>
+        <span id="privacyBody"> Your calculations remain entirely private in your browser.</span>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ========== LANGUAGE ========== */
+  const LANGS = {
+    ENG: {
+      pageTitle: 'Strategic Date Selection',
+      profileGuest: 'Guest Practitioner',
+      profileNoData: 'No profile data saved yet',
+      selectIntention: 'Select Your Intention',
+      activityLabel: 'Activity',
+      activityPlaceholder: 'Choose an activity…',
+      dateFromLabel: 'Search From',
+      dateUntilLabel: 'Search Until',
+      submitBtn: 'Find Auspicious Dates',
+      top3Title: 'Top 3 Strategic Dates',
+      emptyNoResults: 'No highly auspicious dates found in this range. Try widening the window or changing the activity.',
+      privacyTitle: 'Zero Backend Footprint.',
+      privacyBody: 'Your calculations remain entirely private in your browser.',
+      dayNames: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+      monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+      dayMasterMap: { '甲':'Yang Wood','乙':'Yin Wood','丙':'Yang Fire','丁':'Yin Fire','戊':'Yang Earth','己':'Yin Earth','庚':'Yang Metal','辛':'Yin Metal','壬':'Yang Water','癸':'Yin Water' }
+    },
+    CHI: {
+      pageTitle: '择日 · Strategic Date Selection',
+      profileGuest: '访客',
+      profileNoData: '暂无保存资料',
+      selectIntention: '选择您的意向',
+      activityLabel: '活动',
+      activityPlaceholder: '请选择活动…',
+      dateFromLabel: '开始日期',
+      dateUntilLabel: '截止日期',
+      submitBtn: '查找吉日',
+      top3Title: '前三优先吉日',
+      emptyNoResults: '当前范围内未发现高度吉祥日期。请扩大时间段或更换活动类型。',
+      privacyTitle: '零后端足迹。',
+      privacyBody: '您的计算完全在浏览器中保密。',
+      dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+      monthNames: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+      dayMasterMap: { '甲':'甲木','乙':'乙木','丙':'丙火','丁':'丁火','戊':'戊土','己':'己土','庚':'庚金','辛':'辛金','壬':'壬水','癸':'癸水' }
+    }
+  };
+
+  const I18N_OPTIONS = {
+    'business-grand-opening': { ENG: 'Grand Opening / Business Launch — 开张大吉', CHI: '开业/开张大吉' },
+    'business-incorporation': { ENG: 'Company Incorporation / Signing Contracts — 公司注册/签约', CHI: '公司注册/签约' },
+    'business-negotiation': { ENG: 'Partnership Pitches & Key Negotiations — 商务谈判', CHI: '商务谈判/合作提案' },
+    'product-launch': { ENG: 'Product Launch / Marketing Campaign Go-Live — 产品发布/营销上线', CHI: '产品发布/营销上线' },
+    'hiring': { ENG: 'Hiring Key Personnel / Onboarding — 招聘核心人才', CHI: '招聘核心人才/入职' },
+    'moving-house': { ENG: 'Moving House (Grand Entering) — 入宅安床', CHI: '搬家/入宅安床' },
+    'renovation': { ENG: 'Commencing Renovation / Breaking Ground — 动土修造', CHI: '装修/动土修造' },
+    'property-deed': { ENG: 'Signing Property Deeds / Real Estate Purchase — 签约置业', CHI: '签约置业/置产' },
+    'space-clearing': { ENG: 'Space Clearing / Energy Purification — 净宅除秽', CHI: '净宅除秽/气场净化' },
+    'marriage': { ENG: 'Marriage Registration / Wedding — 结婚嫁娶', CHI: '结婚/嫁娶' },
+    'proposal': { ENG: 'Proposal / Betrothal Ceremony — 纳采订盟', CHI: '求婚/纳采订盟' },
+    'medical': { ENG: 'Medical Procedures / Wellness Retreat Initiation — 祈福疗养', CHI: '医疗手术/祈福疗养' },
+    'travel': { ENG: 'Commencing Long-Distance Travel — 出行远行', CHI: '远行/出行' },
+    'production-deploy': { ENG: 'Mainnet/Production Code Deployment — 生产环境部署', CHI: '生产代码部署/上线' },
+    'security-audit': { ENG: 'Security Audits & Vulnerability Assessments — 安全审计', CHI: '安全审计/漏洞评估' }
+  };
+
+  let currentLang = (() => {
+    const raw = localStorage.getItem('appLanguage');
+    return raw === 'CHI' ? 'CHI' : 'ENG';
+  })();
+
+  function applyLang(lang) {
+    currentLang = lang;
+    localStorage.setItem('appLanguage', lang);
+    const t = LANGS[lang];
+    document.getElementById('pageTitle').textContent = t.pageTitle;
+    document.getElementById('selectIntention').textContent = t.selectIntention;
+    document.getElementById('activityLabel').textContent = t.activityLabel;
+    document.getElementById('activityPlaceholder').textContent = t.activityPlaceholder;
+    document.getElementById('dateFromLabel').textContent = t.dateFromLabel;
+    document.getElementById('dateUntilLabel').textContent = t.dateUntilLabel;
+    document.getElementById('submitBtn').textContent = t.submitBtn;
+    document.getElementById('top3Title').textContent = t.top3Title;
+    document.getElementById('privacyTitle').textContent = t.privacyTitle;
+    document.getElementById('privacyBody').textContent = t.privacyBody;
+    document.querySelectorAll('option[data-i18n]').forEach(opt => {
+      const key = opt.getAttribute('data-i18n');
+      if (I18N_OPTIONS[key]) opt.textContent = I18N_OPTIONS[key][lang];
+    });
+    document.querySelectorAll('optgroup[data-i18n-group]').forEach(grp => {
+      const groupKey = grp.getAttribute('data-i18n-group');
+      const label = grp.getAttribute('label') || '';
+      if (lang === 'CHI') {
+        const map = { business: '商业与事业', property: '置业与移徙', personal: '个人重大事项', production: '技术与生产线' };
+        grp.label = '💼 ' + (map[groupKey] || label);
+      } else {
+        const map = { business: 'Business & Career', property: 'Property & Asset Mobility', personal: 'Personal & Vital Milestones', production: 'Production & Creative Build' };
+        grp.label = '💼 ' + (map[groupKey] || label);
+      }
+    });
+    renderProfile();
+    if (document.getElementById('results').children.length > 0 && document.getElementById('upcoming').children.length > 0) {
+      const act = document.getElementById('activity').value;
+      const from = document.getElementById('dateFrom').value;
+      const until = document.getElementById('dateUntil').value;
+      if (act && from && until) runCalculation();
+    }
+  }
+
+  document.getElementById('langToggle').addEventListener('click', () => {
+    const next = currentLang === 'ENG' ? 'CHI' : 'ENG';
+    applyLang(next);
+  });
+
+  /* ========== PROFILE ========== */
+  function renderProfile() {
+    const raw = localStorage.getItem('visitorDetails');
+    let data = null;
+    try { data = raw ? JSON.parse(raw) : null; } catch (_) {}
+    const t = LANGS[currentLang];
+    const sub = document.getElementById('profileSubtitle');
+    if (data && data.name) {
+      const dayMaster = (data.dayMaster || data.bazi || '').trim();
+      const translatedDM = translateDayMaster(dayMaster);
+      if (currentLang === 'CHI') {
+        sub.textContent = `${data.name} / ${translatedDM || dayMaster || 'BaZi Day Master'}`;
+      } else {
+        sub.textContent = `${data.name} / ${translatedDM || dayMaster || 'BaZi Day Master'}`;
+      }
+    } else {
+      sub.textContent = `${t.profileGuest} / ${currentLang === 'CHI' ? '访客' : 'Guest'} — ${t.profileNoData}`;
+    }
+  }
+
+  function translateDayMaster(dm) {
+    if (!dm) return '';
+    if (/[甲乙丙丁戊己庚辛壬癸]/.test(dm)) {
+      const char = dm.charAt(0);
+      const map = LANGS.CHI.dayMasterMap;
+      const prefix = dm.startsWith('阳') || dm.startsWith('Yang') ? (currentLang === 'CHI' ? '阳' : 'Yang ') : (dm.startsWith('阴') || dm.startsWith('Yin') ? (currentLang === 'CHI' ? '阴' : 'Yin ') : '');
+      if (currentLang === 'CHI') {
+        const chi = map[char] || '';
+        return (prefix || '') + chi;
+      } else {
+        const engMap = { '甲':'Yang Wood','乙':'Yin Wood','丙':'Yang Fire','丁':'Yin Fire','戊':'Yang Earth','己':'Yin Earth','庚':'Yang Metal','辛':'Yin Metal','壬':'Yang Water','癸':'Yin Water' };
+        return engMap[char] || dm;
+      }
+    }
+    if (currentLang === 'CHI') {
+      const map = { 'Yang Wood':'甲木','Yin Wood':'乙木','Yang Fire':'丙火','Yin Fire':'丁火','Yang Earth':'戊土','Yin Earth':'己土','Yang Metal':'庚金','Yin Metal':'辛金','Yang Water':'壬水','Yin Water':'癸水' };
+      return map[dm] || dm;
+    }
+    return dm;
+  }
+
+  /* ========== OFFICERS ========== */
+  const OFFICERS = [
+    { en: 'Establish', cn: '建', element: 'Wood', vibe: { ENG: '🚀 Launch Day', CHI: '🚀 开泰日' }, top: { ENG: 'Start new initiatives', CHI: '开创启动新局面' }, note: { ENG: 'One concrete move beats scattered planning.', CHI: '一次实际行动胜过散乱计划。' } },
+    { en: 'Remove', cn: '除', element: 'Wood', vibe: { ENG: '🧹 Clearance Day', CHI: '🧹 除旧日' }, top: { ENG: 'Clear backlogs and blockages', CHI: '清理积压杂物与障碍' }, note: { ENG: 'Remove friction so the week flows.', CHI: '消除阻力，让事务顺畅进行。' } },
+    { en: 'Full', cn: '满', element: 'Earth', vibe: { ENG: '🌾 Payoff Day', CHI: '🌾 丰收日' }, top: { ENG: 'Collect results and value', CHI: '收获成果与价值' }, note: { ENG: 'Harvest before starting anything new.', CHI: '先收获再开新局。' } },
+    { en: 'Balance', cn: '平', element: 'Earth', vibe: { ENG: '⚖️ Rhythm Day', CHI: '⚖️ 均衡日' }, top: { ENG: 'Maintain steady operation', CHI: '维持平稳运行' }, note: { ENG: 'Protect focus and avoid unnecessary noise.', CHI: '保持专注，避免无谓干扰。' } },
+    { en: 'Stable', cn: '定', element: 'Metal', vibe: { ENG: '🔒 Commitment Day', CHI: '🔒 定局日' }, top: { ENG: 'Lock agreements and timing', CHI: '稳固约定与时机' }, note: { ENG: 'Reduce ambiguity for the week.', CHI: '减少本周不确定性。' } },
+    { en: 'Initiate', cn: '执', element: 'Metal', vibe: { ENG: '🛠️ Discipline Day', CHI: '🛠️ 执行日' }, top: { ENG: 'Follow through on hard tasks', CHI: '坚持执行艰难任务' }, note: { ENG: 'Begin the thing that matters most.', CHI: '开始最重要的事。' } },
+    { en: 'Destruction', cn: '破', element: 'Earth', vibe: { ENG: '🔻 Ending Day', CHI: '🔻 破局日' }, top: { ENG: 'Audit, release, cut losses', CHI: '审计、释放、止损' }, note: { ENG: 'End what no longer serves you.', CHI: '结束对你无益之事。' } },
+    { en: 'Danger', cn: '危', element: 'Water', vibe: { ENG: '⚠️ Caution Day', CHI: '⚠️ 谨慎日' }, top: { ENG: 'Review risks defensively', CHI: '防守性审视风险' }, note: { ENG: 'Reduce exposure and protect wins.', CHI: '降低暴露，保护已有成果。' } },
+    { en: 'Success', cn: '成', element: 'Water', vibe: { ENG: '🎯 Outcome Day', CHI: '🎯 成事日' }, top: { ENG: 'Seal deals and complete', CHI: '成交并完成协议' }, note: { ENG: 'Close agreements and make wins visible.', CHI: '完成协议，让成果可见。' } },
+    { en: 'Receive', cn: '收', element: 'Metal', vibe: { ENG: '📬 Closeout Day', CHI: '📬 收束日' }, top: { ENG: 'Consolidate inventory and returns', CHI: '盘点资产与收尾' }, note: { ENG: 'Wrap up before the next push.', CHI: '在下一波行动前收尾。' } },
+    { en: 'Open', cn: '开', element: 'Gold', vibe: { ENG: '🌅 Opening Day', CHI: '🌅 开泰日' }, top: { ENG: 'Start delayed initiatives', CHI: '开启拖延已久的事项' }, note: { ENG: 'The path is open — begin what you delayed.', CHI: '道路已开——开始你拖延的事。' } },
+    { en: 'Close', cn: '闭', element: 'Earth', vibe: { ENG: '🌙 Finish Day', CHI: '🌙 收敛日' }, top: { ENG: 'Complete old tasks quietly', CHI: '安静完成旧任务' }, note: { ENG: 'Preserve energy for the next opening.', CHI: '保存能量待下一个开启。' } }
+  ];
+
+  const EPOCH = new Date(2000, 0, 1);
+  function getOfficerForDate(date) {
+    const diffDays = Math.floor((date.getTime() - EPOCH.getTime()) / 86400000);
+    const idx = ((diffDays % 12) + 12) % 12;
+    return { index: idx, officer: OFFICERS[idx] };
+  }
+
+  const CATEGORY_PREFERENCE = {
+    'business-grand-opening': { leaders: ['Success','Open','Establish','Full'], secondary: ['Receive','Stable'], strength: 3 },
+    'business-incorporation': { leaders: ['Success','Stable','Establish','Close'], secondary: ['Receive','Balance'], strength: 3 },
+    'business-negotiation': { leaders: ['Success','Open','Establish','Balance'], secondary: ['Stable','Close'], strength: 3 },
+    'product-launch': { leaders: ['Open','Establish','Success','Full'], secondary: ['Receive','Initiate'], strength: 3 },
+    'hiring': { leaders: ['Stable','Success','Establish','Receive'], secondary: ['Open','Balance'], strength: 3 },
+    'moving-house': { leaders: ['Stable','Balance','Receive','Full'], secondary: ['Establish','Initiate'], strength: 3 },
+    'renovation': { leaders: ['Full','Stable','Destruction','Remove'], secondary: ['Initiate','Close'], strength: 3 },
+    'property-deed': { leaders: ['Stable','Success','Balance','Full'], secondary: ['Receive','Establish'], strength: 3 },
+    'space-clearing': { leaders: ['Remove','Destruction','Balance','Stable'], secondary: ['Full','Close'], strength: 3 },
+    'marriage': { leaders: ['Full','Success','Receive','Balance'], secondary: ['Open','Close'], strength: 3 },
+    'proposal': { leaders: ['Full','Success','Open','Receive'], secondary: ['Balance','Establish'], strength: 3 },
+    'medical': { leaders: ['Stable','Success','Remove','Balance'], secondary: ['Receive','Close'], strength: 3 },
+    'travel': { leaders: ['Open','Remove','Success','Receive'], secondary: ['Establish','Balance'], strength: 3 },
+    'production-deploy': { leaders: ['Destruction','Success','Remove','Close'], secondary: ['Initiate','Stable'], strength: 3 },
+    'security-audit': { leaders: ['Destruction','Remove','Stable','Close'], secondary: ['Balance','Success'], strength: 3 }
+  };
+
+  function scoreDate(date, activityKey) {
+    const { officer } = getOfficerForDate(date);
+    const pref = CATEGORY_PREFERENCE[activityKey] || { leaders: ['Success','Open','Establish'], secondary: [], strength: 3 };
+    let score = 0;
+    if (pref.leaders.includes(officer.en)) score += pref.strength;
+    else if (pref.secondary.includes(officer.en)) score += 1;
+    return { date, officer, score };
+  }
+
+  function formatDateFull(d) {
+    const t = LANGS[currentLang];
+    const day = t.dayNames[d.getDay()] || '';
+    const month = t.monthNames[d.getMonth()] || '';
+    const y = d.getFullYear();
+    if (currentLang === 'CHI') {
+      return `${y}年${d.getMonth()+1}月${d.getDate()}日 · ${day}`;
+    }
+    return `${day}, ${month} ${d.getDate()}, ${y}`;
+  }
+
+  function runCalculation() {
+    const activityKey = document.getElementById('activity').value;
+    const fromVal = document.getElementById('dateFrom').value;
+    const untilVal = document.getElementById('dateUntil').value;
+    if (!activityKey || !fromVal || !untilVal) return;
+
+    const from = new Date(fromVal + 'T00:00:00');
+    const untilDate = new Date(untilVal + 'T00:00:00');
+    const results = [];
+    for (let d = new Date(from); d <= untilDate; d.setDate(d.getDate() + 1)) results.push(scoreDate(new Date(d), activityKey));
+    results.sort((a,b) => b.score - a.score || a.date - b.date);
+    const top = results.slice(0,3);
+
+    const container = document.getElementById('upcoming');
+    container.innerHTML = '';
+    if (top.every(r => r.score === 0)) {
+      container.innerHTML = `<div class="empty">${LANGS[currentLang].emptyNoResults}</div>`;
+    } else {
+      top.forEach((r, i) => {
+        if (r.score === 0) return;
+        const o = r.officer;
+        const cnLabel = currentLang === 'CHI' ? o.cn : o.cn;
+        const elLabel = currentLang === 'CHI' ? o.top.CHI : o.top.ENG;
+        const noteLabel = currentLang === 'CHI' ? o.note.CHI : o.note.ENG;
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        card.innerHTML = `
+          <div class="rank">#${i+1}</div>
+          <div class="date">${formatDateFull(r.date)}</div>
+          <div class="officer">${o.vibe[currentLang]} · ${o.en} (${cnLabel})</div>
+          <div class="desc">${noteLabel}</div>
+          <div class="score">Score ${r.score} · ${currentLang === 'CHI' ? '适宜事项：' : 'Top activity: '}${elLabel}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+    const resultsEl = document.getElementById('results');
+    resultsEl.classList.remove('hidden');
+    resultsEl.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  document.getElementById('zeForm').addEventListener('submit', (e) => { e.preventDefault(); runCalculation(); });
+
+  /* ========== INIT ========== */
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const until = new Date(today);
+  until.setDate(until.getDate() + 30);
+  const fmt = (d) => d.toISOString().slice(0,10);
+  document.getElementById('dateFrom').value = fmt(today);
+  document.getElementById('dateUntil').value = fmt(until);
+
+  applyLang(currentLang);
+})();
+</script>
+</body>
+</html>

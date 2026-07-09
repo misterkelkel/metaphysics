@@ -42,6 +42,9 @@
       index_classical_note_3: 'Cross-check on',
       index_profile_label: 'Profile',
       index_click_hint: 'Click to set this week as the week start',
+      index_zeri_callout: 'Looking for prime timing? Try our new Strategic Date Selection (Ze Ri) tool.',
+      index_features_intro: 'Four lightweight tools for reflection: <a class="text-link" href="bazi.html">BaZi / 5 Elements</a>, <a class="text-link" href="flying-stars.html">Flying Stars / 9 Star Ki</a>, <a class="text-link" href="index.html#planBtn">12 Daily Officers weekly planner</a>, and <a class="text-link" href="horoscope.html">Horoscope · East + West</a> overview.',
+      index_zeri_feature: '📅 <a class="text-link" href="ze-ri.html">Date Selection (Ze Ri)</a>: Identify optimal, personalized windows for business launches, contract signings, property moves, and deployments.',
       name_required: 'Please enter your name.',
       dob_required: 'Please enter your date of birth.',
       birth_year_required: 'Please enter a valid birth year.',
@@ -113,6 +116,14 @@
       bazi_element_earth: 'Earth',
       bazi_element_metal: 'Metal',
       bazi_element_water: 'Water',
+      bazi_pillars_title: 'Four Pillars',
+      pillar_hour: 'Hour Pillar',
+      pillar_day: 'Day Pillar',
+      pillar_month: 'Month Pillar',
+      pillar_year: 'Year Pillar',
+      pillar_unknown: 'Unknown',
+      stem_jia: 'Jia', stem_yi: 'Yi', stem_bing: 'Bing', stem_ding: 'Ding', stem_wu: 'Wu', stem_ji: 'Ji', stem_geng: 'Geng', stem_xin: 'Xin', stem_ren: 'Ren', stem_gui: 'Gui',
+      branch_zi: 'Zi', branch_chou: 'Chou', branch_yin: 'Yin', branch_mao: 'Mao', branch_chen: 'Chen', branch_si: 'Si', branch_wu: 'Wu', branch_wei: 'Wei', branch_shen: 'Shen', branch_you: 'You', branch_xu: 'Xu', branch_hai: 'Hai',
       // faq.html
       faq_back: '← Back to tools',
       faq_title: 'Frequently.asked.questions',
@@ -219,7 +230,10 @@
       index_classical_note_2: '參考：传统十二建除黄曆規则。',
       index_classical_note_3: '交叉查核',
       index_profile_label: '檔案',
-      index_click_hint: '点擊設定本週开始日期',
+      index_click_hint: '點擊設定本週开始日期',
+      index_zeri_callout: '需要選擇吉日良辰？使用全新 擇日 工具。',
+      index_features_intro: '四款轻量级反思工具：<a class="text-link" href="bazi.html">八字 · 五行</a>、<a class="text-link" href="flying-stars.html">玄空飞星 · 九星数</a>、<a class="text-link" href="index.html#planBtn">十二建除七日规划</a>，以及<a class="text-link" href="horoscope.html">中西合谱星盘</a>概览。',
+      index_zeri_feature: '📅 <a class="text-link" href="ze-ri.html">吉日择选 (择日)</a>：为您筛选最适合商业开张、签约合同、入宅安床以及系统部署的专属吉日良辰。',
       name_required: '請輸入你的姓名。',
       dob_required: '請輸入你的出生日期。',
       birth_year_required: '請輸入有效出生年份。',
@@ -291,6 +305,11 @@
       bazi_element_earth: '土',
       bazi_element_metal: '金',
       bazi_element_water: '水',
+      bazi_pillars_title: '四柱',
+      pillar_hour: '时柱', pillar_day: '日柱', pillar_month: '月柱', pillar_year: '年柱',
+      pillar_unknown: '未知',
+      stem_jia: '甲', stem_yi: '乙', stem_bing: '丙', stem_ding: '丁', stem_wu: '戊', stem_ji: '己', stem_geng: '庚', stem_xin: '辛', stem_ren: '壬', stem_gui: '癸',
+      branch_zi: '子', branch_chou: '丑', branch_yin: '寅', branch_mao: '卯', branch_chen: '辰', branch_si: '巳', branch_wu: '午', branch_wei: '未', branch_shen: '申', branch_you: '酉', branch_xu: '戌', branch_hai: '亥',
       // faq.html
       faq_back: '← 返回工具',
       faq_title: '常见问题',
@@ -430,13 +449,20 @@
     sel.addEventListener('change', e=>{
       setLang(e.target.value);
       applyTranslations(document);
-      location.reload();
+      try { typeof window.__reapplyPillars === 'function' && window.__reapplyPillars(); } catch (_){}
+      try { typeof window.__reapplyZeRi === 'function' && window.__reapplyZeRi(); } catch (_){}
     });
   }
 
   function init(){
     applyToggle(document);
     applyTranslations(document);
+    if (typeof window.mppSharedProfile !== 'undefined' && typeof window.mppSharedProfile.prefillAllInputs === 'function') {
+      window.mppSharedProfile.prefillAllInputs();
+      if (/bazi\.html(\?.*)?$/.test(location.pathname) && localStorage.getItem('mpp.name') && localStorage.getItem('mpp.dob')) {
+        try { if (typeof calc === 'function') calc(); } catch (e) {}
+      }
+    }
   }
   if(document.readyState==='loading'){
     document.addEventListener('DOMContentLoaded', init);
@@ -444,4 +470,61 @@
     init();
   }
   window.mppLang = { t, applyTranslations, getLang, setLang };
+  window.mppSharedProfile = (() => {
+    const KEYS = {
+      name: 'mpp.name',
+      dob: 'mpp.dob',
+      gender: 'mpp.gender',
+      job: 'mpp.job',
+      country: 'mpp.country',
+      tz: 'mpp.tz',
+      tob: 'mpp.tob'
+    };
+    const idMap = {
+      name: 'visitorName',
+      dob: 'visitorDob',
+      gender: 'gender',
+      job: 'visitorJob',
+      country: 'visitorCountry',
+      tz: 'visitorTimezone',
+      tob: 'visitorTob'
+    };
+    const write = (key, value) => { if (value !== undefined && value !== null && String(value).trim() !== '') localStorage.setItem(key, String(value)); };
+    const onChange = (key) => (e) => write(KEYS[key], e.target.value);
+    const listeners = {
+      visitorName: onChange('name'),
+      visitorDob: onChange('dob'),
+      gender: onChange('gender'),
+      visitorJob: onChange('job'),
+      visitorCountry: onChange('country'),
+      visitorTimezone: onChange('tz'),
+      visitorTob: onChange('tob')
+    };
+    document.addEventListener('input', (e) => {
+      const fn = listeners[e.target && e.target.id];
+      if (typeof fn === 'function') fn(e);
+    });
+    document.addEventListener('change', (e) => {
+      const fn = listeners[e.target && e.target.id];
+      if (typeof fn === 'function') fn(e);
+    });
+    return {
+      prefillAllInputs() {
+        Object.keys(idMap).forEach((field) => {
+          const el = document.getElementById(idMap[field]);
+          const raw = localStorage.getItem(KEYS[field]);
+          if (el && raw !== null && raw.trim() !== '') el.value = raw;
+        });
+      },
+      sync(name, dob, gender, job, country, tz, tob) {
+        write(KEYS.name, name);
+        write(KEYS.dob, dob);
+        write(KEYS.gender, gender);
+        write(KEYS.job, job);
+        write(KEYS.country, country);
+        write(KEYS.tz, tz);
+        write(KEYS.tob, tob);
+      }
+    };
+  })();
 })();
