@@ -381,6 +381,21 @@
     };
   }
 
+  // 真太阳时 (true local solar time) for the Hour Pillar.
+  // Country -> approximate birth longitude; correct civil clock time to solar time.
+  const COUNTRY_LON = { 'singapore':103.8,'malaysia':101.9,'indonesia':106.8,'thailand':100.5,'vietnam':105.8,'philippines':121.0,'china':116.4,'中国':116.4,'hong kong':114.2,'香港':114.2,'taiwan':121.0,'台湾':121.0,'japan':139.7,'日本':139.7,'korea':126.9,'韩国':126.9,'朝鲜':126.9,'india':77.2,'印度':77.2,'uk':-0.1,'britain':-0.1,'英国':-0.1,'australia':149.1,'澳洲':149.1 };
+  function countryLon(c){ if(!c) return null; const k=String(c).trim().toLowerCase(); for(const key in COUNTRY_LON){ if(k.includes(key)) return COUNTRY_LON[key]; } return null; }
+  function equationOfTime(date){ const start=new Date(date.getUTCFullYear(),0,0); const N=Math.floor((date-start)/86400000); const B=(2*Math.PI/365)*(N-81); return 9.87*Math.sin(2*B)-7.53*Math.cos(B)-1.5*Math.sin(B); }
+  let _solarHour = 12; // corrected hour for the Hour Pillar (0-23.99)
+  function applyTrueSolar(dobStr, tobStr, tz, country){
+    const [y,m,d] = String(dobStr).split('-').map(Number);
+    let h=12,min=0; if(tobStr){ const p=String(tobStr).split(':'); h=Number(p[0])||0; min=Number(p[1])||0; }
+    let tzOff=8; if(tz && String(tz).startsWith('UTC')){ const raw=String(tz).replace('UTC',''); const sign=raw.startsWith('-')?-1:1; const parts=raw.replace(/^-/,'').split(':'); tzOff=sign*(Number(parts[0])||0)+(parts[1]?sign*(Number(parts[1])/60):0); }
+    const lon = countryLon(country);
+    const offsetH = (lon!==null ? lon/15 : tzOff) - tzOff + equationOfTime(new Date(Date.UTC(y,m-1,d,h,min)))/60;
+    _solarHour = ((h+offsetH)%24+24)%24;
+  }
+
   function calc(){
     const name = nameEl?.value?.trim();
     const dob = dobEl?.value;
@@ -393,14 +408,15 @@
 
     const parsed = parseDateTimeInTz(dob, tob, tz);
     if(!parsed) return alert("Please enter a valid date of birth.");
+    applyTrueSolar(dob, tob, tz, country);
     const p = parsed;
     const y = p.utcYear, m = p.utcMonth, day = p.utcDate;
     const zodiacAnimal = animal(y);
     const birthYear = y;
     // Real 5-element balance from the 4 pillars (8 characters) + hidden stems (藏干).
     // Month branch (月令) weighted 3x as the seasonal driver; day master judged separately.
-    const ys = getYearStem(y), ms = getMonthStem(y, m), ds = getDayStem(y, m, day), hs = getHourStem(ds, p.hours);
-    const yb = getYearBranch(y), mb = getMonthBranch(m), db = getDayBranch(y, m, day), hb = getHourBranch(p.hours);
+    const ys = getYearStem(y), ms = getMonthStem(y, m), ds = getDayStem(y, m, day), hs = getHourStem(ds, _solarHour);
+    const yb = getYearBranch(y), mb = getMonthBranch(m), db = getDayBranch(y, m, day), hb = getHourBranch(_solarHour);
     const PILLAR_STEMS = [hs, ds, ms, ys];        // Hour, Day, Month, Year stems
     const PILLAR_BRANCHES = [hb, db, mb, yb];     // matching branches
     const BRANCH_HIDDEN = {
@@ -508,8 +524,8 @@
     card.style.display = "";
 
     // Ten Gods (十神) — each pillar read relative to the Day Master (its own stem + branch)
-    const stems = [ getHourStem(dayStem, hour), dayStem, getMonthStem(year, month), getYearStem(year) ];
-    const branches = [ getHourBranch(hour), dayBranch, getMonthBranch(month), getYearBranch(year) ];
+    const stems = [ getHourStem(dayStem, _solarHour), dayStem, getMonthStem(year, month), getYearStem(year) ];
+    const branches = [ getHourBranch(_solarHour), dayBranch, getMonthBranch(month), getYearBranch(year) ];
     const posOf = (stem) => { const e = STEM_ELEMENT[stem] || 'Wood'; return (ELEMENT_ORDER.indexOf(e) - ELEMENT_ORDER.indexOf(dmEl_) + 12) % 6; };
     const godNames = { 0:'Companion 比劫', 1:'Resource 印', 2:'Output 食伤', 3:'Wealth 财', 4:'Authority 官杀', 5:'Companion 比劫' };
     const pillarLabels = ['Hour 时','Day 日','Month 月','Year 年'];
@@ -562,12 +578,12 @@
     const yearStem = getYearStem(year);
     const monthStem = getMonthStem(year, month);
     const dayStem = getDayStem(year, month, date);
-    const hourStem = getHourStem(dayStem, hour);
+    const hourStem = getHourStem(dayStem, _solarHour);
 
     const yearBranch = getYearBranch(year);
     const monthBranch = getMonthBranch(month);
     const dayBranch = getDayBranch(year, month, date);
-    const hourBranch = getHourBranch(hour);
+    const hourBranch = getHourBranch(_solarHour);
 
     const stems = [hourStem, dayStem, monthStem, yearStem];
     const branches = [hourBranch, dayBranch, monthBranch, yearBranch];

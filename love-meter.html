@@ -303,8 +303,19 @@
       }
       return animals[((y - 4) % 12 + 12) % 12];
     }
-    function signOf(dob){
-      const d = new Date(dob + "T00:00:00");
+    const COUNTRY_TZ = { 'singapore':8,'malaysia':8,'indonesia':7,'thailand':7,'vietnam':7,'philippines':8,'china':8,'中国':8,'hong kong':8,'香港':8,'taiwan':8,'台湾':8,'japan':9,'日本':9,'korea':9,'韩国':9,'india':5.5,'印度':5.5,'uk':0,'britain':0,'英国':0,'australia':10,'澳洲':10,'usa':-5,'america':-5,'美国':-5 };
+    function countryTz(c){ if(!c) return 8; const k=String(c).trim().toLowerCase(); for(const key in COUNTRY_TZ){ if(k.includes(key)) return COUNTRY_TZ[key]; } return 8; }
+    function signOf(dob, tob, country){
+      let d;
+      if(tob){
+        const p = String(tob).split(':'); const h = Number(p[0])||0, min = Number(p[1])||0;
+        const [y,m,da] = String(dob).split('-').map(Number);
+        const tzOff = countryTz(country);
+        const ms = Date.UTC(y, m-1, da, h, min, 0) - tzOff*3600000; // UTC instant of birth
+        d = new Date(ms + tzOff*3600000); // back to local civil datetime in birth tz
+      } else {
+        d = new Date(dob + "T00:00:00");
+      }
       const mmdd = String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
       return signs.find(s => {
         if (s.from > s.to) return mmdd >= s.from || mmdd <= s.to;
@@ -382,9 +393,10 @@
       const y1 = new Date(dob1 + "T00:00:00").getFullYear();
       const y2 = new Date(dob2 + "T00:00:00").getFullYear();
       const a1 = animalOf(y1, dob1), a2 = animalOf(y2, dob2);
-      const s1 = signOf(dob1), s2 = signOf(dob2);
+      const tob1 = $("visitorTob").value, tob2 = $("partnerTob").value;
       const c1 = $("visitorCountry").value.trim();
       const c2 = $("partnerCountry").value.trim();
+      const s1 = signOf(dob1, tob1, c1), s2 = signOf(dob2, tob2, c2);
       const ln = lang();
 
       const zr = zodiacRel(a1.n, a2.n);
