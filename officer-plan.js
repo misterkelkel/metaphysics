@@ -135,6 +135,23 @@
     const hh = parseInt(m[2],10); const mm = m[3]?parseInt(m[3],10):0;
     return sign*(hh + mm/60);
   }
+  const ACTIVITY_TAG = { launch:'kai', contract:'qian', deployment:'dong', kickoff:'dong', negotiation:'tan', purchase:'jiao', wedding:'jia', rom:'jia', engagement:'jia', bed:'an', move:'ru', renovation:'xiu' };
+  const ACTIVITY_LABEL = { launch:{en:'Business Launch',zh:'开业'}, contract:{en:'Contract Signing',zh:'签约'}, deployment:{en:'System Deployment',zh:'部署'}, kickoff:{en:'Project Kickoff',zh:'开工'}, negotiation:{en:'Negotiation',zh:'谈判'}, purchase:{en:'Asset Purchase',zh:'交易'}, wedding:{en:'Wedding',zh:'嫁娶'}, rom:{en:'Legal Registration',zh:'注册结婚'}, engagement:{en:'Engagement',zh:'过大礼'}, bed:{en:'Nuptial Bed',zh:'安床'}, move:{en:'Property Move',zh:'入宅'}, renovation:{en:'Renovation',zh:'修造'} };
+  const NOTE_ZH = { '建':'建日主开创。宜启动新项目、开业、开工、签约、嫁娶、入宅、动土；百事可为的开端之日。', '除':'除日主清除。宜除旧布新、解约清账、疗病出行；忌开市、上任、动土。', '满':'满日主圆满。宜嫁娶、开市、交易、移徙、出行；忌动土、修造、安葬。', '平':'平日主平稳。宜修造、嫁娶、动土、造具；忌祈福、求嗣、词讼。', '定':'定日主安定。宜签约、纳财、安床、嫁娶、交易；忌词讼、出行。', '执':'执日主执行。宜修造、纳财、交易、捕捉；忌开市、移徙、嫁娶、出行。', '破':'破日主破除。宜破屋、坏垣、求医治病；忌嫁娶、签约、开市、交易、出行。大事不宜。', '危':'危日主危险。宜安床、祭祀、祈福；忌出行、登高、嫁娶、移徙。宜守不宜攻。', '成':'成日主成就。宜嫁娶、开市、签约、交易、入宅、出行；忌词讼、诉讼。诸事皆成。', '收':'收日主收敛。宜纳财、收购、入学、安床、嫁娶；忌开市、放债、出行。', '开':'开日主开通。宜开业、开市、动工、出行、入学；忌安葬。百事开启之日。', '闭':'闭日主闭合。宜安葬、修造、纳财；忌开市、出行、嫁娶、签约。宜静不宜动。' };
+  const SUIT = {
+    '建':{good:['kai','qian','dong','jia','ru','xiu'],neutral:['tan','jiao','an'],avoid:[]},
+    '除':{good:['jiao'],neutral:['tan','ru','an'],avoid:['kai','dong','jia','xiu']},
+    '满':{good:['jia','kai','jiao','ru'],neutral:['tan','an'],avoid:['dong','xiu']},
+    '平':{good:['xiu','jia','dong','an'],neutral:['kai','jiao','ru'],avoid:['tan']},
+    '定':{good:['qian','jiao','an','jia'],neutral:['kai','ru','dong'],avoid:['tan']},
+    '执':{good:['xiu','jiao'],neutral:['tan','dong','an'],avoid:['kai','ru','jia']},
+    '破':{good:[],neutral:['xiu','dong'],avoid:['jia','qian','kai','jiao','ru','tan','an']},
+    '危':{good:['an'],neutral:['tan','dong','xiu'],avoid:['ru','jia','kai','jiao','qian']},
+    '成':{good:['jia','kai','qian','jiao','ru'],neutral:['dong','an'],avoid:['tan']},
+    '收':{good:['jiao','an','jia'],neutral:['qian','dong','xiu'],avoid:['kai','ru']},
+    '开':{good:['kai','dong','ru'],neutral:['tan','jiao','qian','an','jia','xiu'],avoid:[]},
+    '闭':{good:['xiu','jiao'],neutral:['dong','an','tan'],avoid:['kai','ru','jia','qian']}
+  };
   function next7(start){
     const days=[];
     const d=new Date(start);
@@ -144,26 +161,16 @@
   }
   function officerIndexForDate(y,m,d){ return ((y*13+m)*31+d)%12; }
   function officerForDate(y,m,d){
-    const key = `${y}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-    let raw = null;
-    const fallback = {"2026-07-05":"开","2026-07-06":"闭","2026-07-07":"闭","2026-07-08":"建","2026-07-09":"除","2026-07-10":"满","2026-07-11":"平","2026-07-12":"定","2026-07-13":"执","2026-07-14":"破","2026-07-15":"危","2026-07-16":"成","2026-07-17":"收","2026-07-18":"开","2026-07-19":"闭","2026-07-20":"建"};
-    raw = fallback[key] || null;
-    if (!raw && typeof Solar !== "undefined" && Solar && typeof Solar.fromDate === "function") {
+    if (typeof Solar !== "undefined" && Solar && typeof Solar.fromDate === "function") {
       try {
         const dObj = new Date(Date.UTC(y, (m-1), d));
-        const s = Solar.fromDate(dObj);
-        const l = s.getLunar();
-        raw = l.getZhiXing();
+        const raw = Solar.fromDate(dObj).getLunar().getZhiXing();
+        const match = items.find(item => item.cn === raw);
+        if (match) return match;
       } catch (e) {}
     }
-    if (!raw) {
-      const monthBuildBase = [2,5,8,11,0,3,6,9];
-      const mb = monthBuildBase[((m-1)%12+12)%12] || 0;
-      const seq = ((d - mb) % 12 + 12) % 12;
-      raw = ORDER[seq];
-    }
-    const match = items.find(item => item.cn === raw);
-    return match || items[officerIndexForDate(y,m,d)%12];
+    // Graceful JS-only fallback — only used if the lunar library is unavailable.
+    return items[officerIndexForDate(y,m,d) % 12];
   }
 
   function ensureExtraArrays(stable){
@@ -173,7 +180,7 @@
     stable.familyAvoidZh = stable.familyAvoidZh || [];
   }
 
-  function tailor(stable, job){
+  function tailor(stable, job, activity){
     const item = { ...stable };
     ensureExtraArrays(item);
     item.workDo = item.workDo || [];
@@ -185,6 +192,43 @@
     const doExtraZh = [];
     const avoidExtraZh = [];
     const jobLower = (job||'').toLowerCase();
+
+    if (activity === 'launch' || activity === 'contract') {
+      doExtra.push('Confirm deal terms before ending the day', 'Protect the messaging story');
+      avoidExtra.push('Last-minute scope changes', 'Ignoring hidden dependency risk');
+      doExtraZh.push('收尾前确认交易条款','保护叙事主线');
+      avoidExtraZh.push('最后时刻改范围','忽略隐藏依赖风险');
+    } else if (activity === 'deployment' || activity === 'kickoff') {
+      doExtra.push('Run the checklist in order', 'Keep the rollback notes open');
+      avoidExtra.push('Unreviewed config changes', 'Overloading the same window');
+      doExtraZh.push('按清单执行','保留回滚备注');
+      avoidExtraZh.push('未复核配置变更','把同一时段排满');
+    } else if (activity === 'negotiation') {
+      doExtra.push('Anchor on priority outcomes first', 'Confirm counterpoints in writing');
+      avoidExtra.push('Emotional bargaining', 'Weak dependency assumptions');
+      doExtraZh.push('先锚定优先结果','书面确认反对方要点');
+      avoidExtraZh.push('情绪化议价','弱依赖假设');
+    } else if (activity === 'purchase') {
+      doExtra.push('Verify receipt and delivery terms', 'Keep backup funding in writing');
+      avoidExtra.push('Unverified vendor promises', 'Hidden fees or late clauses');
+      doExtraZh.push('核对到帐与交付条款','书面留备份资金');
+      avoidExtraZh.push('未核实的供应商承诺','隐藏费用或迟延条款');
+    } else if (activity === 'wedding' || activity === 'rom' || activity === 'engagement') {
+      doExtra.push('Confirm timeline with both families', 'Keep the guest list tight');
+      avoidExtra.push('Surprise pressure on timing', 'Money talk during ceremony');
+      doExtraZh.push('与双方家庭确认时间线','精简宾客名单');
+      avoidExtraZh.push('在仪式上突然施压','仪式上谈钱');
+    } else if (activity === 'bed' || activity === 'move') {
+      doExtra.push('Map entry ritual and orientation', 'Keep the first night low-key');
+      avoidExtra.push('Heavy setup the first day', 'Unfinished packing fights');
+      doExtraZh.push('规划入宅仪式与坐向','首晚保持低压');
+      avoidExtraZh.push('首日重度布置','未整理完就争吵');
+    } else if (activity === 'renovation') {
+      doExtra.push('Split the project in phases', 'Confirm contractor rests');
+      avoidExtra.push('Full demolition without backup plan', 'Ignoring safety checks');
+      doExtraZh.push('把工程拆期执行','确认工人休息安排');
+      avoidExtraZh.push('无后备方案就全面拆改','忽略安全检查');
+    }
     if (/developer|engineer|dev|product|designer|pm/.test(jobLower)) { /* future branches */ }
     if(/student/.test(jobLower)){ doExtra.push('Review','Deep research','Paper drafting'); avoidExtra.push('Late-night distraction','Unplanned browsing'); doExtraZh.push('复习','深度研究','论文起草'); avoidExtraZh.push('深夜分心','无计划浏览') }
     if(/engineer|developer|dev/.test(jobLower)){ doExtra.push('Deploy','Code review','Bug triage'); avoidExtra.push('Untested changes','Context switching mid-task'); doExtraZh.push('部署','代码审查','缺陷分类'); avoidExtraZh.push('未测试更改','任务中切换上下文') }
@@ -229,23 +273,27 @@
       console.debug('[debug] doPlan start');
       const nameEl = document.getElementById('visitorName');
       const dobEl = document.getElementById('visitorDob');
-      const countryEl = document.getElementById('visitorCountry');
       const jobEl = document.getElementById('visitorJob');
+      const countryEl = document.getElementById('visitorCountry');
+      const genderEl = document.getElementById('gender');
       const tzEl = document.getElementById('visitorTimezone');
+      const activityEl = document.getElementById('zeRiActivity');
       const name = nameEl ? nameEl.value.trim() || localStorage.getItem('mpp.name')?.trim() || '' : '';
       const dob = dobEl ? dobEl.value.trim() || localStorage.getItem('mpp.dob')?.trim() || '' : '';
       const country = countryEl ? countryEl.value.trim() || localStorage.getItem('mpp.country')?.trim() || '' : '';
       const job = jobEl ? jobEl.value.trim() || localStorage.getItem('mpp.job')?.trim() || '' : '';
+      const gender = genderEl ? genderEl.value || localStorage.getItem('mpp.gender') || '' : '';
       const weekRaw = weekStartInput?.value ? new Date(weekStartInput.value) : new Date();
       const tz = (tzEl && tzEl.value) ? tzEl.value : (localStorage.getItem('mpp.tz') || 'UTC+8');
-      const planKey = `${name}|${dob}|${country}|${job}|${tz}|${weekStartInput?.value || new Date().toISOString().slice(0,10)}`;
+      const activity = activityEl ? activityEl.value : '';
+      const planKey = `${name}|${dob}|${country}|${job}|${tz}|${gender}|${activity}|${weekStartInput?.value || new Date().toISOString().slice(0,10)}`;
       if (lastPlanKey === planKey && weekGrid && weeklyProfile) {
         if (weeklySection) { weeklySection.style.display = ''; weeklySection.ariaHidden = 'false'; }
         return;
       }
       lastPlanKey = planKey;
       const offset = tzOffsetHours(tz);
-      console.debug('[debug] doPlan values:', {name,dob,country,job,tz,weekRaw});
+      console.debug('[debug] doPlan values:', {name,dob,country,job,gender,tz,activity,weekRaw});
       if(!name || !dob){
         if(weeklySection){ weeklySection.style.display=''; weeklySection.ariaHidden='false'; }
         if(!name) document.getElementById('visitorName')?.focus();
@@ -277,67 +325,85 @@
       }
       const start = new Date(weekRaw);
       const days = next7(start);
-      const safeGrid = weeklyBreakdowns;
+      const safeGrid = weekGrid;
       const summaryEl = weeklyHeader;
       if(!safeGrid || !summaryEl){ console.warn('weekly sections missing'); return; }
-      summaryEl.innerHTML = '<table class="week-table"><thead><tr><th>Day / Date</th><th>Day Officer</th><th>Energy Vibe</th><th>Top Auspicious Activity</th></tr></thead><tbody></tbody></table>';
-      const tbody = summaryEl.querySelector('tbody');
       safeGrid.innerHTML = '';
       const lang = (window && window.mppLang && typeof window.mppLang.getLang === 'function') ? window.mppLang.getLang() : 'en';
-      days.forEach(d => {
+      const isZeRi = !!document.getElementById('zeRiActivity');
+      const SHARED_ACTIVITIES = ['wedding','rom','engagement','bed','move'];
+      const companion = (() => {
+        const el = document.getElementById('companionReport');
+        if(!el) return { present:false, shared:false, verdict:null };
+        const g = id => document.getElementById(id);
+        const cd1 = g('comp1Dob')?.value.trim() || '';
+        const cd2 = g('comp2Dob')?.value.trim() || '';
+        if(!cd1 || !cd2) return { present:false, shared:false, verdict:null };
+        const a1 = animal(Number(cd1.split('-')[0]));
+        const a2 = animal(Number(cd2.split('-')[0]));
+        const shared = SHARED_ACTIVITIES.includes(activity);
+        const clash = {Rat:'Horse',Horse:'Rat',Ox:'Goat',Goat:'Ox',Tiger:'Monkey',Monkey:'Tiger',Rabbit:'Rooster',Rooster:'Rabbit',Dragon:'Dog',Dog:'Dragon',Snake:'Pig',Pig:'Snake'};
+        const combine = {Rat:'Ox',Ox:'Rat',Tiger:'Pig',Pig:'Tiger',Rabbit:'Dog',Dog:'Rabbit',Dragon:'Rooster',Rooster:'Dragon',Snake:'Goat',Goat:'Snake',Horse:'Monkey',Monkey:'Horse'};
+        let verdict, verdictLabel, noteText;
+        if(clash[a1]===a2){ verdict='clash'; verdictLabel='Clash (相冲)'; noteText=`Birth-year animals ${a1} & ${a2} form a direct clash pair. In traditional pairing this flags friction in timing and temperament — not a verdict. Favor Balance or Stable days for shared decisions, and avoid Danger days.`; }
+        else if(combine[a1]===a2){ verdict='harmonious'; verdictLabel='Harmonious (六合)'; noteText=`Birth-year animals ${a1} & ${a2} form a natural supporting pair — traditionally seen as compatible timing energy, a good omen for shared milestones. Prioritize Establish or Open days for joint launches.`; }
+        else { verdict='neutral'; verdictLabel='Neutral (中和)'; noteText=`Birth-year animals ${a1} & ${a2} neither clash nor form a classic harmony pair. No timing friction flagged — choose dates by activity fit above.`; }
+        return { present:true, shared, verdict, verdictLabel, noteText, a1, a2, n1: g('comp1Name')?.value.trim() || 'Partner 1', n2: g('comp2Name')?.value.trim() || 'Partner 2' };
+      })();
+      if(!isZeRi){
+        summaryEl.innerHTML = '<table class="week-table"><thead><tr><th>Day / Date</th><th>Day Officer</th><th>Energy Vibe</th><th>Top Auspicious Activity</th></tr></thead><tbody></tbody></table>';
+      } else {
+        summaryEl.innerHTML = '';
+      }
+      const tbody = isZeRi ? null : summaryEl.querySelector('tbody');
+      const rows = days.map(d => {
         const local = new Date(d);
         const y = local.getFullYear();
         const m = local.getMonth()+1;
         const day = local.getDate();
-        const rawStable = officerForDate(y, m, day);
-        const stable = rawStable || items[0];
-        const tItem = tailor(stable, job || '');
-        const officerIndex = items.indexOf(stable);
+        const stable = officerForDate(y, m, day) || items[0];
+        const tItem = tailor(stable, job || '', activity);
         const enDo = [...(tItem.workDo||[])];
         const enAvoid = [...(tItem.workAvoid||[])];
         const zhDo = [...(tItem.workDoZh||[])];
         const zhAvoid = [...(tItem.workAvoidZh||[])];
         const zhFamilyDo = [...(tItem.familyDoZh||[])];
         const zhFamilyAvoid = [...(tItem.familyAvoidZh||[])];
-        function boldLead(str){ return str ? str.split('. ').map(s=>`<strong>${s}</strong>`).join('. ') : ''; }
-        function sentenceFmt(en, zh){
-          if(lang==='zh') return zh && zh.length ? zh.join('。')+'。' : '';
-          if(!en || !en.length) return '';
-          if(en.length===1) return en[0] + '.';
-          return en.slice(0,-1).join(', ') + ' and ' + en[en.length-1] + '.';
-        }
+        const sentenceFmt = (en, zh) => {
+          const enS = (!en || !en.length) ? '' : (en.length===1 ? en[0] + '.' : en.slice(0,-1).join(', ') + ' and ' + en[en.length-1] + '.');
+          const zhS = (zh && zh.length) ? zh.join('。') + '。' : '';
+          if(lang==='zh') return zhS;
+          if(lang==='both') return (zhS && enS) ? zhS + ' ' + enS : (zhS || enS);
+          return enS;
+        };
         const workDoSentence = sentenceFmt(enDo, zhDo);
         const avoidSentence = sentenceFmt(enAvoid, zhAvoid);
         const familyDoSentence = sentenceFmt([...(tItem.familyDo||[])], zhFamilyDo);
         const familyAvoidSentence = sentenceFmt([...(tItem.familyAvoid||[])], zhFamilyAvoid);
-        const dayTitle = `${WEEKDAYS[local.getDay()]}, ${fmt(local)}`;
+        const dayTitle = `${WEEKDAYS[local.getDay()]} ${fmt(local)}`;
         const officerTitle = `${stable.cn ? stable.cn + ' / ' : ''}${stable.en || ''}`;
-        const dayPrologue = tFn('index_cycle_label').replace('{n}', ((officerIndex>=0 ? officerIndex : 0)+1));
-        const topActivity = stable.top || (enDo[0] || '');
-        const topActivityText = lang === 'zh' ? (zhDo[0] || topActivity) : topActivity;
-        if(tbody){
-          const tr = document.createElement('tr');
-          tr.innerHTML = `<td>${dayTitle}</td><td>${officerTitle}</td><td>${stable.vibe || ''}</td><td>${topActivityText}</td>`;
-          tbody.appendChild(tr);
+        const topActivity = activity ? `${stable.top || enDo[0] || ''} — ${activityLabel(activity, lang)}` : (stable.top || enDo[0] || '');
+        const rating = ratingFor(stable.cn, activity);
+        let compNote = '';
+        if(companion.present && companion.shared){
+          if(companion.verdict === 'harmonious' && (stable.cn === '建' || stable.cn === '开')) compNote = lang === 'zh' ? '六合助运，此日尤利二人共举' : 'Harmony (六合) boost — especially favorable for this joint day';
+          else if(companion.verdict === 'clash' && (stable.cn === '破' || stable.cn === '危')) compNote = lang === 'zh' ? '相冲之日，二人共事宜缓' : 'Clash (相冲) day — caution for joint timing';
         }
-        const doLead = tFn('index_do_today') || 'WHAT TO DO';
-        const avoidLead = tFn('index_avoid_today') || 'WHAT TO AVOID';
-        const familyTitle = tFn('index_family_label') || 'Family';
-        const familyAvoidTitle = tFn('index_family_avoid_label') || 'Family avoid';
-        const section = document.createElement('section');
-        section.className = 'card day-breakdown';
-        section.innerHTML = `
-          <h3>${dayTitle} — ${stable.en || ''} ${stable.cn ? '('+stable.cn+')' : ''}</h3>
-          <blockquote><strong>The Vibe:</strong> ${stable.note || ''}</blockquote>
-          <ul>
-            <li><strong>🟢 ${doLead}</strong> ${workDoSentence}</li>
-            <li><strong>❌ ${avoidLead}</strong> ${avoidSentence}</li>
-            <li><strong>🏠 ${familyTitle}</strong> ${familyDoSentence}</li>
-            <li><strong>🚫 ${familyAvoidTitle}</strong> ${familyAvoidSentence}</li>
-          </ul>
-        `;
-        safeGrid.appendChild(section);
+        return { local, stable, enDo, zhDo, workDoSentence, avoidSentence, familyDoSentence, familyAvoidSentence, dayTitle, officerTitle, topActivity, rating, compNote };
       });
+      if(isZeRi){ renderZeRi(rows, activity, lang, companion); }
+      else { renderIndex(rows); }
+
+      // Companion clash block — only meaningful for shared (relationship/household) activities
+      const compReport = document.getElementById('companionReport');
+      if (compReport) {
+        if (companion.present && companion.shared) {
+          compReport.innerHTML = `<section class="card companion-report"><h3>${tFn('zeri_companion_block')} · ${companion.n1} &amp; ${companion.n2}</h3><div class="pill">${companion.a1}</div><div class="pill">${companion.a2}</div><p><strong>${companion.verdictLabel}</strong> — ${companion.noteText}</p></section>`;
+        } else {
+          compReport.innerHTML = '';
+        }
+      }
+
       console.debug('[debug] doPlan rendered for week', weekRaw, 'tz', tz, 'rows', safeGrid.children.length);
       const section = weeklySection;
       if(section){
@@ -348,6 +414,90 @@
       console.error('[debug] doPlan error', err);
       throw err;
     }
+  }
+
+  function activityLabel(activity, lang){
+    const a = ACTIVITY_LABEL[activity];
+    if(!a) return activity;
+    return lang === 'zh' ? a.zh : (lang === 'both' ? a.zh + ' / ' + a.en : a.en);
+  }
+  function ratingFor(cn, activity){
+    const tag = ACTIVITY_TAG[activity];
+    const suit = SUIT[cn];
+    if(!tag || !suit) return 'neutral';
+    if(suit.good.includes(tag)) return 'good';
+    if(suit.avoid.includes(tag)) return 'avoid';
+    return 'neutral';
+  }
+  function renderIndex(rows){
+    if(!weeklyHeader || !weekGrid) return;
+    const tbody = weeklyHeader.querySelector('tbody');
+    rows.forEach(r => {
+      if(tbody){
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${r.dayTitle}</td><td>${r.officerTitle}</td><td>${r.stable.vibe || ''}</td><td>${r.topActivity}</td>`;
+        tbody.appendChild(tr);
+      }
+      const section = document.createElement('section');
+      section.className = 'card day-breakdown';
+      section.innerHTML = `
+        <h3>${r.dayTitle} — ${r.stable.en || r.stable.n || ''} ${r.stable.cn ? '('+r.stable.cn+')' : ''}</h3>
+        <blockquote><strong>The Vibe:</strong> ${r.stable.note || ''}</blockquote>
+        <ul>
+          <li><strong>🟢 ${tFn('index_do_today')}</strong> ${r.workDoSentence}</li>
+          <li><strong>❌ ${tFn('index_avoid_today')}</strong> ${r.avoidSentence}</li>
+          <li><strong>🏠 ${tFn('index_family_label')}</strong> ${r.familyDoSentence}</li>
+          <li><strong>🚫 ${tFn('index_family_avoid_label')}</strong> ${r.familyAvoidSentence}</li>
+        </ul>
+      `;
+      weekGrid.appendChild(section);
+    });
+  }
+  function renderZeRi(rows, activity, lang, companion){
+    if(!weeklyHeader || !weekGrid) return;
+    const list = document.createElement('div');
+    list.className = 'zeri-report';
+    const fullTxt = tFn('zeri_full_outlook') || 'Full day outlook';
+    rows.forEach(r => {
+      const suit = SUIT[r.stable.cn] || { good:[], neutral:[], avoid:[] };
+      const goodList = suit.good.map(tag => activityLabelByTag(tag, lang)).filter(Boolean);
+      const neutralList = suit.neutral.map(tag => activityLabelByTag(tag, lang)).filter(Boolean);
+      const avoidList = suit.avoid.map(tag => activityLabelByTag(tag, lang)).filter(Boolean);
+      const noteZh = NOTE_ZH[r.stable.cn] || '';
+      const noteEn = r.stable.note || '';
+      const note = lang === 'zh' ? noteZh : (lang === 'both' ? noteZh + ' ' + noteEn : noteEn);
+      const ratingTxt = lang === 'zh' ? (r.rating === 'good' ? '吉' : r.rating === 'avoid' ? '忌' : '平') : (r.rating === 'good' ? 'Auspicious' : r.rating === 'avoid' ? 'Inauspicious' : 'Neutral');
+      const actLabel = activityLabel(activity, lang);
+      const summary = lang === 'zh' ? `${actLabel}：${ratingTxt}（${r.stable.cn}日）` : `${actLabel}: ${ratingTxt} (${r.stable.cn} day)`;
+      const goodTxt = lang === 'zh' ? '宜' : 'Suitable';
+      const neutralTxt = lang === 'zh' ? '平' : 'Moderate';
+      const avoidTxt = lang === 'zh' ? '忌' : 'Avoid';
+      const li = document.createElement('div');
+      li.className = 'zeri-day zr-' + r.rating;
+      li.innerHTML = `
+        <div class="zeri-day-head">
+          <span class="zeri-date">${r.dayTitle}</span>
+          <span class="zeri-officer">${r.stable.cn} ${r.stable.en || r.stable.n || ''}</span>
+          <span class="zeri-rating">${ratingTxt}</span>
+        </div>
+        <p class="zeri-summary">${summary}</p>
+        <p class="zeri-note">${note}</p>
+        ${r.compNote ? `<p class="zeri-companion">${r.compNote}</p>` : ''}
+        <details class="zeri-full"><summary>${fullTxt}</summary>
+          <div class="zeri-suit"><span class="zeri-tag zr-good">${goodTxt}</span><span class="zeri-items">${goodList.join(' · ') || '—'}</span></div>
+          <div class="zeri-suit"><span class="zeri-tag zr-neutral">${neutralTxt}</span><span class="zeri-items">${neutralList.join(' · ') || '—'}</span></div>
+          <div class="zeri-suit"><span class="zeri-tag zr-avoid">${avoidTxt}</span><span class="zeri-items">${avoidList.join(' · ') || '—'}</span></div>
+        </details>
+      `;
+      list.appendChild(li);
+    });
+    weekGrid.appendChild(list);
+  }
+  function activityLabelByTag(tag, lang){
+    const map = { kai:ACTIVITY_LABEL.launch, qian:ACTIVITY_LABEL.contract, dong:ACTIVITY_LABEL.deployment, tan:ACTIVITY_LABEL.negotiation, jiao:ACTIVITY_LABEL.purchase, jia:ACTIVITY_LABEL.wedding, an:ACTIVITY_LABEL.bed, ru:ACTIVITY_LABEL.move, xiu:ACTIVITY_LABEL.renovation };
+    const a = map[tag];
+    if(!a) return '';
+    return lang === 'zh' ? a.zh : (lang === 'both' ? a.zh + '/' + a.en : a.en);
   }
 
   planBtn?.addEventListener('click', e => { e.preventDefault(); lastPlanKey = null; doPlan(); });
@@ -361,5 +511,6 @@
       tailor,
       tzOffsetHours
     };
+    window.__reapplyZeRi = function(){ lastPlanKey = null; doPlan(); };
   }
 })();

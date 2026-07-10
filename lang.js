@@ -41,6 +41,11 @@
       index_classical_note_2: 'Reference: traditional 12 daily officer 黄历 rules.',
       index_classical_note_3: 'Cross-check on',
       index_profile_label: 'Profile',
+      index_family_label: 'Family',
+      index_family_avoid_label: 'Family avoid',
+      zeri_report_title: 'Date Selection Report',
+      zeri_full_outlook: 'Full day outlook',
+      zeri_companion_block: 'Companion Check',
       index_click_hint: 'Click to set this week as the week start',
       index_zeri_callout: 'Looking for prime timing? Try our new Strategic Date Selection (Ze Ri) tool.',
       index_features_intro: 'Four lightweight tools for reflection: <a class="text-link" href="bazi.html">BaZi / 5 Elements</a>, <a class="text-link" href="flying-stars.html">Flying Stars / 9 Star Ki</a>, <a class="text-link" href="index.html#planBtn">12 Daily Officers weekly planner</a>, and <a class="text-link" href="horoscope.html">Horoscope · East + West</a> overview.',
@@ -187,7 +192,26 @@
       horo_today_note: 'Today note',
       horo_east_use_title: 'Suggested use',
       horo_east_use_body: 'In an Eastern view, birthdays starting from the lunar year shape the {animal} perspective. This is a simple symbolic reading.',
-      horo_west_element_body: '{el} signs value {el.toLowerCase()} themes. {body}'
+      horo_west_element_body: '{el} signs value {el.toLowerCase()} themes. {body}',
+      horo_mix_title: 'East meets West',
+      lm_back: '← Back',
+      lm_title: 'Love Meter · East + West',
+      lm_learn_title: 'How to read this playful meter',
+      lm_intro_1: 'Two birthdays, two traditions:',
+      lm_intro_2: 'compare your Eastern zodiac and Western signs, then see how the pairing reads toward marriage.',
+      lm_p1: 'Person 1',
+      lm_p2: 'Partner',
+      lm_calc: 'Measure our love',
+      lm_temperature: 'Compatibility temperature',
+      lm_east_title: 'Eastern · Chinese zodiac',
+      lm_west_title: 'Western · Sun signs',
+      lm_mix_title: 'The Union · East meets West',
+      lm_marriage_note: 'Toward marriage:',
+      lm_pick_date: 'Pick your wedding date with Ze Ri →',
+      lm_mode_label: 'Show me',
+      lm_mode_east: 'East',
+      lm_mode_west: 'West',
+      lm_mode_both: 'Both'
     },
     zh: {
       langLabel: '语言',
@@ -230,6 +254,11 @@
       index_classical_note_2: '參考：传统十二建除黄曆規则。',
       index_classical_note_3: '交叉查核',
       index_profile_label: '檔案',
+      index_family_label: '家庭',
+      index_family_avoid_label: '家庭忌',
+      zeri_report_title: '择日分析报告',
+      zeri_full_outlook: '全天宜忌一览',
+      zeri_companion_block: '伴侣合参',
       index_click_hint: '點擊設定本週开始日期',
       index_zeri_callout: '需要選擇吉日良辰？使用全新 擇日 工具。',
       index_features_intro: '四款轻量级反思工具：<a class="text-link" href="bazi.html">八字 · 五行</a>、<a class="text-link" href="flying-stars.html">玄空飞星 · 九星数</a>、<a class="text-link" href="index.html#planBtn">十二建除七日规划</a>，以及<a class="text-link" href="horoscope.html">中西合谱星盘</a>概览。',
@@ -373,7 +402,26 @@
       horo_today_note: '当日提示',
       horo_east_use_title: '建議用途',
       horo_east_use_body: '从东方观点来看，農曆年开始塑造了{animal}的視角。这是一个簡單的象徵解讀。',
-      horo_west_element_body: '{el}星座重視{el}主题。{body}'
+      horo_west_element_body: '{el}星座重視{el}主题。{body}',
+      horo_mix_title: '东西方合参',
+      lm_back: '← 返回',
+      lm_title: '姻缘温度计 · 东西合拍',
+      lm_learn_title: '如何读懂这个趣味温度计',
+      lm_intro_1: '两个生日，两种传统：',
+      lm_intro_2: '比对你们的中國生肖与西方星座，看看这段缘分如何走向婚姻。',
+      lm_p1: '本人',
+      lm_p2: '伴侣',
+      lm_calc: '测一测我们的缘份',
+      lm_temperature: '姻缘温度',
+      lm_east_title: '东方 · 中國生肖',
+      lm_west_title: '西方 · 太阳星座',
+      lm_mix_title: '缘分之合 · 东西方合参',
+      lm_marriage_note: '走向婚姻：',
+      lm_pick_date: '用择日挑选你们的婚期 →',
+      lm_mode_label: '显示',
+      lm_mode_east: '东方',
+      lm_mode_west: '西方',
+      lm_mode_both: '东西合参'
     }
   };
 
@@ -451,6 +499,7 @@
       applyTranslations(document);
       try { typeof window.__reapplyPillars === 'function' && window.__reapplyPillars(); } catch (_){}
       try { typeof window.__reapplyZeRi === 'function' && window.__reapplyZeRi(); } catch (_){}
+      try { typeof window.__reapplyLoveMeter === 'function' && window.__reapplyLoveMeter(); } catch (_){}
     });
   }
 

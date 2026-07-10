@@ -113,6 +113,9 @@ button:active { transform: translateY(1px); }
 .el-fill { height: 100%; border-radius: 999px; }
 .el-foot, .chakra-meta, .cell-body, .sign-foot { font-size: .8rem; color: var(--muted); margin-top: .4rem; }
 .social-bar { display: inline-flex; align-items: center; justify-content: center; gap: 1.2rem; flex-wrap: wrap; }
+.tool-links { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .5rem; }
+.companion-report { margin: .75rem 0; }
+.companion-report .pill { margin: .15rem .2rem 0 0; }
 .social-circle {
   display: inline-flex; align-items: center; justify-content: center;
   width: 44px; height: 44px; border-radius: 50%;
@@ -158,4 +161,29 @@ a { color: #ffb299; }
 a:hover { color: #ffffff; }
 .text-link { color: #ffb299; text-decoration: none; border-bottom: 1px dashed rgba(255,178,153,.4); transition: color .18s ease, border-bottom-color .18s ease; }
 .text-link:hover { color: #ffffff; border-bottom-color: rgba(255,255,255,.65); }
+.zeri-report { display:grid; gap:.75rem; margin-top:.5rem; }
+.zeri-day { border-radius:16px; border:1px solid var(--border); background:rgba(255,255,255,.025); padding:14px; }
+.zeri-day.zr-good { border-left:4px solid #4ade80; }
+.zeri-day.zr-neutral { border-left:4px solid #facc15; }
+.zeri-day.zr-avoid { border-left:4px solid #f87171; }
+.zeri-day-head { display:flex; align-items:baseline; gap:.75rem; flex-wrap:wrap; }
+.zeri-date { font-weight:700; }
+.zeri-officer { color:var(--accent); font-size:.92rem; }
+.zeri-rating { margin-left:auto; font-weight:700; font-size:.85rem; padding:.1rem .5rem; border-radius:999px; }
+.zr-good .zeri-rating { color:#4ade80; background:rgba(74,222,128,.12); }
+.zr-neutral .zeri-rating { color:#facc15; background:rgba(250,204,21,.12); }
+.zr-avoid .zeri-rating { color:#f87171; background:rgba(248,113,113,.12); }
+.zeri-note { margin:.45rem 0 .6rem; color:var(--muted); line-height:1.5; }
+.zeri-suit { display:flex; gap:.6rem; align-items:baseline; margin-top:.25rem; }
+.zeri-tag { flex:none; min-width:4.2rem; font-weight:700; font-size:.82rem; }
+.zeri-tag.zr-good { color:#4ade80; }
+.zeri-tag.zr-neutral { color:#facc15; }
+.zeri-tag.zr-avoid { color:#f87171; }
+.zeri-items { color:var(--text); font-size:.92rem; }
+.zeri-summary { margin:.2rem 0 .5rem; font-weight:600; color:var(--text); }
+.zeri-companion { margin:.2rem 0 .4rem; color:#ffb299; font-size:.9rem; }
+.zeri-full { margin-top:.4rem; border-top:1px solid var(--border); padding-top:.4rem; }
+.zeri-full summary { cursor:pointer; color:var(--muted); font-size:.85rem; }
+.zeri-full[open] summary { color:var(--accent); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0; }
+

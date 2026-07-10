@@ -3,129 +3,158 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" type="image/png" href="mascot.png">
   <title>metaphysics.it.com — Date Selection (Ze Ri)</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    /* Styling for the drop-down groups */
-    optgroup {
-      background: var(--surface-2);
-      color: var(--accent-gold);
-      font-weight: 600;
-    }
-    option {
-      background: var(--card);
-      color: var(--text);
-      font-weight: normal;
-    }
-    .activity-badge {
-      display: inline-block;
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      margin-left: 0.75rem;
-      text-transform: uppercase;
-    }
-    .badge-optimal { background: rgba(129, 199, 132, 0.15); color: #81c784; border: 1px solid rgba(129, 199, 132, 0.3); }
-    .badge-avoid { background: rgba(229, 115, 115, 0.15); color: #e57373; border: 1px solid rgba(229, 115, 115, 0.3); }
-    .clash-card { background: rgba(229, 115, 115, 0.08); border: 1px solid rgba(229, 115, 115, 0.2) !important; }
-    .clash-alert { margin-top: 0.6rem; padding: 0.5rem 0.75rem; border-radius: 6px; background: rgba(229, 115, 115, 0.12); color: #e57373; font-size: 0.82rem; font-weight: 500; border-left: 3px solid #e57373; }
-    .strategic-box { background: rgba(255, 255, 255, 0.03); padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem; font-size: 0.92rem; line-height: 1.45; }
-  </style>
 </head>
 <body>
-  <header>
-    <nav class="nav">
-      <div class="nav-left">
-        <a class="brand" href="index.html">metaphysics.it.com</a>
-        <span class="tag">Date Selection (Ze Ri)</span>
+
+<header>
+  <nav class="nav">
+    <div class="nav-left">
+      <a href="index.html" class="back-link">← Back</a>
+      <a class="brand" href="index.html">
+        <img src="mascot.png" alt="mascot" class="logo brand-img">
+        <span class="brand">metaphysics.it.com</span>
+      </a>
+      <span class="tag">Date Selection (Ze Ri)</span>
+    </div>
+    <div class="nav-right">
+      <select id="visitorLang" aria-label="Language">
+        <option value="en">English</option>
+        <option value="zh">中文</option>
+        <option value="both">中英</option>
+      </select>
+    </div>
+  </nav>
+</header>
+
+<div class="wrap">
+  <!-- Guidance & Description Section -->
+  <section class="card">
+    <p class="intro" style="margin-top:0;"><strong>Date Selection (Ze Ri)</strong></p>
+    <details style="margin-bottom: 0.5rem;">
+      <summary>What is Ze Ri?</summary>
+      <p style="margin: 0.5rem 0; line-height: 1.4; color: var(--muted);">The traditional practice of selecting auspicious dates for significant milestones. By aligning your business alignments or relationship milestones with favorable daily energetic branches, you protect your timelines from conflicts and maximize baseline momentum.</p>
+    </details>
+    <details>
+      <summary>How to use this tool</summary>
+      <p style="margin: 0.5rem 0; line-height: 1.4; color: var(--muted);">Define your strategic activity target and select your preferred tracking start date. The timeline compiler reviews the 12 Daily Officers cycle and maps them against personal profile inputs to flag high-yield versus risk-exposed window intervals.</p>
+    </details>
+  </section>
+
+  <!-- Strategic Target Parameters -->
+  <section class="card">
+    <h2>Strategic Target</h2>
+    <div class="row">
+      <div><label for="visitorName">Name</label><input type="text" id="visitorName"></div>
+      <div><label for="visitorDob">Date of birth</label><input type="date" id="visitorDob"></div>
+    </div>
+    <div class="row" style="margin-top:.75rem;">
+      <div><label for="visitorJob">Job Title</label><input type="text" id="visitorJob"></div>
+      <div>
+        <label for="gender">Gender</label>
+        <select id="gender"><option value="">— select —</option><option value="male">Male</option><option value="female">Female</option></select>
       </div>
-      <div class="nav-right">
-        <select id="visitorLang" aria-label="Language" style="margin-top:0; padding:0.4rem 0.6rem; width:auto;">
-          <option value="en">English</option>
-          <option value="zh">中文</option>
-          <option value="both">中英</option>
+    </div>
+    <div class="row" style="margin-top:.75rem;">
+      <div><label for="visitorCountry">Country</label><input type="text" id="visitorCountry" placeholder="Singapore / 新加坡"></div>
+      <div><label for="visitorTimezone">Timezone</label><select id="visitorTimezone"><option value="UTC+8" selected>UTC+8</option><option value="UTC-4">UTC-4</option><option value="UTC-5">UTC-5</option><option value="UTC+0">UTC+0</option><option value="UTC+1">UTC+1</option><option value="UTC+5:30">UTC+5:30</option><option value="UTC+7">UTC+7</option><option value="UTC+9">UTC+9</option><option value="UTC+10">UTC+10</option></select></div>
+    </div>
+    <div class="row" style="margin-top:.75rem;">
+      <div>
+        <label for="zeRiActivity">Strategic Activity</label>
+        <select id="zeRiActivity">
+          <optgroup label="TRANSACTIONAL & ACTIVE">
+            <option value="launch">Business Launch (开业)</option>
+            <option value="contract">Contract Signing (签约)</option>
+            <option value="deployment">System Deployment (部署)</option>
+            <option value="kickoff">Project Kickoff (开工)</option>
+            <option value="negotiation">Negotiation (谈判)</option>
+            <option value="purchase">Asset Purchase (交易)</option>
+          </optgroup>
+          <optgroup label="SANCTUARY & RELATIONSHIP">
+            <option value="wedding">Wedding (嫁娶)</option>
+            <option value="rom">Legal Registration (注册结婚)</option>
+            <option value="engagement">Engagement (过大礼)</option>
+            <option value="bed">Nuptial Bed (安床)</option>
+            <option value="move">Property Move (入宅)</option>
+            <option value="renovation">Renovation (修造)</option>
+          </optgroup>
         </select>
       </div>
-    </nav>
-  </header>
-
-  <div class="wrap">
-    <section class="card">
-      <h2>Profile & Strategic Target</h2>
-      <div class="row">
-        <div><label for="visitorName">Name</label><input type="text" id="visitorName"></div>
-        <div><label for="visitorJob">Job Title / Focus</label><input type="text" id="visitorJob"></div>
+      <div>
+        <label for="weekStart">Start From</label><input type="date" id="weekStart">
       </div>
-      <div class="row" style="margin-top:.5rem;">
-        <div><label for="weekStart">Starting Selection From</label><input type="date" id="weekStart"></div>
-        <div>
-          <label for="zeRiActivity">Strategic Activity Target</label>
-          <select id="zeRiActivity">
-            <optgroup label="TRANSACTIONAL & ACTIVE MILESTONES">
-              <option value="launch">Business Launch & Grand Opening (开业)</option>
-              <option value="contract">Contract Signing & Legal Deals (签约)</option>
-              <option value="deployment">System Deployment & Tech Go-Live (部署)</option>
-              <option value="kickoff">Major Project Kickoff & Breaking Ground (开工)</option>
-              <option value="negotiation">High-Stakes Negotiation & Pitching (谈判)</option>
-              <option value="purchase">Major Asset & Equipment Purchase (交易)</option>
-            </optgroup>
-            <optgroup label="SANCTUARY & RELATIONSHIP MILESTONES">
-              <option value="wedding">Wedding Ceremony & Banquet (嫁娶)</option>
-              <option value="rom">Legal ROM Registration / Civil Union (注册结婚)</option>
-              <option value="engagement">Engagement Rituals & Guo Da Li (过大礼)</option>
-              <option value="bed">Setting the Nuptial Bed (安床)</option>
-              <option value="move">Property Move & Space Relocation (入宅)</option>
-              <option value="renovation">Internal Renovation & Layout Updates (修造)</option>
-            </optgroup>
-          </select>
-        </div>
-      </div>
-    </section>
+    </div>
+    
+    <!-- Property Context Field (Toggled by Activity Choice) -->
+    <div id="property-wrapper" style="display:none; margin-top:0.75rem;">
+      <label for="propertyDirection">Property Facing Direction</label>
+      <select id="propertyDirection">
+        <option value="">— select direction —</option>
+        <option value="North">North (北)</option>
+        <option value="South">South (南)</option>
+        <option value="East">East (东)</option>
+        <option value="West">West (西)</option>
+        <option value="Northeast">Northeast (东北)</option>
+        <option value="Northwest">Northwest (西北)</option>
+        <option value="Southeast">Southeast (东南)</option>
+        <option value="Southwest">Southwest (西南)</option>
+      </select>
+    </div>
+  </section>
 
-    <section class="card">
-      <h2>Companion Compatibility Parameters (Optional)</h2>
-      <div style="margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px dashed var(--border);">
-        <div class="row">
-          <div style="flex: 2;"><label for="comp1Name">Partner 1 Name</label><input type="text" id="comp1Name" placeholder="Name"></div>
-          <div><label for="comp1Gender">Gender</label>
-            <select id="comp1Gender">
-              <option value="">Select</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-          </div>
-        </div>
-        <div class="row" style="margin-top: .5rem;">
-          <div><label for="comp1Dob">Date of Birth</label><input type="date" id="comp1Dob"></div>
-          <div><label for="comp1Tob">Time of Birth</label><input type="time" id="comp1Tob"></div>
-        </div>
-      </div>
+  <!-- Companion Parameters Grid -->
+  <section class="card">
+    <h2>Companion Parameters</h2>
+    <div class="row" style="margin-bottom:1rem; border-bottom:1px solid var(--border); padding-bottom:1rem;">
+      <div style="flex:2"><label for="comp1Name">Partner 1 Name</label><input type="text" id="comp1Name"></div>
+      <div><label for="comp1Dob">DOB</label><input type="date" id="comp1Dob"></div>
+    </div>
+    <div class="row">
+      <div style="flex:2"><label for="comp2Name">Partner 2 Name</label><input type="text" id="comp2Name"></div>
+      <div><label for="comp2Dob">DOB</label><input type="date" id="comp2Dob"></div>
+    </div>
+    <button id="planBtn" class="primary" style="margin-top:1.25rem;" type="button">Calculate Selection Window</button>
+  </section>
 
-      <div style="margin-bottom: 1rem;">
-        <div class="row">
-          <div style="flex: 2;"><label for="comp2Name">Partner 2 Name</label><input type="text" id="comp2Name" placeholder="Name"></div>
-          <div><label for="comp2Gender">Gender</label>
-            <select id="comp2Gender">
-              <option value="">Select</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-          </div>
-        </div>
-        <div class="row" style="margin-top: .5rem;">
-          <div><label for="comp2Dob">Date of Birth</label><input type="date" id="comp2Dob"></div>
-          <div><label for="comp2Tob">Time of Birth</label><input type="time" id="comp2Tob"></div>
-        </div>
-      </div>
-      <button id="planBtn" class="primary" style="margin-top:1.2rem;" type="button">Calculate Optimal Selection Window</button>
-    </section>
+  <!-- Output Dynamic Interface Component -->
+  <section class="card" id="weekly" style="display:none;">
+    <h2 data-i18n="zeri_report_title">Analysis Timeline</h2>
+    <div id="weeklyProfile" class="weekly-profile"></div>
+    <div id="companionReport"></div>
+    <div id="weeklyHeader" class="weekly-header" style="overflow-x:auto;"></div>
+    <div id="weekGrid" class="timeline"></div>
+    <div id="weeklyBreakdowns"></div>
+  </section>
+  <div class="footer-spacer"></div>
+</div>
 
-    <section class="card" id="weekly" style="display:none;">
-      <h2>7-Day Analysis Timeline</h2>
-      <div id="weekGrid" class="timeline"></div>
-    </section>
+<footer class="footer-bar">
+  <div class="footer-inner">
+    <div class="social-bar">
+      <a href="index.html" aria-label="Home" title="Home" class="social-circle social-home">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </a>
+      <a href="about.html" aria-label="About" title="About" class="social-circle">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      </a>
+      <a href="faq.html" aria-label="FAQ" title="FAQ" class="social-circle social-faq">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </a>
+      <a href="https://instagram.com/x.s.seow" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram" class="social-circle social-ig">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/seow-xi-sun-kelvin-0950379" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn" class="social-circle">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2 2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+    </div>
   </div>
-  <script src="zeri-plan.js"></script>
+</footer>
+
+<script src="lunar.js"></script>
+<script src="officer-plan.js"></script>
+<script src="lang.js"></script>
 </body>
 </html>

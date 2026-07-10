@@ -8,6 +8,7 @@
   <meta name="description" content="Quick Eastern Chinese zodiac + Western sun sign profile from your birthday. Simple, mobile-first insight.">
   <link rel="canonical" href="https://metaphysics.it.com/horoscope.html">
   <link rel="stylesheet" href="style.css">
+  <script src="lang.js"></script>
   <meta property="og:title" content="metaphysics.it.com — Horoscope · East + West">
   <meta property="og:description" content="Eastern zodiac and Western sun sign from your birthday.">
   <meta property="og:type" content="website">
@@ -202,6 +203,14 @@
         </div>
       </div>
     </section>
+
+    <section class="card" id="mixCard" style="display:none;">
+      <div class="bar">
+        <div class="bar-meta"><strong data-i18n="horo_mix_title">East meets West</strong></div>
+      </div>
+      <p class="body" id="mixBody" style="margin-top:.6rem;"></p>
+    </section>
+
   </div>
 
   <div class="footer-spacer"></div>
@@ -279,9 +288,9 @@
       const animal = animals[(y - 4) % 12];
       document.getElementById("animalEmoji").textContent = animal.emoji;
       document.getElementById("animalMeta").textContent = `${animal.n} ${animal.cn} · ${y}`;
-      document.getElementById("animalBody").textContent = `${name}, ${animal.trait}. ${animal.use}.`;
+      document.getElementById("animalBody").textContent = `${name}, born in a ${animal.n} year — ${animal.trait}.`;
       document.getElementById("animalUseTitle").textContent = animal.use;
-      document.getElementById("animalUseBody").textContent = `In an Eastern view, birthdays starting from the lunar year shape the ${animal.n} perspective. This is a simple symbolic reading.`;
+      document.getElementById("animalUseBody").textContent = `In an Eastern view, the lunar year you were born into shapes a ${animal.n} lens: lean into ${animal.use.toLowerCase()}. A simple symbolic reading — a mirror, not a map.`;
 
       document.getElementById("eastPill").textContent = `${animal.n} ${animal.cn}`;
       eastCard.style.display = "";
@@ -293,13 +302,24 @@
         }
         return mmdd >= s.from && mmdd <= s.to;
       }) || signs[signs.length-1];
+      const bestUse = (sign.body.split(". ")[1] || sign.body).replace(/^Best for /i, "").replace(/\.$/, "");
       document.getElementById("westSignLabel").textContent = `${sign.n} · ${sign.el} · ${sign.planet}`;
       document.getElementById("westSignBody").textContent = `${name}, ${sign.body}`;
       document.getElementById("westElement").textContent = sign.icon;
-      document.getElementById("westElementLabel").textContent = sign.planet;
-      document.getElementById("westElementBody").textContent = `${sign.el} signs value ${sign.el.toLowerCase()} themes. ${sign.body}`;
+      document.getElementById("westElementLabel").textContent = `Ruled by ${sign.planet}`;
+      document.getElementById("westElementBody").textContent = `Best for ${bestUse}.`;
       document.getElementById("westPill").textContent = `${sign.n} ${sign.icon} · ${sign.el}`;
       westCard.style.display = "";
+
+      // East meets West synthesis
+      const mix = document.getElementById("mixBody");
+      mix.innerHTML = `${name}, your Eastern ${animal.n} leans ${animal.trait.split(",")[0].toLowerCase()}, while your Western ${sign.n} (${sign.el}) suggests ${bestUse.toLowerCase()}. `
+        + (sign.el === "Fire" && animal.tone === "var(--fire)" ? `Both point to a fiery, expressive streak — channel it into visible, momentum-building work.`
+          : sign.el === "Earth" && animal.tone === "var(--earth)" ? `Both reward steadiness — long-term projects and reliable routines suit you.`
+          : sign.el === "Water" && animal.tone === "var(--water)" ? `Both favour feeling and reflection — protect quiet time and trusted inner circles.`
+          : sign.el === "Air" && animal.tone === "var(--metal)" ? `Both reward clear thinking and communication — writing and analysis are your friends.`
+          : `Where they differ, treat the overlap as your safe default and the contrast as a growth edge.`);
+      mixCard.style.display = "";
     });
 
     ['input','change'].forEach(ev => document.querySelectorAll('#visitorName,#visitorDob,#gender,#country,#job,#tob').forEach(el => el.addEventListener(ev, ()=>{

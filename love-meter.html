@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="mascot.png">
+  <title>metaphysics.it.com — Love Meter · East + West</title>
+  <meta name="description" content="A playful East + West couple compatibility check: Chinese zodiac, Five Elements, and Western sun signs, read toward marriage.">
+  <link rel="canonical" href="https://metaphysics.it.com/love-meter.html">
+  <link rel="stylesheet" href="style.css">
+  <script src="lang.js"></script>
+  <script src="lunar.js"></script>
+  <meta property="og:title" content="metaphysics.it.com — Love Meter · East + West">
+  <meta property="og:description" content="A playful East + West couple compatibility check toward marriage.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://metaphysics.it.com/love-meter.html">
+  <meta property="og:image" content="https://metaphysics.it.com/mascot.png">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="metaphysics.it.com — Love Meter · East + West">
+  <meta name="twitter:description" content="Chinese zodiac + Western signs, read toward marriage.">
+  <meta name="twitter:image" content="https://metaphysics.it.com/mascot.png">
+  <style>
+    :root {
+      --bg: #0f0f14;
+      --surface: #181820;
+      --surface-2: #1f1f29;
+      --border: rgba(255,255,255,.08);
+      --text: #f2f2f7;
+      --muted: #aaa7b3;
+      --accent: #ff8a65;
+      --accent-2: #ff6e40;
+      --wood: #81c784;
+      --fire: #ff8a65;
+      --earth: #ffd54f;
+      --metal: #e0e0e0;
+      --water: #4fc3f7;
+      --chip-bg: rgba(255,255,255,.06);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: radial-gradient(1200px 600px at -10% -10%, rgba(255,110,64,.12), transparent), radial-gradient(1000px 500px at 110% 10%, rgba(255,138,101,.1), transparent), var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    header { max-width: 1100px; margin: 0 auto; padding: 24px 0 6px; }
+    header h1 {
+      font-family: "Noto Serif SC", "Songti SC", Georgia, "Times New Roman", serif;
+      font-size: 1.75rem;
+      letter-spacing: -0.01em;
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+    }
+    header h1 span { color: var(--accent); }
+    header a.back { color: var(--muted); text-decoration: none; font-size: .9rem; margin-left: .75rem; }
+    .subtitle { color: var(--muted); margin-top: .3rem; font-size: .95rem; }
+    .wrap { width: 100%; max-width: 1100px; margin: 0 auto; padding: 18px 0 110px; }
+    @media (min-width: 760px) { .wrap { padding-left: 22px; padding-right: 22px; } }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 16px;
+      margin-top: 16px;
+      backdrop-filter: blur(8px);
+    }
+    @media (min-width: 760px) { .card { padding: 18px; } }
+    .pair-grid { display: grid; gap: .75rem; grid-template-columns: 1fr 1fr; }
+    @media (max-width: 760px) { .pair-grid { grid-template-columns: 1fr; } }
+    .person-card { border-radius: 16px; padding: 14px; border: 1px solid var(--border); background: rgba(255,255,255,.025); }
+    .person-card h3 { margin: .1rem 0 .5rem; font-size: 1.02rem; }
+    label { display: block; font-size: .82rem; color: var(--muted); margin-bottom: .25rem; }
+    input, select {
+      width: 100%;
+      padding: .6rem .8rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      outline: none;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(255,110,64,.15); }
+    button {
+      padding: .7rem;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .04s ease, opacity .15s ease;
+    }
+    button:active { transform: translateY(1px); }
+    .secondary { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); }
+    .bar { display:flex; justify-content:space-between; gap:1rem; align-items:center; flex-wrap: wrap; }
+    @media (max-width: 760px) { .bar { flex-direction: column; align-items: flex-start; } }
+    .pill { display:inline-flex; align-items:center; gap:.35rem; padding: .35rem .7rem; border-radius: 999px; background: var(--chip-bg); border: 1px solid var(--border); font-size: .82rem; color: var(--text); }
+    .row { display: grid; gap: .75rem; grid-template-columns: 1fr 1fr; }
+    @media (max-width: 760px) { .row { grid-template-columns: 1fr; } }
+    .full { grid-template-columns: 1fr; }
+    .intro { color: var(--muted); font-size: .92rem; }
+    .intro strong { color: var(--text); }
+    .animal { font-size: 2rem; }
+    .meta { font-size: .82rem; color: var(--muted); }
+    .body { font-size: .92rem; color: var(--muted); margin-top: .4rem; }
+    .meter { position: relative; height: 20px; border-radius: 999px; background: linear-gradient(90deg, #f87171 0%, #facc15 50%, #81c784 100%); margin: .8rem 0 .3rem; }
+    .meter-needle { position: absolute; top: -5px; bottom: -5px; width: 4px; border-radius: 2px; background: #fff; box-shadow: 0 0 0 2px rgba(0,0,0,.45); transform: translateX(-50%); }
+    .meter-score { font-size: 2.4rem; font-weight: 800; line-height: 1; }
+    .meter-tick { position:absolute; top:-2px; bottom:-2px; width:1px; background:rgba(255,255,255,.25); }
+    .meter-label { color: var(--muted); margin-bottom: .4rem; }
+    .seg { display:inline-flex; gap:.25rem; padding:.25rem; background: var(--surface); border:1px solid var(--border); border-radius: 999px; }
+    .seg-btn { background: transparent; border: none; color: var(--muted); padding: .45rem .9rem; border-radius: 999px; font-weight: 600; cursor: pointer; }
+    .seg-btn.active { background: linear-gradient(180deg, var(--accent), var(--accent-2)); color: #fff; }
+    .sub { margin-top: .7rem; }
+    .sub-row { display: grid; grid-template-columns: 1fr auto; gap: .5rem 1rem; align-items: baseline; }
+    .sub-name { font-size: .9rem; }
+    .sub-num { font-weight: 700; font-size: .9rem; }
+    .sub-track { grid-column: 1 / -1; height: 8px; border-radius: 999px; background: rgba(255,255,255,.08); overflow: hidden; }
+    .sub-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent-2), var(--accent)); width: 0; transition: width .5s ease; }
+    .rel-card { border-radius: 16px; padding: 14px; border: 1px solid var(--border); background: rgba(255,255,255,.025); }
+    .rel-title { font-weight: 700; margin-bottom: .35rem; }
+    .rel-sub { font-size: .85rem; color: var(--muted); }
+    .union-body { font-size: .95rem; color: var(--muted); margin-top: .4rem; }
+    .union-body strong { color: var(--text); }
+    .verdict { margin-top: .6rem; font-size: 1.05rem; font-weight: 700; }
+    .fortune { margin-top: .5rem; padding: .8rem 1rem; border-radius: 14px; background: rgba(255,213,79,.08); border: 1px solid rgba(255,213,79,.25); font-size: .92rem; }
+    .fortune::before { content: "🥠 "; }
+    .mary-link { display:inline-block; margin-top:.7rem; color: var(--accent); text-decoration: none; font-weight: 600; }
+    .mary-link:hover { text-decoration: underline; }
+    .text-link { color: var(--accent); text-decoration: none; }
+    .text-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>
+      <a class="brand" href="index.html">
+        <img src="mascot.png" alt="mascot" class="logo brand-img">
+        <span class="brand">metaphysics<span>.</span>it<span>.com</span>
+      </a>
+      <a class="back" href="index.html" data-i18n="lm_back" data-i18n-html="1">← Back</a>
+    </h1>
+    <p class="subtitle" data-i18n="lm_title">Love Meter · East + West</p>
+  </header>
+
+  <div class="wrap">
+
+    <section class="card">
+      <p class="intro" style="margin-top:0;" data-i18n="lm_learn_title">
+        <strong>How to read this playful meter</strong>
+      </p>
+      <details>
+        <summary>What does the temperature mean?</summary>
+        <p>It is a fun composite of your Eastern zodiac relationship, your Five-Element blend, and your Western sun-sign match — not a prediction. Treat it as a conversation starter, not a verdict.</p>
+      </details>
+      <details>
+        <summary>How is the East side read?</summary>
+        <p>We compare your birth-year animals (生肖): 六合 is the closest pairing, 三合 is harmonious, 相冲 is friction. Then we check how your animal elements (五行) generate or control each other. The animal is taken from the real lunar year (Chinese New Year boundary), not just the calendar year.</p>
+      </details>
+      <details>
+        <summary>How is the West side read?</summary>
+        <p>We compare your Western sun signs and their elements (Fire, Earth, Air, Water). Same or complementary elements read warmer; opposing elements add a little tension.</p>
+      </details>
+      <details>
+        <summary>Does this predict marriage?</summary>
+        <p>No. It is symbolic and cultural. For the actual wedding day, use the Ze Ri (择日) tool to find a personalized auspicious window.</p>
+      </details>
+    </section>
+
+    <section class="card">
+      <p class="intro" style="margin-top:0;" data-i18n="lm_intro_1"><strong>Two birthdays, two traditions:</strong> <span data-i18n="lm_intro_2">compare your Eastern zodiac and Western signs, then see how the pairing reads toward marriage.</span></p>
+      <div class="pair-grid">
+        <div class="person-card">
+          <h3 data-i18n="lm_p1">Person 1</h3>
+          <div class="row">
+            <div><label for="visitorName" data-i18n="horo_name">Name</label><input type="text" id="visitorName" placeholder="Your name" data-i18n-placeholder="index_name_placeholder"></div>
+            <div><label for="visitorDob" data-i18n="horo_dob">Date of birth</label><input type="date" id="visitorDob"></div>
+          </div>
+          <div class="row" style="margin-top:.6rem;">
+            <div><label for="gender" data-i18n="horo_gender">Gender</label><select id="gender"><option value="" data-i18n="index_gender_select">— select —</option><option value="male" data-i18n="index_male">Male</option><option value="female" data-i18n="index_female">Female</option></select></div>
+            <div><label for="visitorTob" data-i18n="horo_tob">Time of birth</label><input type="time" id="visitorTob"></div>
+          </div>
+          <div class="row" style="margin-top:.6rem;">
+            <div><label for="visitorCountry" data-i18n="index_country">Country</label><input type="text" id="visitorCountry" placeholder="Singapore / 新加坡"></div>
+          </div>
+        </div>
+        <div class="person-card">
+          <h3 data-i18n="lm_p2">Partner</h3>
+          <div class="row">
+            <div><label for="partnerName" data-i18n="horo_name">Name</label><input type="text" id="partnerName" placeholder="Partner name"></div>
+            <div><label for="partnerDob" data-i18n="horo_dob">Date of birth</label><input type="date" id="partnerDob"></div>
+          </div>
+          <div class="row" style="margin-top:.6rem;">
+            <div><label for="partnerGender" data-i18n="horo_gender">Gender</label><select id="partnerGender"><option value="" data-i18n="index_gender_select">— select —</option><option value="male" data-i18n="index_male">Male</option><option value="female" data-i18n="index_female">Female</option></select></div>
+            <div><label for="partnerTob" data-i18n="horo_tob">Time of birth</label><input type="time" id="partnerTob"></div>
+          </div>
+          <div class="row" style="margin-top:.6rem;">
+            <div><label for="partnerCountry" data-i18n="index_country">Country</label><input type="text" id="partnerCountry" placeholder="Singapore / 新加坡"></div>
+          </div>
+        </div>
+      </div>
+      <div class="bar" style="margin-top:.9rem;">
+        <div class="bar-meta"><strong data-i18n="lm_mode_label">Show me</strong></div>
+        <div class="seg" id="modeSeg" role="group">
+          <button type="button" class="seg-btn" data-mode="east" data-i18n="lm_mode_east">East</button>
+          <button type="button" class="seg-btn" data-mode="west" data-i18n="lm_mode_west">West</button>
+          <button type="button" class="seg-btn active" data-mode="both" data-i18n="lm_mode_both">Both</button>
+        </div>
+      </div>
+      <button id="calcBtn" class="secondary" style="margin-top:.8rem;" type="button" data-i18n="lm_calc">Measure our love</button>
+    </section>
+
+    <section class="card" id="pairCard" style="display:none;">
+      <div class="bar">
+        <div class="bar-meta"><strong id="pairTitle"></strong></div>
+        <div><span class="pill" id="pillA1"></span> <span class="pill" id="pillB1"></span> · <span class="pill" id="pillC1"></span> <span class="pill" id="pillD1"></span></div>
+      </div>
+      <div style="margin-top:.8rem;">
+        <div class="meta" data-i18n="lm_temperature">Compatibility temperature</div>
+        <div class="meter" id="meter"><div class="meter-needle" id="needle"></div></div>
+        <div class="meter-score" id="scoreNum">—</div>
+        <div class="meter-label" id="scoreLabel"></div>
+        <div class="verdict" id="verdict"></div>
+        <div class="fortune" id="fortune"></div>
+      </div>
+    </section>
+
+    <section class="card" id="eastCard" style="display:none;">
+      <div class="bar"><div class="bar-meta"><strong data-i18n="lm_east_title">Eastern · Chinese zodiac</strong></div></div>
+      <div class="rel-card" style="margin-top:.6rem;"><div class="rel-title" id="eastRelTitle"></div><div class="rel-sub" id="eastRelSub"></div></div>
+      <div class="sub" id="eastSubs"></div>
+    </section>
+
+    <section class="card" id="westCard" style="display:none;">
+      <div class="bar"><div class="bar-meta"><strong data-i18n="lm_west_title">Western · Sun signs</strong></div></div>
+      <div class="rel-card" style="margin-top:.6rem;"><div class="rel-title" id="westRelTitle"></div><div class="rel-sub" id="westRelSub"></div></div>
+      <div class="sub" id="westSubs"></div>
+    </section>
+
+    <section class="card" id="unionCard" style="display:none;">
+      <div class="bar"><div class="bar-meta"><strong data-i18n="lm_mix_title">The Union · East meets West</strong></div></div>
+      <p class="union-body" id="unionBody" style="margin-top:.6rem;"></p>
+      <div class="union-body" style="margin-top:.5rem;"><strong data-i18n="lm_marriage_note">Toward marriage:</strong> <span id="maryNote"></span></div>
+      <a class="mary-link" href="ze-ri.html" data-i18n="lm_pick_date">Pick your wedding date with Ze Ri →</a>
+    </section>
+
+  </div>
+
+  <div class="footer-spacer"></div>
+
+<script>
+  (function(){
+    const ELEMENT_ICON = { Wood:'🌿', Fire:'🔥', Earth:'🌏', Metal:'⚙️', Water:'💧' };
+
+    const animals = [
+      {n:"Rat",cn:"鼠",emoji:"🐭",el:"Metal"},
+      {n:"Ox",cn:"牛",emoji:"🐂",el:"Earth"},
+      {n:"Tiger",cn:"虎",emoji:"🐅",el:"Wood"},
+      {n:"Rabbit",cn:"兔",emoji:"🐇",el:"Wood"},
+      {n:"Dragon",cn:"龍",emoji:"🐉",el:"Earth"},
+      {n:"Snake",cn:"蛇",emoji:"🐍",el:"Fire"},
+      {n:"Horse",cn:"马",emoji:"🐎",el:"Fire"},
+      {n:"Goat",cn:"羊",emoji:"🐑",el:"Earth"},
+      {n:"Monkey",cn:"猴",emoji:"🐒",el:"Metal"},
+      {n:"Rooster",cn:"雞",emoji:"🐓",el:"Metal"},
+      {n:"Dog",cn:"狗",emoji:"🐕",el:"Earth"},
+      {n:"Pig",cn:"豬",emoji:"🐖",el:"Water"}
+    ];
+    const signs = [
+      {n:"Aries",from:"03-21",to:"04-19",el:"Fire",icon:"🐏"},
+      {n:"Taurus",from:"04-20",to:"05-20",el:"Earth",icon:"🐂"},
+      {n:"Gemini",from:"05-21",to:"06-20",el:"Air",icon:"👥"},
+      {n:"Cancer",from:"06-21",to:"07-22",el:"Water",icon:"🦀"},
+      {n:"Leo",from:"07-23",to:"08-22",el:"Fire",icon:"🦁"},
+      {n:"Virgo",from:"08-23",to:"09-22",el:"Earth",icon:"🌾"},
+      {n:"Libra",from:"09-23",to:"10-22",el:"Air",icon:"⚖️"},
+      {n:"Scorpio",from:"10-23",to:"11-21",el:"Water",icon:"🦂"},
+      {n:"Sagittarius",from:"11-22",to:"12-21",el:"Fire",icon:"🏹️"},
+      {n:"Capricorn",from:"12-22",to:"01-19",el:"Earth",icon:"🐐"},
+      {n:"Aquarius",from:"01-20",to:"02-18",el:"Air",icon:"🌊"},
+      {n:"Pisces",from:"02-19",to:"03-20",el:"Water",icon:"🐟"}
+    ];
+    const HE = { Rat:"Ox", Ox:"Rat", Tiger:"Pig", Pig:"Tiger", Rabbit:"Dog", Dog:"Rabbit", Dragon:"Rooster", Rooster:"Dragon", Snake:"Goat", Goat:"Snake", Horse:"Monkey", Monkey:"Horse" };
+    const TRIPLE = [ ["Monkey","Rat","Dragon"], ["Pig","Rabbit","Goat"], ["Tiger","Horse","Dog"], ["Snake","Rooster","Ox"] ];
+    const CLASH = { Rat:"Horse", Horse:"Rat", Ox:"Goat", Goat:"Ox", Tiger:"Monkey", Monkey:"Tiger", Rabbit:"Rooster", Rooster:"Rabbit", Dragon:"Dog", Dog:"Dragon", Snake:"Pig", Pig:"Snake" };
+    const HARM = { Rat:"Goat", Goat:"Rat", Ox:"Horse", Horse:"Ox", Tiger:"Snake", Snake:"Tiger", Rabbit:"Dragon", Dragon:"Rabbit", Monkey:"Pig", Pig:"Monkey", Dog:"Rooster", Rooster:"Dog" };
+    const GEN = { Wood:"Fire", Fire:"Earth", Earth:"Metal", Metal:"Water", Water:"Wood" };
+    const CONTROL = { Wood:"Earth", Earth:"Water", Water:"Fire", Fire:"Metal", Metal:"Wood" };
+
+    function animalOf(y, dob){
+      if (typeof Solar !== "undefined" && Solar && typeof Solar.fromDate === "function") {
+        try {
+          const cn = Solar.fromDate(new Date(dob + "T00:00:00")).getLunar().getYearShengXiao();
+          const hit = animals.find(a => a.cn === cn);
+          if (hit) return hit;
+        } catch (_) {}
+      }
+      return animals[((y - 4) % 12 + 12) % 12];
+    }
+    function signOf(dob){
+      const d = new Date(dob + "T00:00:00");
+      const mmdd = String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+      return signs.find(s => {
+        if (s.from > s.to) return mmdd >= s.from || mmdd <= s.to;
+        return mmdd >= s.from && mmdd <= s.to;
+      }) || signs[signs.length-1];
+    }
+    function zodiacRel(a, b){
+      if (HE[a] === b) return { score:85, en:"Harmonious union (六合)", zh:"六合 · 天作之合" };
+      if (TRIPLE.some(g => g.includes(a) && g.includes(b))) return { score:75, en:"Triple harmony (三合)", zh:"三合 · 情投意合" };
+      if (CLASH[a] === b) return { score:25, en:"Clash (相冲)", zh:"相冲 · 性格相冲" };
+      if (HARM[a] === b) return { score:40, en:"Subtle friction (相害)", zh:"相害 · 小有摩擦" };
+      return { score:55, en:"Neutral (中和)", zh:"中立 · 平顺" };
+    }
+    function eastElementRel(elA, elB){
+      if (elA === elB) return { score:55, en:"Same element ("+elA+")", zh:"同气 · 五行相同 ("+elA+")" };
+      if (GEN[elA] === elB) return { score:75, en:"Generating ("+elA+"→"+elB+" 相生)", zh:"相生 · 你生旺对方" };
+      if (GEN[elB] === elA) return { score:70, en:"Nurtured ("+elB+"→"+elA+" 相生)", zh:"相生 · 对方生旺你" };
+      if (CONTROL[elA] === elB) return { score:40, en:"Control ("+elA+"→"+elB+" 相克)", zh:"相克 · 你约束对方" };
+      if (CONTROL[elB] === elA) return { score:38, en:"Controlled ("+elB+"→"+elA+" 相克)", zh:"相克 · 对方约束你" };
+      return { score:52, en:"Neutral blend", zh:"平顺相合" };
+    }
+    function westSignRel(i1, i2){
+      const d = ((i1 - i2) % 12 + 12) % 12;
+      const map = { 0:70, 1:62, 11:62, 2:74, 10:74, 3:46, 9:46, 4:82, 8:82, 5:58, 7:58, 6:50 };
+      return map[d] || 55;
+    }
+    function westElementRel(elA, elB){
+      if (elA === elB) return 70;
+      if ((elA==="Fire"&&elB==="Air")||(elA==="Air"&&elB==="Fire")) return 78;
+      if ((elA==="Earth"&&elB==="Water")||(elA==="Water"&&elB==="Earth")) return 72;
+      if ((elA==="Fire"&&elB==="Water")||(elA==="Water"&&elB==="Fire")) return 35;
+      if ((elA==="Earth"&&elB==="Air")||(elA==="Air"&&elB==="Earth")) return 45;
+      return 58;
+    }
+    function tempInfo(s, lang){
+      if (s >= 80) return lang === "zh" ? { label:"天作之合 🔥", emoji:"🔥" } : { label:"Sizzling destiny 🔥", emoji:"🔥" };
+      if (s >= 68) return lang === "zh" ? { label:"热情似火 💞", emoji:"💞" } : { label:"Hot & hopeful 💞", emoji:"💞" };
+      if (s >= 52) return lang === "zh" ? { label:"温润如玉 🌤️", emoji:"🌤️" } : { label:"Warm & workable 🌤️", emoji:"🌤️" };
+      if (s >= 42) return lang === "zh" ? { label:"尚需磨合 🤔", emoji:"🤔" } : { label:"Needs some spark 🤔", emoji:"🤔" };
+      return lang === "zh" ? { label:"冰点待融 ❄️", emoji:"❄️" } : { label:"Cool — still warming ❄️", emoji:"❄️" };
+    }
+    const FORTUNE_EN = {
+      high:["The stars booked the venue before you did. 💍","Two traditions, one heartbeat. 🐉♒","This is the kind of match fortune cookies dream about.","六合 energy: destiny did the paperwork."],
+      mid:["Solid foundation, build the rest together. 🔨","Different systems, same signal. 📡","Warm enough to try; the rest is choice, not fate.","East nods, West winks — go for it."],
+      low:["Opposites attract, but someone has to be the magnet. 🧲","The friction is the fun part — lean in. 🔥","Cool now, but every fire starts small. 🕯️","Not a no. Just a 'let's see'. 👀"]
+    };
+    const FORTUNE_ZH = {
+      high:["缘分早把婚书拟好了。💍","两种传统，一颗心跳。🐉♒","这是连签文都羡慕的配对。","六合之气：天意已盖章。"],
+      mid:["地基稳了，其余一起盖。🔨","系统不同，信号相同。📡","够暖，可以开始；其余是选择不是命定。","东方点头，西方眨眼——上吧。"],
+      low:["互补相吸，总得有人当磁铁。🧲","摩擦正是乐趣所在，迎上去。🔥","此刻微凉，但火皆从小起。🕯️","不是不行，只是'再看看'。👀"]
+    };
+    function fortune(s, lang){
+      const band = s >= 68 ? "high" : s >= 42 ? "mid" : "low";
+      const arr = lang === "zh" ? FORTUNE_ZH[band] : FORTUNE_EN[band];
+      return arr[Math.abs(s) % arr.length];
+    }
+
+    const $ = id => document.getElementById(id);
+    const lang = () => (window.mppLang && typeof window.mppLang.getLang === "function") ? window.mppLang.getLang() : "en";
+    const L = k => (window.mppLang && window.mppLang.t) ? window.mppLang.t(k) : k;
+    let mode = "both";
+
+    function subBar(name, num){
+      return '<div class="sub-row"><div class="sub-name">'+name+'</div><div class="sub-num">'+num+'</div>'
+        + '<div class="sub-track"><div class="sub-fill" style="width:'+num+'%"></div></div></div>';
+    }
+
+    function render(){
+      const n1 = $("visitorName").value.trim() || "Person 1";
+      const n2 = $("partnerName").value.trim() || "Partner";
+      const dob1 = $("visitorDob").value;
+      const dob2 = $("partnerDob").value;
+      if (!dob1 || !dob2) return alert(L("dob_required"));
+
+      const y1 = new Date(dob1 + "T00:00:00").getFullYear();
+      const y2 = new Date(dob2 + "T00:00:00").getFullYear();
+      const a1 = animalOf(y1, dob1), a2 = animalOf(y2, dob2);
+      const s1 = signOf(dob1), s2 = signOf(dob2);
+      const c1 = $("visitorCountry").value.trim();
+      const c2 = $("partnerCountry").value.trim();
+      const ln = lang();
+
+      const zr = zodiacRel(a1.n, a2.n);
+      const ee = eastElementRel(a1.el, a2.el);
+      const ws = westSignRel(signs.indexOf(s1), signs.indexOf(s2));
+      const we = westElementRel(s1.el, s2.el);
+
+      const eastList = [
+        { name: ln === "zh" ? "生肖配对" : "Zodiac pair", num: zr.score, title: ln === "zh" ? zr.zh : zr.en, sub: ln === "zh" ? `${a1.n}${a1.cn} 与 ${a2.n}${a2.cn}` : `${a1.n} & ${a2.n}` },
+        { name: ln === "zh" ? "五行相合" : "Five Elements", num: ee.score, title: ln === "zh" ? ee.zh : ee.en, sub: `${ELEMENT_ICON[a1.el]} ${a1.el} · ${ELEMENT_ICON[a2.el]} ${a2.el}` }
+      ];
+      const westList = [
+        { name: ln === "zh" ? "星座配对" : "Sun sign", num: ws, title: `${s1.icon} ${s1.n} · ${s2.icon} ${s2.n}`, sub: ln === "zh" ? "西方太阳星座对照" : "Western sun-sign match" },
+        { name: ln === "zh" ? "元素相合" : "Element match", num: we, title: ln === "zh" ? `${s1.el} · ${s2.el}` : `${s1.el} · ${s2.el}`, sub: `${s1.el} · ${s2.el}` }
+      ];
+
+      const eastAvg = Math.round((eastList[0].num + eastList[1].num) / 2);
+      const westAvg = Math.round((westList[0].num + westList[1].num) / 2);
+      const composite = mode === "east" ? eastAvg : mode === "west" ? westAvg : Math.round((eastAvg + westAvg) / 2);
+
+      $("pairCard").style.display = "";
+      $("pairTitle").textContent = ln === "zh" ? `${n1} 与 ${n2}` : `${n1} & ${n2}`;
+      $("pillA1").textContent = `${a1.emoji} ${a1.n} ${a1.cn}`;
+      $("pillB1").textContent = `${s1.icon} ${s1.n}`;
+      $("pillC1").textContent = `${a2.emoji} ${a2.n} ${a2.cn}`;
+      $("pillD1").textContent = `${s2.icon} ${s2.n}`;
+      $("meter").querySelectorAll(".meter-tick").forEach(t => t.remove());
+      [25,50,75].forEach(p => { const tk = document.createElement("div"); tk.className = "meter-tick"; tk.style.left = p + "%"; $("meter").appendChild(tk); });
+      $("needle").style.left = composite + "%";
+      $("scoreNum").textContent = composite + "°";
+      const ti = tempInfo(composite, ln);
+      $("scoreLabel").textContent = ti.label;
+      $("verdict").textContent = ti.emoji + " " + ti.label;
+      $("fortune").textContent = fortune(composite, ln);
+
+      const showEast = mode === "east" || mode === "both";
+      const showWest = mode === "west" || mode === "both";
+      $("eastCard").style.display = showEast ? "" : "none";
+      $("westCard").style.display = showWest ? "" : "none";
+      $("eastRelTitle").textContent = eastList[0].title;
+      $("eastRelSub").textContent = eastList[0].sub;
+      $("eastSubs").innerHTML = subBar(eastList[0].name, eastList[0].num) + subBar(eastList[1].name, eastList[1].num);
+      $("westRelTitle").textContent = westList[0].title;
+      $("westRelSub").textContent = westList[0].sub;
+      $("westSubs").innerHTML = subBar(westList[0].name, westList[0].num) + subBar(westList[1].name, westList[1].num);
+
+      $("unionCard").style.display = "";
+      const place = (c1 || c2) ? (ln === "zh"
+        ? (c1 && c2 && c1 !== c2 ? ` 你们分别生于 ${c1} 与 ${c2}，` : ` 你们同生于 ${c1 || c2}，`)
+        : (c1 && c2 && c1 !== c2 ? ` Born in ${c1} and ${c2}, ` : ` Both born in ${c1 || c2}, `)) : " ";
+      const union = ln === "zh"
+        ? `<strong>${n1}</strong>（${a1.n}${a1.cn} · ${s1.n}）与 <strong>${n2}</strong>（${a2.n}${a2.cn} · ${s2.n}）：${place}你们${zr.zh.replace(/ ·.*/,"")}定下基调；东方五行${ee.zh.replace(/ ·.*/,"")}，西方太阳${s1.n}与${s2.n}相${ws>=68?"合":ws>=42?"稳":"冲"}。走向婚姻，把契合处当作安全默认，分歧处视为成长契机。`
+        : `<strong>${n1}</strong> (${a1.n} · ${s1.n}) and <strong>${n2}</strong> (${a2.n} · ${s2.n}):${place}your ${zr.en.toLowerCase()} sets the tone. East elements ${ee.en.toLowerCase()}; Western ${s1.n}–${s2.n} reads ${ws>=68?"warm":ws>=42?"steady":"tense"}. Toward marriage, treat your shared strengths as the safe default, and where East and West differ, let the contrast be a growth edge.`;
+      $("unionBody").innerHTML = union;
+      $("maryNote").textContent = ln === "zh"
+        ? "准备定下婚期时，可用择日（嫁娶）挑一个专属吉日。"
+        : "When you're ready to set the date, use Ze Ri for the wedding day (嫁娶).";
+    }
+
+    document.querySelectorAll("#modeSeg .seg-btn").forEach(b => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll("#modeSeg .seg-btn").forEach(x => x.classList.remove("active"));
+        b.classList.add("active");
+        mode = b.dataset.mode;
+        if ($("unionCard").style.display !== "none") render();
+      });
+    });
+    $("calcBtn").addEventListener("click", render);
+    window.__reapplyLoveMeter = render;
+    document.addEventListener("change", e => {
+      if (e.target && e.target.id === "visitorLang" && $("unionCard").style.display !== "none") setTimeout(render, 0);
+    });
+  })();
+</script>
+<footer class="footer-bar">
+  <div class="footer-inner">
+    <div class="social-bar">
+      <a href="index.html" aria-label="Home" title="Home" class="social-circle social-home">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </a>
+      <a href="about.html" aria-label="About" title="About" class="social-circle">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      </a>
+      <a href="faq.html" aria-label="FAQ" title="FAQ" class="social-circle social-faq">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </a>
+      <a href="https://instagram.com/x.s.seow" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram" class="social-circle social-ig">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/seow-xi-sun-kelvin-0950379" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn" class="social-circle">
+        <svg class="social-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2 2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

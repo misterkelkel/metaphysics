@@ -147,6 +147,20 @@
     .pillar-cell .p-branch { font-weight: 700; font-size: 1rem; color: var(--accent); }
     .pillar-cell.unknown .p-stem,
     .pillar-cell.unknown .p-branch { color: var(--muted); font-weight: 600; }
+    #elementGrid { grid-template-columns: repeat(5, 1fr); }
+    @media (max-width: 760px) { #elementGrid { grid-template-columns: repeat(2, 1fr); } }
+    .area-grid { display:grid; gap:.75rem; grid-template-columns: repeat(5, 1fr); margin-top:.75rem; }
+    @media (max-width: 760px){ .area-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 440px){ .area-grid { grid-template-columns: 1fr; } }
+    .area-card { border-radius:16px; padding:14px; border:1px solid var(--border); background:rgba(255,255,255,.025); }
+    .area-card h4 { margin:.1rem 0 .4rem; font-size:.98rem; }
+    .area-score { font-size:1.6rem; font-weight:800; }
+    .area-tag { font-size:.74rem; padding:.15rem .5rem; border-radius:999px; background:var(--chip-bg); border:1px solid var(--border); margin-left:.4rem; vertical-align:middle; }
+    .cmp-table { width:100%; border-collapse:collapse; margin-top:.5rem; font-size:.85rem; }
+    .cmp-table th, .cmp-table td { padding:.4rem .5rem; text-align:left; border-bottom:1px solid var(--border); }
+    .cmp-table th { color:var(--muted); font-weight:600; }
+    .delta-up { color:var(--good); }
+    .delta-down { color:var(--bad); }
   </style>
 </head>
 <body>
@@ -191,13 +205,15 @@
         <summary>What should I take note of?</summary>
         <p>Notice your strongest and weakest elements. Strongest shows your default strength; weakest shows where you may overuse effort. Watch for seasonal shifts, because environment often brings out different behaviour. Use balanced habits instead of relying on one style.</p>
       </details>
+    </section>
+  </div>
 
-    <section class="card">
-      <p class="intro" style="margin-top:0;" data-i18n="bazi_intro">
-        <strong data-i18n="bazi_intro_1">What this page does:</strong> <span data-i18n="bazi_intro_2" data-i18n-html="1">It turns your birthday and birth time into a simple 5-element profile — <strong>Wood</strong>, <strong>Fire</strong>, <strong>Earth</strong>, <strong>Metal</strong>, and <strong>Water</strong>.</span><br><br>
-        <strong data-i18n="bazi_intro_3">How to read it:</strong> <span data-i18n="bazi_intro_4">The percentages show which element is strongest and which needs more support. Use the guidance as a gentle nudge, not a strict rule.</span>
-      </p>
-      <div class="row">
+  <section class="card">
+    <p class="intro" style="margin-top:0;" data-i18n="bazi_intro">
+      <strong data-i18n="bazi_intro_1">What this page does:</strong> <span data-i18n="bazi_intro_2" data-i18n-html="1">It turns your birthday and birth time into a simple 5-element profile — <strong>Wood</strong>, <strong>Fire</strong>, <strong>Earth</strong>, <strong>Metal</strong>, and <strong>Water</strong>.</span><br><br>
+      <strong data-i18n="bazi_intro_3">How to read it:</strong> <span data-i18n="bazi_intro_4">The percentages show which element is strongest and which needs more support. Use the guidance as a gentle nudge, not a strict rule.</span>
+    </p>
+    <div class="row">
         <div><label for="visitorName" data-i18n="index_name">Name</label><input type="text" id="visitorName" placeholder="Your name" data-i18n-placeholder="index_name_placeholder"></div>
         <div><label for="visitorDob" data-i18n="index_dob">Date of birth</label><input type="date" id="visitorDob"></div>
       </div>
@@ -230,11 +246,23 @@
         <div class="pillar-grid" id="pillarGrid"></div>
       </div>
 
+      <div class="card-inner" id="coreCard" style="display:none;">
+        <div class="pillar-head" data-i18n="bazi_core_title">Chart Core</div>
+        <div id="coreDayMaster"></div>
+        <div id="coreTenGods"></div>
+        <div id="coreYong"></div>
+      </div>
+
       <div class="card-inner" id="tipsCard" style="display:none;">
         <p class="intro" style="margin-top:0;" data-i18n="bazi_how_use">
           <strong>How to use this guidance:</strong> <span data-i18n="bazi_how_use_p" data-i18n-html="1">Think of your strongest element as your natural strength, and your weakest as an area to develop. The suggestions are practical and meant to help you balance decisions in work, family, and personal planning.</span>
         </p>
         <p class="intro" id="guidanceText"></p>
+      </div>
+      <div class="card-inner" id="annualCard" style="display:none;">
+        <div class="pillar-head" id="annualTitle">Annual Outlook</div>
+        <div id="annualCompare"></div>
+        <div class="area-grid" id="lifeAreas"></div>
       </div>
     </section>
 
@@ -247,18 +275,18 @@
 <script src="lang.js"></script>
 <script>
   const defaultTz = "UTC+8";
-  const TZ_OPTIONS = ["UTC+8","UTC+9","UTC+10","UTC+5:30","UTC+7","UTC+0","UTC+1","UTC-4","UTC-5"];
+  const TZ_OPTIONS = ["UTC+8","UTC-4","UTC-5","UTC+0","UTC+1","UTC+5:30","UTC+7","UTC+9","UTC+10"];
   function setTimezoneOptions(){
     const el = document.getElementById("visitorTimezone");
     if(!el) return;
     el.innerHTML = "";
+    const chosen = localStorage.getItem("mpp.tz") || defaultTz;
     TZ_OPTIONS.forEach(v => {
       const o = document.createElement("option");
       o.value = v; o.textContent = v;
+      if(v === chosen) o.selected = true;
       el.appendChild(o);
     });
-    const saved = localStorage.getItem("mpp.tz");
-    el.value = saved || defaultTz;
   }
   setTimezoneOptions();
   const countryEl = document.getElementById("visitorCountry");
@@ -316,39 +344,84 @@
   const DAY_ELEMENT = { midnight: 'Water', dawn: 'Wood', morning: 'Wood', afternoon: 'Fire', evening: 'Metal', night: 'Water' };
   const ELEMENT_ICON = { Wood: '🌿', Fire: '🔥', Earth: '🌏', Metal: '⚙️', Water: '💧' };
   const ELEMENT_COLOR = { Wood: '#81c784', Fire: '#ff8a65', Earth: '#ffd54f', Metal: '#e0e0e0', Water: '#64b5f6' };
+  const ELEMENT_ORDER = ['Wood','Fire','Earth','Metal','Water'];
+  const pct1 = n => (Math.floor(n*10)/10).toFixed(1); // exact %, 1 forced decimal (25 -> "25.0")
   const STEM_ELEMENT = { 甲:'Wood', 乙:'Wood', 丙:'Fire', 丁:'Fire', 戊:'Earth', 己:'Earth', 庚:'Metal', 辛:'Metal', 壬:'Water', 癸:'Water' };
+  const BRANCH_ELEMENT = { 子:'Water', 丑:'Earth', 寅:'Wood', 卯:'Wood', 辰:'Earth', 巳:'Fire', 午:'Fire', 未:'Earth', 申:'Metal', 酉:'Metal', 戌:'Earth', 亥:'Water' };
   const ELEMENT_DESC = { Wood: 'Growth & planning', Fire: 'Visibility & connection', Earth: 'Stability & process', Metal: 'Clarity & decisions', Water: 'Reflection & communication' };
+
+  function parseDateTimeInTz(dateStr, timeStr, tz){
+    if(!dateStr) return null;
+    const [y,m,d] = String(dateStr).split('-').map(Number);
+    let hours = 12, minutes = 0;
+    if(timeStr){
+      const parts = String(timeStr).split(':');
+      hours = Number(parts[0]) || 0;
+      minutes = Number(parts[1]) || 0;
+    }
+    let tzOffsetHours = 8;
+    if(tz && String(tz).startsWith('UTC')){
+      const raw = String(tz).replace('UTC','');
+      const sign = raw.startsWith('-') ? -1 : 1;
+      const parts = raw.replace(/^-/, '').split(':');
+      tzOffsetHours = sign * (Number(parts[0]) || 0);
+      if(parts[1]) tzOffsetHours += sign * (Number(parts[1]) / 60);
+    }
+    const dt = new Date(Date.UTC(y, m-1, d, hours, minutes, 0) - tzOffsetHours * 3600000);
+    return {
+      date: dt,
+      year: y,
+      month: m,
+      day: d,
+      hours,
+      minutes,
+      utcYear: dt.getUTCFullYear(),
+      utcMonth: dt.getUTCMonth()+1,
+      utcDate: dt.getUTCDate()
+    };
+  }
 
   function calc(){
     const name = nameEl?.value?.trim();
     const dob = dobEl?.value;
     const tob = tobEl?.value;
     const country = countryEl?.value?.trim();
-    const tz = tzEl?.value?.trim() || "UTC+8";
+    const tz = tzEl?.value?.trim() || defaultTz;
     const job = jobEl?.value?.trim();
     const gender = genderEl?.value;
     if (!dob) return alert("Please enter your date of birth.");
 
-    const d = new Date(dob + "T" + (tob || "12:00"));
-    const y = d.getFullYear(), m = d.getMonth()+1, day = d.getDate();
+    const parsed = parseDateTimeInTz(dob, tob, tz);
+    if(!parsed) return alert("Please enter a valid date of birth.");
+    const p = parsed;
+    const y = p.utcYear, m = p.utcMonth, day = p.utcDate;
     const zodiacAnimal = animal(y);
-    const season = SEASON_ELEMENT[(m + 9) % 12] || "Earth";
-    const dayPart = hourLabel(d.getHours());
-    const birthStem = STEM_ELEMENT[getYearStem(y)] || "Wood";
-
-    let elementCounts = { Wood: 2, Fire: 1, Earth: 1, Metal: 1, Water: 1 };
-    elementCounts[birthStem]++;
-    elementCounts[season]++;
-    elementCounts[DAY_ELEMENT[dayPart] || "Earth"]++;
-
-    if (/engineer|developer|programmer|coder/.test((job||"").toLowerCase())) elementCounts["Metal"] = (elementCounts["Metal"]||0) + 1;
-    else if (/teacher|lecturer|tutor|edu/.test((job||"").toLowerCase())) elementCounts["Wood"] = (elementCounts["Wood"]||0) + 1;
-    else if (/trader|finance|banker|broker/.test((job||"").toLowerCase())) elementCounts["Water"] = (elementCounts["Water"]||0) + 1;
-    else if (/designer|artist|creator/.test((job||"").toLowerCase())) elementCounts["Fire"] = (elementCounts["Fire"]||0) + 1;
-    else if (/project manager|pm|manager/.test((job||"").toLowerCase())) elementCounts["Earth"] = (elementCounts["Earth"]||0) + 1;
-
-    const total = Object.values(elementCounts).reduce((a,b)=>a+b,0);
-    Object.keys(elementCounts).forEach(k => elementCounts[k] = Math.round((elementCounts[k]/total)*100));
+    const birthYear = y;
+    // Real 5-element balance from the 4 pillars (8 characters) + hidden stems (藏干).
+    // Month branch (月令) weighted 3x as the seasonal driver; day master judged separately.
+    const ys = getYearStem(y), ms = getMonthStem(y, m), ds = getDayStem(y, m, day), hs = getHourStem(ds, p.hours);
+    const yb = getYearBranch(y), mb = getMonthBranch(m), db = getDayBranch(y, m, day), hb = getHourBranch(p.hours);
+    const PILLAR_STEMS = [hs, ds, ms, ys];        // Hour, Day, Month, Year stems
+    const PILLAR_BRANCHES = [hb, db, mb, yb];     // matching branches
+    const BRANCH_HIDDEN = {
+      子:[['Water',1]], 丑:[['Earth',1],['Metal',.5],['Water',.5]], 寅:[['Wood',1],['Fire',.5],['Earth',.5]],
+      卯:[['Wood',1]], 辰:[['Earth',1],['Wood',.5],['Water',.5]], 巳:[['Fire',1],['Earth',.5],['Metal',.5]],
+      午:[['Fire',1],['Earth',.5]], 未:[['Earth',1],['Fire',.5],['Wood',.5]], 申:[['Metal',1],['Water',.5],['Earth',.5]],
+      酉:[['Metal',1]], 戌:[['Earth',1],['Metal',.5],['Fire',.5]], 亥:[['Water',1],['Wood',.5],['Fire',.5]]
+    };
+    const BR_W = [1, 1, 3, 1]; // hour, day, month(月令), year — month branch drives the season
+    const tally = { Wood:0, Fire:0, Earth:0, Metal:0, Water:0 };
+    PILLAR_STEMS.forEach(s => { const e = STEM_ELEMENT[s]; if (e) tally[e] += 1; });
+    PILLAR_BRANCHES.forEach((b, i) => (BRANCH_HIDDEN[b] || [[BRANCH_ELEMENT[b] || 'Earth', 1]]).forEach(([e, w]) => { tally[e] += w * BR_W[i]; }));
+    if (/engineer|developer|programmer|coder/.test((job||'').toLowerCase())) tally.Metal += 0.5;
+    else if (/teacher|lecturer|tutor|edu/.test((job||'').toLowerCase())) tally.Wood += 0.5;
+    else if (/trader|finance|banker|broker/.test((job||'').toLowerCase())) tally.Water += 0.5;
+    else if (/designer|artist|creator/.test((job||'').toLowerCase())) tally.Fire += 0.5;
+    else if (/project manager|pm|manager/.test((job||'').toLowerCase())) tally.Earth += 0.5;
+    const total = Object.values(tally).reduce((a,b)=>a+b,0) || 1;
+    // Exact percentage, NO round-up: truncate to 1 decimal (floor of 10×), e.g. 28.6% shows, never bumped to 29%.
+    const elementCounts = {};
+    ['Wood','Fire','Earth','Metal','Water'].forEach(e => { elementCounts[e] = Math.floor((tally[e]/total)*1000)/10; });
 
     const strongest = Object.entries(elementCounts).sort((a,b)=>b[1]-a[1])[0];
     const weakest = Object.entries(elementCounts).sort((a,b)=>a[1]-b[1])[0];
@@ -367,11 +440,13 @@
         <div class="el-name" style="color:${ELEMENT_COLOR[el]}">${ELEMENT_ICON[el]} ${el}</div>
         <div class="el-cn">${ELEMENT_DESC[el] || ''}</div>
         <div class="el-bar"><div class="el-fill" style="width:${score}%; background:${ELEMENT_COLOR[el]}; opacity:.85;"></div></div>
-        <div class="el-foot">${score}% · ${tagline(el, score)}</div>`;
+        <div class="el-foot">${pct1(score)}% · ${tagline(el, score)}</div>`;
       grid.appendChild(card);
     });
 
-    renderPillars(dob, tob, tz, name);
+    renderPillars(parsed.date, tob, name);
+    renderAnnual(birthYear, elementCounts, strongest[0], weakest[0]);
+    renderCore(parsed.date, tob, elementCounts, strongest[0], weakest[0]);
 
     const tipsCard = document.getElementById("tipsCard");
     tipsCard.style.display = "";
@@ -406,7 +481,60 @@
     return map[key1] || map[key2] || "Balance the extremes of your profile through small, consistent habits.";
   }
 
-  function renderPillars(dob, tob, tz, name){
+  function renderCore(dateObj, tob, elementCounts, strongestEl, weakestEl){
+    const card = document.getElementById("coreCard");
+    const dmEl = document.getElementById("coreDayMaster");
+    const tgEl = document.getElementById("coreTenGods");
+    const yongEl = document.getElementById("coreYong");
+    if(!card || !dmEl || !tgEl || !yongEl) return;
+    const base = new Date(dateObj.getTime());
+    const year = base.getUTCFullYear();
+    const month = base.getUTCMonth()+1;
+    const date = base.getUTCDate();
+    let hour = 12, minute = 0;
+    if(tob){ const parts = String(tob).split(':'); hour = parseInt(parts[0],10); minute = parseInt(parts[1],10); }
+    const dayStem = getDayStem(year, month, date);
+    const dayBranch = getDayBranch(year, month, date);
+    const dmEl_ = STEM_ELEMENT[dayStem] || "Wood";
+    const dmName = { 甲:'Jia',乙:'Yi',丙:'Bing',丁:'Ding',戊:'Wu',己:'Ji',庚:'Geng',辛:'Xin',壬:'Ren',癸:'Gui' }[dayStem] || dayStem;
+    const dmBranchName = { 子:'Zi',丑:'Chou',寅:'Yin',卯:'Mao',辰:'Chen',巳:'Si',午:'Wu',未:'Wei',申:'Shen',酉:'You',戌:'Xu',亥:'Hai' }[dayBranch] || dayBranch;
+
+    // Day Master strength: share of the chart held by the DM element + half its Resource (generating) element.
+    const genIdx = (ELEMENT_ORDER.indexOf(dmEl_) - 1 + 5) % 5;
+    const resourceEl = ELEMENT_ORDER[genIdx];
+    const dmShare = elementCounts[dmEl_] || 0;
+    const strength = dmShare + 0.5 * (elementCounts[resourceEl] || 0);
+    const dmStrong = dmShare >= 18; // ~1/5 baseline; above that with resource support = strong
+    card.style.display = "";
+
+    // Ten Gods (十神) — each pillar read relative to the Day Master (its own stem + branch)
+    const stems = [ getHourStem(dayStem, hour), dayStem, getMonthStem(year, month), getYearStem(year) ];
+    const branches = [ getHourBranch(hour), dayBranch, getMonthBranch(month), getYearBranch(year) ];
+    const posOf = (stem) => { const e = STEM_ELEMENT[stem] || 'Wood'; return (ELEMENT_ORDER.indexOf(e) - ELEMENT_ORDER.indexOf(dmEl_) + 12) % 6; };
+    const godNames = { 0:'Companion 比劫', 1:'Resource 印', 2:'Output 食伤', 3:'Wealth 财', 4:'Authority 官杀', 5:'Companion 比劫' };
+    const pillarLabels = ['Hour 时','Day 日','Month 月','Year 年'];
+    const stemNames = { 甲:'Jia',乙:'Yi',丙:'Bing',丁:'Ding',戊:'Wu',己:'Ji',庚:'Geng',辛:'Xin',壬:'Ren',癸:'Gui' };
+    const branchNames = { 子:'Zi',丑:'Chou',寅:'Yin',卯:'Mao',辰:'Chen',巳:'Si',午:'Wu',未:'Wei',申:'Shen',酉:'You',戌:'Xu',亥:'Hai' };
+    let tgRows = "";
+    stems.forEach((s, i) => {
+      const rel = posOf(s);
+      const god = godNames[rel];
+      const cell = `${stemNames[s] || s} ${s} · ${branchNames[branches[i]] || branches[i]}`;
+      tgRows += `<tr><td>${pillarLabels[i]}</td><td>${cell}</td><td>${god}</td></tr>`;
+    });
+    dmEl.innerHTML = `<p><strong>Day Master (日主):</strong> ${dmName} ${dayStem} · ${dmBranchName} — element <strong style="color:${ELEMENT_COLOR[dmEl_]}">${dmEl_}</strong>. Your Day Master is the center of the chart; every other stem is read relative to it.</p>
+      <p style="color:var(--muted); font-size:.85rem; margin-top:.3rem;">Day Master strength: <strong>${dmStrong ? 'Strong 身强' : 'Moderate–Weak 身弱'}</strong> (your ${dmEl_} presence is ${strength}% of the chart). ${dmStrong ? 'You can take on more output/wealth activity.' : 'You benefit from support (Resource/Companion) and pacing.'}</p>`;
+    tgEl.innerHTML = `<p style="margin-top:.6rem;"><strong>Ten Gods (十神)</strong> — each pillar seen from the Day Master:</p>
+      <table class="cmp-table"><thead><tr><th>Pillar</th><th>Day Master</th><th>Ten God</th></tr></thead><tbody>${tgRows}</tbody></table>`;
+
+    // Useful God / Taboo God (用神/忌神): element that balances the Day Master
+    const useful = dmStrong ? weakestEl : strongestEl;
+    const taboo = dmStrong ? strongestEl : weakestEl;
+    yongEl.innerHTML = `<p style="margin-top:.6rem;"><strong>Useful God (用神) & Taboo God (忌神)</strong></p>
+      <p style="font-size:.9rem;">A balanced chart favours the element that supports your Day Master. Here the Useful God is <strong style="color:${ELEMENT_COLOR[useful]}">${useful}</strong> (favour it in timing, environment, and decisions) and the Taboo God is <strong style="color:${ELEMENT_COLOR[taboo]}">${taboo}</strong> (moderate it). This is a simplified reading — a full 用神 analysis also weighs the month branch, 大运 (luck pillars), and 调候 (climate).</p>`;
+  }
+
+  function renderPillars(dateObj, tob, name){
     const card = document.getElementById("pillarCard");
     const grid = document.getElementById("pillarGrid");
     if(!card || !grid) return;
@@ -421,16 +549,16 @@
     const labels = headers[lang] || headers.en;
     const t = (window.mppLang && typeof window.mppLang.t === 'function') ? window.mppLang.t : ((k)=>k);
 
-    const year = new Date(dob).getFullYear();
-    const month = new Date(dob).getMonth()+1;
-    const date = new Date(dob).getDate();
+    const fallbackBase = new Date(dateObj.getTime());
+    const year = fallbackBase.getUTCFullYear();
+    const month = fallbackBase.getUTCMonth()+1;
+    const date = fallbackBase.getUTCDate();
     let hour = 12, minute = 0;
     if(tob){
       const parts = String(tob).split(':');
-      if(parts[0]) hour = parseInt(parts[0],10);
-      if(parts[1]) minute = parseInt(parts[1],10);
+      hour = parseInt(parts[0],10);
+      minute = parseInt(parts[1],10);
     }
-
     const yearStem = getYearStem(year);
     const monthStem = getMonthStem(year, month);
     const dayStem = getDayStem(year, month, date);
@@ -514,11 +642,62 @@
     const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
     return BRANCHES[Math.floor(((h + 1) % 24) / 2)];
   }
+  function animal(y){
     const m=["鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"];
     return m[((y-4)%12+12)%12];
   }
 
-  btn && btn.addEventListener("click", calc);
+  function renderAnnual(birthYear, baseline, strongest, weakest){
+    const card = document.getElementById("annualCard");
+    const cmp = document.getElementById("annualCompare");
+    const areas = document.getElementById("lifeAreas");
+    if(!card || !cmp || !areas) return;
+    const ANALYSIS_YEAR = new Date().getFullYear();
+    const yearStem = getYearStem(ANALYSIS_YEAR);
+    const yearBranch = getYearBranch(ANALYSIS_YEAR);
+    const yearEl = (STEM_ELEMENT[yearStem] || "Earth");
+    const branchEl = (BRANCH_ELEMENT[yearBranch] || "Earth");
+    card.style.display = "";
+    document.getElementById("annualTitle").textContent = `Annual Outlook — ${ANALYSIS_YEAR} vs Baseline`;
+
+    // comparison table: baseline vs analysis-year-influenced element profile
+    let rows = "";
+    ["Wood","Fire","Earth","Metal","Water"].forEach(el => {
+      const base = baseline[el] || 0;
+      let adj = base;
+      if (yearEl === el) adj += 9;
+      if (branchEl === el) adj -= 6;
+      if (adj > 100) adj = 100; if (adj < 0) adj = 0;
+      const delta = adj - base;
+      const cls = delta > 0 ? "delta-up" : (delta < 0 ? "delta-down" : "");
+      const sign = delta > 0 ? "+" : "";
+      rows += `<tr><td>${ELEMENT_ICON[el]} ${el}</td><td>${pct1(base)}%</td><td>${pct1(adj)}%</td><td class="${cls}">${sign}${delta}%</td></tr>`;
+    });
+    cmp.innerHTML = `<p style="color:var(--muted); font-size:.85rem; margin:.2rem 0 0;">${ANALYSIS_YEAR} is a <strong>${yearStem}${yearBranch}</strong> year (${yearEl}${branchEl !== yearEl ? " + " + branchEl : ""}). Below is how the year's element interacts with your baseline 5-element balance.</p>
+      <table class="cmp-table"><thead><tr><th>Element</th><th>Baseline</th><th>${ANALYSIS_YEAR}</th><th>Shift</th></tr></thead><tbody>${rows}</tbody></table>`;
+
+    // life-area readings — one card per element (5 elements → 5 cards)
+    const tag = v => v >= 60 ? "Favorable" : (v >= 45 ? "Workable" : "Watch");
+    const tagColor = v => v >= 60 ? "var(--good)" : (v >= 45 ? "var(--accent)" : "var(--bad)");
+    const AREA = {
+      Wood:  { name: "Health",            icon: "🩺", note: "Wood governs growth, liver, and planning energy. Protect rhythm and recovery; pace new initiatives." },
+      Fire:  { name: "Expression",        icon: "🔥", note: "Fire governs visibility, connection, and heart energy. Good for outreach, warmth, and being seen — watch burnout." },
+      Earth: { name: "Wealth / Stability",icon: "🌏", note: "Earth governs assets, stability, and grounding. Favor structured budgeting and steady terms over speculative moves." },
+      Metal: { name: "Career / Structure",icon: "💼", note: "Metal governs clarity, decisions, and execution. Good for negotiation, reporting, and deliberate launches." },
+      Water: { name: "Wisdom / Learning", icon: "💧", note: "Water governs reflection, strategy, and communication. Good for study, writing, and long-view planning." }
+    };
+    const cards = ["Wood","Fire","Earth","Metal","Water"].map(el => {
+      const score = baseline[el] || 0; // exact %, matches the element grid — no second rounding here
+      return { el, name: AREA[el].name, icon: AREA[el].icon, score, note: AREA[el].note };
+    });
+    areas.innerHTML = "";
+    cards.forEach(c => {
+      const el = document.createElement("div");
+      el.className = "area-card";
+      el.innerHTML = `<h4 style="color:${ELEMENT_COLOR[c.el]};">${ELEMENT_ICON[c.el]} ${c.name}</h4><div class="area-score" style="color:${ELEMENT_COLOR[c.el]};">${pct1(c.score)}<span style="font-size:.9rem; color:var(--muted);">%</span><span class="area-tag" style="color:${tagColor(c.score)};">${tag(c.score)}</span></div><p class="el-foot" style="margin-top:.4rem;">${c.note}</p>`;
+      areas.appendChild(el);
+    });
+  }
   const baziPersist = (key, value) => {
     try { if (value) localStorage.setItem(key, value); else localStorage.removeItem(key); } catch (e) {}
   };
@@ -537,7 +716,7 @@
     el.addEventListener('change', save);
   });
 </script>
-<script src="../chatbot.js"></script>
+<script src="chatbot.js"></script>
 <footer class="footer-bar">
   <div class="footer-inner">
     <div class="social-bar">

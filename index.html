@@ -70,6 +70,8 @@
       <a class="secondary" href="bazi.html">BaZi / 5 Elements profile →</a>
       <a class="secondary" href="flying-stars.html">Flying Stars / 9 Star Ki →</a>
       <a class="secondary" href="horoscope.html">Horoscope · East + West →</a>
+      <a class="secondary" href="love-meter.html">Love Meter · East + West →</a>
+      <a class="secondary" href="ze-ri.html">Date Selection (Ze Ri) →</a>
       <a class="secondary" href="learn.html">Learn — beginner guide →</a>
     </div>
     <div class="row" style="margin-top:.75rem;">
@@ -99,6 +101,7 @@
       <div id="weeklyProfile"></div>
     </div>
     <div id="weeklyHeader" class="weekly-header" style="overflow-x:auto;"></div>
+    <div id="weekGrid" class="timeline"></div>
     <div id="weeklyBreakdowns"></div>
   </section>
   <div class="footer-spacer"></div>
@@ -127,45 +130,8 @@
   </div>
 </footer>
 
+<script src="lunar.js"></script>
 <script src="officer-plan.js"></script>
 <script src="lang.js"></script>
-<script>
-  (function(){
-    const ls = window.localStorage;
-    const keys = {
-      visitorName: 'mpp.name',
-      visitorDob: 'mpp.dob',
-      visitorCountry: 'mpp.country',
-      visitorJob: 'mpp.job',
-      visitorTimezone: 'mpp.tz',
-      weekStart: 'mpp.weekStart',
-      gender: 'mpp.gender',
-      visitorLang: 'mpp.lang',
-      tob: 'mpp.tob'
-    };
-    const ids = Object.keys(keys);
-    function save(id){ const el = document.getElementById(id); if(!el) return; try { if(el.value) ls.setItem(keys[id], el.value); else ls.removeItem(keys[id]); } catch(e){} }
-    function prefill(){
-      ids.forEach(id=>{
-        const el = document.getElementById(id);
-        if(!el) return;
-        const val = ls.getItem(keys[id]);
-        if(val) el.value = val;
-      });
-      if(window.mppLang && typeof window.mppLang.setLang === 'function'){
-        const savedLang = ls.getItem('mpp.lang');
-        if(savedLang==='en'||savedLang==='zh'||savedLang==='both') window.mppLang.setLang(savedLang);
-      }
-    }
-    ['input','change'].forEach(ev=>{
-      ids.forEach(id=>{
-        const el = document.getElementById(id);
-        if(!el) return;
-        el.addEventListener(ev, ()=>save(id));
-      });
-    });
-    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', prefill); else prefill();
-  })();
-</script>
 </body>
 </html>
