@@ -112,6 +112,11 @@
       bazi_guidance: 'Guidance:',
       bazi_how_use_p: 'Think of your strongest element as your natural strength, and your weakest as an area to develop. The suggestions are practical and meant to help you balance decisions in work, family, and personal planning.',
       bazi_enter_birthday: 'Enter your birthday for a personalised nudge.',
+      bazi_born: 'Born',
+      bazi_day_master: 'Day Master',
+      bazi_generate: 'Generate Strategic Profile',
+      bazi_export_pdf: 'Export Strategic Profile (PDF)',
+      bazi_disclaimer: 'Symbolic guidance for reflection, not prediction. Your data stays in this browser.',
       bazi_strongest: 'Strongest',
       bazi_weakest: 'Weakest',
       bazi_tag_strong: 'Strong presence',
@@ -326,6 +331,11 @@
       bazi_guidance: '指引：',
       bazi_how_use_p: '將你最強的元素視为天賦，最弱的視为发展方向。建議務实，幫助你在工作、家庭与个人規划中平衡決策。',
       bazi_enter_birthday: '請輸入生日以獲得个人化提示。',
+      bazi_born: '生于',
+      bazi_day_master: '日主',
+      bazi_generate: '生成战略命盘',
+      bazi_export_pdf: '导出战略命盘（PDF）',
+      bazi_disclaimer: '象徵性指引，供反思而非預測。資料僅留在本機瀏览器。',
       bazi_strongest: '最強',
       bazi_weakest: '最弱',
       bazi_tag_strong: '強勢',
@@ -502,6 +512,7 @@
       try { typeof window.__reapplyPillars === 'function' && window.__reapplyPillars(); } catch (_){}
       try { typeof window.__reapplyZeRi === 'function' && window.__reapplyZeRi(); } catch (_){}
       try { typeof window.__reapplyLoveMeter === 'function' && window.__reapplyLoveMeter(); } catch (_){}
+      try { typeof window.__reapplyBazi === 'function' && window.__reapplyBazi(); } catch (_){}
     });
   }
 

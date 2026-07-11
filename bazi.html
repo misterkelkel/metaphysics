@@ -4,735 +4,203 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="mascot.png">
-  <title>metaphysics.it.com — BaZi 5 Elements</title>
-<meta name="description" content="Simple BaZi-inspired 5 Elements profile from your birthday and birth time. See Wood, Fire, Earth, Metal and Water balance instantly.">
-<link rel="canonical" href="https://metaphysics.it.com/bazi.html">
-<link rel="stylesheet" href="style.css">
-<meta property="og:title" content="metaphysics.it.com — BaZi 5 Elements">
-<meta property="og:description" content="Turn your birthday into a simple 5-element profile: Wood, Fire, Earth, Metal, Water.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://metaphysics.it.com/bazi.html">
-<meta property="og:image" content="https://metaphysics.it.com/mascot.png">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="metaphysics.it.com — BaZi 5 Elements">
-<meta name="twitter:description" content="Turn your birthday into a simple 5-element profile: Wood, Fire, Earth, Metal, Water.">
-<meta name="twitter:image" content="https://metaphysics.it.com/mascot.png">
+  <title>metaphysics.it.com — BaZi Strategic Profile</title>
+  <meta name="description" content="A clean, 1-page BaZi-inspired Strategic Profile: your Day Master, Five-Element resource matrix, and actionable nudges. Private, 100% in your browser.">
+  <link rel="canonical" href="https://metaphysics.it.com/bazi.html">
+  <link rel="stylesheet" href="style.css">
   <style>
+    /* page parity with index/ze-ri (uses style.css variables + header) */
     :root {
-      --bg: #0f0f14;
-      --surface: #181820;
-      --surface-2: #1f1f29;
-      --border: rgba(255,255,255,.08);
-      --text: #f2f2f7;
-      --muted: #aaa7b3;
-      --accent: #ff8a65;
-      --accent-2: #ff6e40;
-      --good: #81c784;
-      --bad: #e57373;
-      --metal: #e0e0e0; --wood: #81c784; --water: #64b5f6; --fire: #ff8a65; --earth: #ffd54f;
-      --chip-bg: rgba(255,255,255,.06);
+      --bg: #0f0f14; --surface: #181820; --surface-2: #1f1f29; --border: rgba(255,255,255,.08);
+      --text: #f2f2f7; --muted: #aaa7b3; --accent: #ff8a65; --accent-2: #ff6e40;
+      --good: #81c784; --bad: #e57373; --chip-bg: rgba(255,255,255,.06);
+      --wood: #81c784; --fire: #ff8a65; --earth: #ffd54f; --metal: #e0e0e0; --water: #64b5f6;
     }
     * { box-sizing: border-box; }
-    html, body { height: 100%; }
+    html, body { min-height: 100%; }
     body {
       margin: 0;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: radial-gradient(1200px 600px at -10% -10%, rgba(255,110,64,.12), transparent), radial-gradient(1000px 500px at 110% 10%, rgba(255,138,101,.1), transparent), var(--bg);
-      color: var(--text);
-      line-height: 1.55;
+      background:
+        radial-gradient(1200px 600px at -10% -10%, rgba(255,110,64,.12), transparent),
+        radial-gradient(1000px 500px at 110% 10%, rgba(255,138,101,.1), transparent),
+        var(--bg);
+      color: var(--text); line-height: 1.55;
     }
-    header { max-width: 1100px; margin: 0 auto; padding: 24px 0 6px; }
-    header h1 {
-      font-family: "Noto Serif SC", "Songti SC", Georgia, "Times New Roman", serif;
-      font-size: 1.75rem;
-      letter-spacing: -0.01em;
-      margin: 0;
-      display: inline-flex;
-      align-items: center;
-      gap: .65rem;
-    }
-    header h1 span { color: var(--accent); }
-    header a.back { color: var(--muted); text-decoration: none; font-size: .9rem; margin-left: .75rem; }
-    .subtitle { color: var(--muted); margin-top: .3rem; font-size: .95rem; }
+    header { max-width: 1100px; margin: 0 auto; padding: 22px 0 6px; }
+    .nav { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: .5rem; }
+    .nav-left { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; min-width: 0; }
+    .nav-right { display: flex; align-items: flex-start; justify-content: flex-end; flex-shrink: 0; }
+    .nav-right select { width: auto; min-width: 110px; }
+    .logo { width: 44px; height: 44px; display: inline-flex; }
+    .brand-img { object-fit: contain; border-radius: 50%; }
+    .brand { color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: .6rem; font-weight: 750; font-size: 1.05rem; }
+    .tag { color: var(--muted); font-size: .88rem; margin-left: .6rem; }
+    .back-link { display: inline-flex; align-items: center; gap: .4rem; padding: .42rem .68rem; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); text-decoration: none; font-size: .85rem; }
     .wrap { width: 100%; max-width: 1100px; margin: 0 auto; padding: 18px 0 110px; }
     @media (min-width: 760px) { .wrap { padding-left: 22px; padding-right: 22px; } }
-    .card {
-      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015));
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 16px;
-      margin-top: 16px;
-      backdrop-filter: blur(8px);
-    }
+
+    .card { background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015)); border: 1px solid var(--border); border-radius: 20px; padding: 16px; margin-top: 16px; backdrop-filter: blur(8px); }
     @media (min-width: 760px) { .card { padding: 18px; } }
-    .card-inner {
-      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015));
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 16px;
-      margin-top: .75rem;
-      backdrop-filter: blur(8px);
-    }
-    @media (min-width: 760px) { .card-inner { padding: 18px; } }
     .row { display: grid; gap: .75rem; grid-template-columns: repeat(2, 1fr); }
     @media (max-width: 760px) { .row { grid-template-columns: 1fr; } }
     label { display: block; font-size: .82rem; color: var(--muted); margin-bottom: .25rem; }
-    input, select {
-      width: 100%;
-      padding: .6rem .8rem;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: var(--surface);
-      color: var(--text);
-      font: inherit;
-      outline: none;
-      transition: border-color .15s ease, box-shadow .15s ease;
-    }
+    input, select { width: 100%; padding: .6rem .8rem; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); font: inherit; outline: none; transition: border-color .15s ease, box-shadow .15s ease; }
     input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(255,110,64,.15); }
-    button {
-      width: 100%;
-      padding: .7rem;
-      border: none;
-      border-radius: 12px;
-      background: linear-gradient(180deg, var(--accent), var(--accent-2));
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform .04s ease, opacity .15s ease;
-    }
+    button { width: 100%; padding: .7rem; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: transform .04s ease, opacity .15s ease; }
+    button.primary { background: linear-gradient(180deg, var(--accent), var(--accent-2)); color: #fff; }
+    button.secondary { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); }
     button:active { transform: translateY(1px); }
-    .bar { display:flex; justify-content:space-between; gap:1rem; align-items:center; flex-wrap: wrap; }
-    @media (max-width: 760px) { .bar { flex-direction: column; align-items: flex-start; } }
-    .pill { display:inline-flex; align-items:center; gap:.35rem; padding: .35rem .7rem; border-radius: 999px; background: var(--chip-bg); border: 1px solid var(--border); font-size: .82rem; color: var(--text); }
-    .bar-meta { color: var(--muted); }
-    .bar-meta strong { color: var(--text); font-weight: 600; }
-    .grid { display:grid; gap: .75rem; }
-    @media (min-width: 760px) { .grid { grid-template-columns: repeat(12, 1fr); } }
-    @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
-    .el-card {
-      border-radius: 16px; padding: 14px; border: 1px solid var(--border); background: rgba(255,255,255,.025);
-    }
-    .el-name { font-size: 1.1rem; font-weight: 700; }
-    .el-cn { font-size: .85rem; color: var(--muted); }
-    .el-bar { height: 8px; border-radius: 999px; background: rgba(255,255,255,.08); margin-top: .5rem; overflow: hidden; }
-    .el-fill { height: 100%; border-radius: 999px; }
-    .el-foot { font-size: .8rem; color: var(--muted); margin-top: .4rem; }
-    .guide-box { border-radius: 16px; padding: 14px; border: 1px solid var(--border); background: rgba(255,255,255,.025); }
-    .guide-box { border-radius: 16px; padding: 14px; border: 1px solid var(--border); background: rgba(255,255,255,.025); }
+    .section-title { font-family: "Noto Serif SC", "Songti SC", Georgia, "Times New Roman", serif; font-size: 1.4rem; margin: 0 0 .3rem; }
+    .intro { color: var(--muted); font-size: .92rem; }
     .intro strong { color: var(--text); }
-    .pillar-card { margin-top: .75rem; }
-    .pillar-head { font-weight: 700; margin-bottom: .5rem; }
-    .pillar-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: .5rem;
+
+    /* ---- report (1-page dashboard) ---- */
+    #baziReport { display: none; }
+    .report-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: .4rem; border-bottom: 1px solid var(--border); padding-bottom: .5rem; margin-bottom: .6rem; }
+    #reportMeta { font-size: .9rem; color: var(--muted); }
+    #reportMeta strong, #reportMeta .name { color: var(--text); font-weight: 700; }
+    .report-grid { display: grid; gap: .75rem; }
+    @media (min-width: 860px) { .report-grid { grid-template-columns: 1fr 1.25fr; } .segC { grid-column: 1 / -1; } }
+    .seg { border: 1px solid var(--border); border-radius: 16px; padding: 14px; background: rgba(255,255,255,.025); }
+    .seg h3 { margin: 0 0 .55rem; font-size: 1.05rem; color: var(--accent); }
+    .dm-badge { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap; }
+    .dm-polarity { font-size: 1.6rem; font-weight: 800; }
+    .dm-el { color: var(--muted); font-size: .95rem; }
+    .signature { margin: .55rem 0; font-size: 1.05rem; line-height: 1.45; font-weight: 600; }
+    .pillars-line { font-size: .82rem; color: var(--muted); }
+
+    .matrix-row { display: grid; grid-template-columns: 92px 1fr 52px 150px; align-items: center; gap: .5rem; margin: .35rem 0; }
+    @media (max-width: 520px) { .matrix-row { grid-template-columns: 78px 1fr 46px; } .matrix-flag { grid-column: 2 / -1; text-align: left; } }
+    .matrix-label { font-weight: 600; }
+    .matrix-track { height: 12px; border-radius: 999px; background: rgba(255,255,255,.08); overflow: hidden; }
+    .matrix-fill { height: 100%; border-radius: 999px; }
+    .matrix-val { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+    .matrix-flag { font-size: .72rem; }
+    .flag-dominant { color: var(--good); font-weight: 700; }
+    .flag-bottleneck { color: var(--bad); font-weight: 700; }
+    .matrix-summary { margin-top: .55rem; font-size: .85rem; color: var(--text); }
+    .nudges { margin: 0; padding-left: 1.1rem; }
+    .nudges li { margin: .4rem 0; line-height: 1.5; }
+    .print-bar { display: flex; gap: .6rem; margin-top: .8rem; }
+    .print-bar button { width: auto; padding: .55rem 1rem; }
+
+    .footer-spacer { height: 90px; }
+    footer.footer-bar, footer { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(20,20,26,.85); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-top: 1px solid var(--border); padding: 14px 18px 16px; text-align: center; z-index: 100; }
+    .footer-inner { display: inline-flex; align-items: center; gap: 1.2rem; }
+    .social-bar { display: inline-flex; align-items: center; justify-content: center; gap: 1.2rem; flex-wrap: wrap; }
+    .social-circle { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--border); color: var(--muted); text-decoration: none; box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 8px 18px rgba(0,0,0,.35); }
+    .social-icon { width: 18px; height: 18px; stroke: currentColor; fill: none; }
+    .social-home .social-icon { color: #ff8a65; }
+    .social-faq .social-icon { color: #9fa8da; }
+    .social-ig .social-icon { color: #ff7eb3; }
+
+    /* ---- print: clean, black-on-white 1-page A4 ---- */
+    @media print {
+      @page { size: A4 portrait; margin: 14mm 14mm; }
+      :root, html, body {
+        background: #fff !important; color: #000 !important;
+        font-family: Georgia, "Times New Roman", serif !important;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
+      header, .nav, .back-link, .nav-right, .footer-bar, footer,
+      .no-print, #inputCard, #baziForm, .print-bar, .footer-spacer { display: none !important; }
+      .wrap { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+      .card { border: none !important; background: #fff !important; box-shadow: none !important; backdrop-filter: none !important; margin: 0 !important; padding: 0 !important; }
+      #baziReport { display: block !important; page-break-inside: avoid; }
+      .seg { border: 1px solid #bbb !important; background: #fff !important; break-inside: avoid; }
+      .seg h3 { color: #000 !important; border-bottom: 1px solid #000; padding-bottom: .25rem; }
+      .report-head { border-bottom: 2px solid #000 !important; }
+      #reportMeta, .pillars-line, .intro { color: #000 !important; }
+      .dm-polarity { color: #000 !important; }
+      .matrix-track { border: 1px solid #999; background: #fff !important; }
+      .matrix-fill { opacity: 1 !important; }
+      .matrix-val, .flag-dominant, .flag-bottleneck { color: #000 !important; }
+      .nudges li { color: #000 !important; }
+      a { color: #000 !important; text-decoration: none; }
     }
-    @media (max-width: 760px) {
-      .pillar-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 440px) {
-      .pillar-grid { grid-template-columns: 1fr; }
-    }
-    .pillar-cell {
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.025);
-      padding: .7rem .6rem;
-      text-align: center;
-      display: grid;
-      gap: .2rem;
-    }
-    .pillar-cell .p-label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
-    .pillar-cell .p-stem { font-weight: 800; font-size: 1.1rem; color: var(--text); }
-    .pillar-cell .p-branch { font-weight: 700; font-size: 1rem; color: var(--accent); }
-    .pillar-cell.unknown .p-stem,
-    .pillar-cell.unknown .p-branch { color: var(--muted); font-weight: 600; }
-    #elementGrid { grid-template-columns: repeat(5, 1fr); }
-    @media (max-width: 760px) { #elementGrid { grid-template-columns: repeat(2, 1fr); } }
-    .area-grid { display:grid; gap:.75rem; grid-template-columns: repeat(5, 1fr); margin-top:.75rem; }
-    @media (max-width: 760px){ .area-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 440px){ .area-grid { grid-template-columns: 1fr; } }
-    .area-card { border-radius:16px; padding:14px; border:1px solid var(--border); background:rgba(255,255,255,.025); }
-    .area-card h4 { margin:.1rem 0 .4rem; font-size:.98rem; }
-    .area-score { font-size:1.6rem; font-weight:800; }
-    .area-tag { font-size:.74rem; padding:.15rem .5rem; border-radius:999px; background:var(--chip-bg); border:1px solid var(--border); margin-left:.4rem; vertical-align:middle; }
-    .cmp-table { width:100%; border-collapse:collapse; margin-top:.5rem; font-size:.85rem; }
-    .cmp-table th, .cmp-table td { padding:.4rem .5rem; text-align:left; border-bottom:1px solid var(--border); }
-    .cmp-table th { color:var(--muted); font-weight:600; }
-    .delta-up { color:var(--good); }
-    .delta-down { color:var(--bad); }
   </style>
 </head>
 <body>
-  <header>
-    <h1>
+
+<header>
+  <nav class="nav">
+    <div class="nav-left">
+      <a href="index.html" class="back-link">← Back</a>
       <a class="brand" href="index.html">
         <img src="mascot.png" alt="mascot" class="logo brand-img">
         <span class="brand">metaphysics<span>.</span>it<span>.com</span>
       </a>
-      <a class="back" href="index.html" data-i18n="bazi_back" data-i18n-html="1">← Back</a>
-    </h1>
-    <p class="subtitle" data-i18n="bazi_title">BaZi · 5 Elements · Simple profile</p>
-  </header>
+      <span class="tag">BaZi · Strategic Profile</span>
+    </div>
+    <div class="nav-right">
+      <select id="visitorLang" aria-label="Language">
+        <option value="en">English</option>
+        <option value="zh">中文</option>
+        <option value="both">中英</option>
+      </select>
+    </div>
+  </nav>
+</header>
 
-  <div class="wrap">
+<div class="wrap">
 
-    <section class="card">
-      <p class="intro" style="margin-top:0;" data-i18n="bazi_learn_title">
-        <strong>How to learn from this page</strong>
-      </p>
-      <details>
-        <summary>What do the five elements mean?</summary>
-        <p>Wood / 木 is growth and planning. Fire / 火 is visibility and connection. Earth / 土 is stability and process. Metal / 金 is clarity and decisions. Water / 水 is reflection and communication.</p>
-      </details>
-      <details>
-        <summary>Is this fate or a habit nudge?</summary>
-        <p>This is a symbolic habit nudge. It helps you notice patterns and choose actions. It does not predict events or guarantee outcomes.</p>
-      </details>
-      <details>
-        <summary>How does BaZi link to the weekly planner?</summary>
-        <p>Your strongest element can suggest a planning style. Metal often suits structured checklists; Wood suits new starts; Water suits conversation-heavy plans. Use the weekly planner to test small timing choices.</p>
-      </details>
-      <details>
-        <summary>What are the Four Pillars?</summary>
-        <p>Year, Month, Day, and Hour each become one pillar. Each pillar has a Heavenly Stem and an Earthly Branch. Together they form eight characters: 八字. They are a symbolic snapshot, not a moral judgement. Day is usually the strongest reference point.</p>
-      </details>
-      <details>
-        <summary>What is the life cycle?</summary>
-        <p>Traditional BaZi often describes growth phases such as 十二长生. The idea is not destiny but rhythm: some stages suit starting, some suit resting, some suit review. In practice, use it as a timing lens, not a prediction.</p>
-      </details>
-      <details>
-        <summary>What should I take note of?</summary>
-        <p>Notice your strongest and weakest elements. Strongest shows your default strength; weakest shows where you may overuse effort. Watch for seasonal shifts, because environment often brings out different behaviour. Use balanced habits instead of relying on one style.</p>
-      </details>
-    </section>
-  </div>
-
-  <section class="card">
-    <p class="intro" style="margin-top:0;" data-i18n="bazi_intro">
-      <strong data-i18n="bazi_intro_1">What this page does:</strong> <span data-i18n="bazi_intro_2" data-i18n-html="1">It turns your birthday and birth time into a simple 5-element profile — <strong>Wood</strong>, <strong>Fire</strong>, <strong>Earth</strong>, <strong>Metal</strong>, and <strong>Water</strong>.</span><br><br>
-      <strong data-i18n="bazi_intro_3">How to read it:</strong> <span data-i18n="bazi_intro_4">The percentages show which element is strongest and which needs more support. Use the guidance as a gentle nudge, not a strict rule.</span>
+  <!-- Input card (hidden on print) -->
+  <section class="card" id="inputCard">
+    <p class="intro" style="margin-top:0;">
+      <strong data-i18n="bazi_intro_1">What this page does:</strong>
+      <span data-i18n="bazi_intro_2" data-i18n-html="1">It turns your birthday and birth time into a simple 5-element Strategic Profile — a clean, private 1-page snapshot.</span>
     </p>
-    <div class="row">
+    <div id="baziForm">
+      <div class="row">
         <div><label for="visitorName" data-i18n="index_name">Name</label><input type="text" id="visitorName" placeholder="Your name" data-i18n-placeholder="index_name_placeholder"></div>
         <div><label for="visitorDob" data-i18n="index_dob">Date of birth</label><input type="date" id="visitorDob"></div>
       </div>
       <div class="row" style="margin-top:.75rem;">
         <div><label for="visitorTob" data-i18n="bazi_tob">Time of birth</label><input type="time" id="visitorTob"></div>
-        <div><label for="gender" data-i18n="index_gender">Gender</label><select id="gender"><option value="" data-i18n="index_gender_select">— select —</option><option value="male" data-i18n="index_male">Male</option><option value="female" data-i18n="index_female">Female</option></select></div>
+        <div><label for="gender" data-i18n="index_gender">Gender</label>
+          <select id="gender"><option value="" data-i18n="index_gender_select">— select —</option><option value="male" data-i18n="index_male">Male</option><option value="female" data-i18n="index_female">Female</option></select>
+        </div>
       </div>
       <div class="row" style="margin-top:.75rem;">
-        <div><label for="visitorCountry" data-i18n="index_country">Country</label><input type="text" id="visitorCountry" placeholder="Country" data-i18n-placeholder="index_country_placeholder"><span id="countryHint" style="font-size:.78rem;color:var(--muted);margin-top:.25rem;display:inline-block;"></span></div>
+        <div><label for="visitorJob" data-i18n="index_job">Job Title</label><input type="text" id="visitorJob" placeholder="e.g. IT Project Manager" data-i18n-placeholder="index_job_placeholder"></div>
+        <div><label for="visitorCountry" data-i18n="index_country">Country</label><input type="text" id="visitorCountry" placeholder="Singapore / 新加坡" data-i18n-placeholder="index_country_placeholder"></div>
+      </div>
+      <div class="row" style="margin-top:.75rem;">
         <div><label for="visitorTimezone" data-i18n="index_timezone">Timezone</label><select id="visitorTimezone"></select></div>
+        <div></div>
       </div>
-      <div class="row" style="margin-top:.75rem;">
-        <div><label for="visitorJob" data-i18n="index_job">Job</label><input type="text" id="visitorJob" placeholder="Job" data-i18n-placeholder="index_job_placeholder"></div>
+      <button id="generateBtn" class="primary" style="margin-top:.6rem;" type="button" data-i18n="bazi_generate">Generate Strategic Profile</button>
+    </div>
+  </section>
+
+  <!-- 1-page report -->
+  <section class="card" id="baziReport" aria-live="polite">
+    <div class="report-head">
+      <div>
+        <h2 class="section-title" style="margin:0;">Strategic Profile · 战略命盘</h2>
+        <div id="reportMeta"></div>
       </div>
-      <button id="calcBtn" class="secondary" style="margin-top:.6rem;" type="button" data-i18n="bazi_calc">Calculate</button>
-    </section>
+    </div>
 
-    <section class="card" id="resultCard" style="display:none;">
-      <div class="bar">
-        <div class="bar-meta" id="profileBar" data-i18n="bazi_profile"><strong>Profile</strong></div>
-        <div class="bar-meta" id="elementBar"></div>
-      </div>
+    <div class="report-grid">
+      <div class="seg" id="segA"></div>
+      <div class="seg" id="segB"></div>
+      <div class="seg" id="segC"></div>
+    </div>
 
-      <div class="card-inner">
-        <div class="grid" id="elementGrid" style="margin-top:.75rem;"></div>
-      </div>
+    <div class="print-bar no-print">
+      <button id="exportPdf" class="secondary" type="button" data-i18n="bazi_export_pdf">Export Strategic Profile (PDF)</button>
+    </div>
+    <p class="intro no-print" style="font-size:.78rem; margin-top:.5rem;">
+      <span data-i18n="bazi_disclaimer">Symbolic guidance for reflection, not prediction. Your data stays in this browser.</span>
+    </p>
+  </section>
 
-      <div class="card-inner pillar-card" id="pillarCard" style="display:none;">
-        <div class="pillar-head" data-i18n="bazi_pillars_title">Four Pillars</div>
-        <div class="pillar-grid" id="pillarGrid"></div>
-      </div>
+</div>
 
-      <div class="card-inner" id="coreCard" style="display:none;">
-        <div class="pillar-head" data-i18n="bazi_core_title">Chart Core</div>
-        <div id="coreDayMaster"></div>
-        <div id="coreTenGods"></div>
-        <div id="coreYong"></div>
-      </div>
+<div class="footer-spacer"></div>
 
-      <div class="card-inner" id="tipsCard" style="display:none;">
-        <p class="intro" style="margin-top:0;" data-i18n="bazi_how_use">
-          <strong>How to use this guidance:</strong> <span data-i18n="bazi_how_use_p" data-i18n-html="1">Think of your strongest element as your natural strength, and your weakest as an area to develop. The suggestions are practical and meant to help you balance decisions in work, family, and personal planning.</span>
-        </p>
-        <p class="intro" id="guidanceText"></p>
-      </div>
-      <div class="card-inner" id="annualCard" style="display:none;">
-        <div class="pillar-head" id="annualTitle">Annual Outlook</div>
-        <div id="annualCompare"></div>
-        <div class="area-grid" id="lifeAreas"></div>
-      </div>
-    </section>
-
-    </section>
-
-  </div>
-
-  <div class="footer-spacer"></div>
-
-<script src="lang.js"></script>
-<script>
-  const defaultTz = "UTC+8";
-  const TZ_OPTIONS = ["UTC+8","UTC-4","UTC-5","UTC+0","UTC+1","UTC+5:30","UTC+7","UTC+9","UTC+10"];
-  function setTimezoneOptions(){
-    const el = document.getElementById("visitorTimezone");
-    if(!el) return;
-    el.innerHTML = "";
-    const chosen = localStorage.getItem("mpp.tz") || defaultTz;
-    TZ_OPTIONS.forEach(v => {
-      const o = document.createElement("option");
-      o.value = v; o.textContent = v;
-      if(v === chosen) o.selected = true;
-      el.appendChild(o);
-    });
-  }
-  setTimezoneOptions();
-  const countryEl = document.getElementById("visitorCountry");
-  const tzEl = document.getElementById("visitorTimezone");
-  const jobEl = document.getElementById("visitorJob");
-  const genderEl = document.getElementById("gender");
-  const nameEl = document.getElementById("visitorName");
-  const dobEl = document.getElementById("visitorDob");
-  const tobEl = document.getElementById("visitorTob");
-  const btn = document.getElementById("calcBtn");
-  const resultCard = document.getElementById("resultCard");
-
-  try {
-    const savedName = localStorage.getItem("mpp.name");
-    const savedDob = localStorage.getItem("mpp.dob");
-    const savedTz = localStorage.getItem("mpp.tz");
-    const savedCountry = localStorage.getItem("mpp.country");
-    const savedJob = localStorage.getItem("mpp.job");
-    const savedGender = localStorage.getItem("mpp.gender");
-    const savedTob = localStorage.getItem("mpp.tob");
-    if (nameEl && savedName) nameEl.value = savedName;
-    if (dobEl && savedDob) dobEl.value = savedDob;
-    if (tzEl && savedTz) tzEl.value = savedTz;
-    if (countryEl && savedCountry) countryEl.value = savedCountry;
-    if (jobEl && savedJob) jobEl.value = savedJob;
-    if (genderEl && savedGender) genderEl.value = savedGender;
-    if (tobEl && savedTob) tobEl.value = savedTob;
-  } catch (e) {}
-
-  function hourLabel(h){
-    if (h >= 23 || h < 1) return "midnight";
-    if (h < 3) return "midnight";
-    if (h < 5) return "dawn";
-    if (h < 9) return "morning";
-    if (h < 12) return "morning";
-    if (h < 14) return "afternoon";
-    if (h < 17) return "afternoon";
-    if (h < 20) return "evening";
-    return "night";
-  }
-
-  function getYearStem(gy){
-    if (typeof Solar !== "undefined" && Solar && typeof Solar.fromYmd === "function") {
-      try {
-        const l = Solar.fromYmd(gy, 1, 1).getLunar();
-        if (l.getYearInGanZhi) return l.getYearInGanZhi().charAt(0);
-      } catch (e) {}
-    }
-    const STEMS = "甲乙丙丁戊己庚辛壬癸";
-    const idx = ((gy - 4) % 60 + 60) % 60;
-    return STEMS[idx % 10];
-  }
-
-  const SEASON_ELEMENT = { 1: 'Wood', 2: 'Wood', 3: 'Wood', 4: 'Fire', 5: 'Fire', 6: 'Fire', 7: 'Fire', 8: 'Earth', 9: 'Earth', 10: 'Metal', 11: 'Metal', 12: 'Water' };
-  const DAY_ELEMENT = { midnight: 'Water', dawn: 'Wood', morning: 'Wood', afternoon: 'Fire', evening: 'Metal', night: 'Water' };
-  const ELEMENT_ICON = { Wood: '🌿', Fire: '🔥', Earth: '🌏', Metal: '⚙️', Water: '💧' };
-  const ELEMENT_COLOR = { Wood: '#81c784', Fire: '#ff8a65', Earth: '#ffd54f', Metal: '#e0e0e0', Water: '#64b5f6' };
-  const ELEMENT_ORDER = ['Wood','Fire','Earth','Metal','Water'];
-  const pct1 = n => (Math.floor(n*10)/10).toFixed(1); // exact %, 1 forced decimal (25 -> "25.0")
-  const STEM_ELEMENT = { 甲:'Wood', 乙:'Wood', 丙:'Fire', 丁:'Fire', 戊:'Earth', 己:'Earth', 庚:'Metal', 辛:'Metal', 壬:'Water', 癸:'Water' };
-  const BRANCH_ELEMENT = { 子:'Water', 丑:'Earth', 寅:'Wood', 卯:'Wood', 辰:'Earth', 巳:'Fire', 午:'Fire', 未:'Earth', 申:'Metal', 酉:'Metal', 戌:'Earth', 亥:'Water' };
-  const ELEMENT_DESC = { Wood: 'Growth & planning', Fire: 'Visibility & connection', Earth: 'Stability & process', Metal: 'Clarity & decisions', Water: 'Reflection & communication' };
-
-  function parseDateTimeInTz(dateStr, timeStr, tz){
-    if(!dateStr) return null;
-    const [y,m,d] = String(dateStr).split('-').map(Number);
-    let hours = 12, minutes = 0;
-    if(timeStr){
-      const parts = String(timeStr).split(':');
-      hours = Number(parts[0]) || 0;
-      minutes = Number(parts[1]) || 0;
-    }
-    let tzOffsetHours = 8;
-    if(tz && String(tz).startsWith('UTC')){
-      const raw = String(tz).replace('UTC','');
-      const sign = raw.startsWith('-') ? -1 : 1;
-      const parts = raw.replace(/^-/, '').split(':');
-      tzOffsetHours = sign * (Number(parts[0]) || 0);
-      if(parts[1]) tzOffsetHours += sign * (Number(parts[1]) / 60);
-    }
-    const dt = new Date(Date.UTC(y, m-1, d, hours, minutes, 0) - tzOffsetHours * 3600000);
-    return {
-      date: dt,
-      year: y,
-      month: m,
-      day: d,
-      hours,
-      minutes,
-      utcYear: dt.getUTCFullYear(),
-      utcMonth: dt.getUTCMonth()+1,
-      utcDate: dt.getUTCDate()
-    };
-  }
-
-  // 真太阳时 (true local solar time) for the Hour Pillar.
-  // Country -> approximate birth longitude; correct civil clock time to solar time.
-  const COUNTRY_LON = { 'singapore':103.8,'malaysia':101.9,'indonesia':106.8,'thailand':100.5,'vietnam':105.8,'philippines':121.0,'china':116.4,'中国':116.4,'hong kong':114.2,'香港':114.2,'taiwan':121.0,'台湾':121.0,'japan':139.7,'日本':139.7,'korea':126.9,'韩国':126.9,'朝鲜':126.9,'india':77.2,'印度':77.2,'uk':-0.1,'britain':-0.1,'英国':-0.1,'australia':149.1,'澳洲':149.1 };
-  function countryLon(c){ if(!c) return null; const k=String(c).trim().toLowerCase(); for(const key in COUNTRY_LON){ if(k.includes(key)) return COUNTRY_LON[key]; } return null; }
-  function equationOfTime(date){ const start=new Date(date.getUTCFullYear(),0,0); const N=Math.floor((date-start)/86400000); const B=(2*Math.PI/365)*(N-81); return 9.87*Math.sin(2*B)-7.53*Math.cos(B)-1.5*Math.sin(B); }
-  let _solarHour = 12; // corrected hour for the Hour Pillar (0-23.99)
-  function applyTrueSolar(dobStr, tobStr, tz, country){
-    const [y,m,d] = String(dobStr).split('-').map(Number);
-    let h=12,min=0; if(tobStr){ const p=String(tobStr).split(':'); h=Number(p[0])||0; min=Number(p[1])||0; }
-    let tzOff=8; if(tz && String(tz).startsWith('UTC')){ const raw=String(tz).replace('UTC',''); const sign=raw.startsWith('-')?-1:1; const parts=raw.replace(/^-/,'').split(':'); tzOff=sign*(Number(parts[0])||0)+(parts[1]?sign*(Number(parts[1])/60):0); }
-    const lon = countryLon(country);
-    const offsetH = (lon!==null ? lon/15 : tzOff) - tzOff + equationOfTime(new Date(Date.UTC(y,m-1,d,h,min)))/60;
-    _solarHour = ((h+offsetH)%24+24)%24;
-  }
-
-  function calc(){
-    const name = nameEl?.value?.trim();
-    const dob = dobEl?.value;
-    const tob = tobEl?.value;
-    const country = countryEl?.value?.trim();
-    const tz = tzEl?.value?.trim() || defaultTz;
-    const job = jobEl?.value?.trim();
-    const gender = genderEl?.value;
-    if (!dob) return alert("Please enter your date of birth.");
-
-    const parsed = parseDateTimeInTz(dob, tob, tz);
-    if(!parsed) return alert("Please enter a valid date of birth.");
-    applyTrueSolar(dob, tob, tz, country);
-    const p = parsed;
-    const y = p.utcYear, m = p.utcMonth, day = p.utcDate;
-    const zodiacAnimal = animal(y);
-    const birthYear = y;
-    // Real 5-element balance from the 4 pillars (8 characters) + hidden stems (藏干).
-    // Month branch (月令) weighted 3x as the seasonal driver; day master judged separately.
-    const ys = getYearStem(y), ms = getMonthStem(y, m), ds = getDayStem(y, m, day), hs = getHourStem(ds, _solarHour);
-    const yb = getYearBranch(y), mb = getMonthBranch(m), db = getDayBranch(y, m, day), hb = getHourBranch(_solarHour);
-    const PILLAR_STEMS = [hs, ds, ms, ys];        // Hour, Day, Month, Year stems
-    const PILLAR_BRANCHES = [hb, db, mb, yb];     // matching branches
-    const BRANCH_HIDDEN = {
-      子:[['Water',1]], 丑:[['Earth',1],['Metal',.5],['Water',.5]], 寅:[['Wood',1],['Fire',.5],['Earth',.5]],
-      卯:[['Wood',1]], 辰:[['Earth',1],['Wood',.5],['Water',.5]], 巳:[['Fire',1],['Earth',.5],['Metal',.5]],
-      午:[['Fire',1],['Earth',.5]], 未:[['Earth',1],['Fire',.5],['Wood',.5]], 申:[['Metal',1],['Water',.5],['Earth',.5]],
-      酉:[['Metal',1]], 戌:[['Earth',1],['Metal',.5],['Fire',.5]], 亥:[['Water',1],['Wood',.5],['Fire',.5]]
-    };
-    const BR_W = [1, 1, 3, 1]; // hour, day, month(月令), year — month branch drives the season
-    const tally = { Wood:0, Fire:0, Earth:0, Metal:0, Water:0 };
-    PILLAR_STEMS.forEach(s => { const e = STEM_ELEMENT[s]; if (e) tally[e] += 1; });
-    PILLAR_BRANCHES.forEach((b, i) => (BRANCH_HIDDEN[b] || [[BRANCH_ELEMENT[b] || 'Earth', 1]]).forEach(([e, w]) => { tally[e] += w * BR_W[i]; }));
-    if (/engineer|developer|programmer|coder/.test((job||'').toLowerCase())) tally.Metal += 0.5;
-    else if (/teacher|lecturer|tutor|edu/.test((job||'').toLowerCase())) tally.Wood += 0.5;
-    else if (/trader|finance|banker|broker/.test((job||'').toLowerCase())) tally.Water += 0.5;
-    else if (/designer|artist|creator/.test((job||'').toLowerCase())) tally.Fire += 0.5;
-    else if (/project manager|pm|manager/.test((job||'').toLowerCase())) tally.Earth += 0.5;
-    const total = Object.values(tally).reduce((a,b)=>a+b,0) || 1;
-    // Exact percentage, NO round-up: truncate to 1 decimal (floor of 10×), e.g. 28.6% shows, never bumped to 29%.
-    const elementCounts = {};
-    ['Wood','Fire','Earth','Metal','Water'].forEach(e => { elementCounts[e] = Math.floor((tally[e]/total)*1000)/10; });
-
-    const strongest = Object.entries(elementCounts).sort((a,b)=>b[1]-a[1])[0];
-    const weakest = Object.entries(elementCounts).sort((a,b)=>a[1]-b[1])[0];
-
-    const profile = [name, country?`· ${country}`:"", gender?`· ${gender}`:"", job?`· ${job}`:"", zodiacAnimal?`· ${zodiacAnimal}`:""].filter(Boolean).join(" ");
-    document.getElementById("profileBar").innerHTML = `<strong data-i18n="bazi_profile">Profile</strong> · ${profile || 'BaZi profile'}`;
-    document.getElementById("elementBar").innerHTML = `<span class="pill">${ELEMENT_ICON[strongest[0]]} <span data-i18n="bazi_strongest">Strongest</span>: ${strongest[0]}</span><span class="pill">${ELEMENT_ICON[weakest[0]]} <span data-i18n="bazi_weakest">Weakest</span>: ${weakest[0]}</span>`;
-
-    const grid = document.getElementById("elementGrid");
-    grid.innerHTML = "";
-    ["Wood","Fire","Earth","Metal","Water"].forEach(el => {
-      const score = elementCounts[el];
-      const card = document.createElement("div");
-      card.className = "el-card";
-      card.innerHTML = `
-        <div class="el-name" style="color:${ELEMENT_COLOR[el]}">${ELEMENT_ICON[el]} ${el}</div>
-        <div class="el-cn">${ELEMENT_DESC[el] || ''}</div>
-        <div class="el-bar"><div class="el-fill" style="width:${score}%; background:${ELEMENT_COLOR[el]}; opacity:.85;"></div></div>
-        <div class="el-foot">${pct1(score)}% · ${tagline(el, score)}</div>`;
-      grid.appendChild(card);
-    });
-
-    renderPillars(parsed.date, tob, name);
-    renderAnnual(birthYear, elementCounts, strongest[0], weakest[0]);
-    renderCore(parsed.date, tob, elementCounts, strongest[0], weakest[0]);
-
-    const tipsCard = document.getElementById("tipsCard");
-    tipsCard.style.display = "";
-    document.getElementById("guidanceText").innerHTML = `<strong data-i18n="bazi_guidance">Guidance:</strong> ${guidance(strongest[0], weakest[0])}`;
-
-    if(resultCard){ resultCard.style.display = ""; }
-  }
-
-  function tagline(el, score){
-    if (score >= 40) return "Strong presence";
-    if (score >= 25) return "Balanced";
-    return "Needs support";
-  }
-  function guidance(strong, weak){
-    if (!strong || !weak) return "Enter your birthday for a personalised nudge.";
-    const map = {
-      "Wood-Fire": "You have growth energy and passion. Good for starting projects, leading, and public work. Watch for burnout from too much speed.",
-      "Wood-Earth": "You have ideas but may overcommit. Finish plans before launching new ones. Build routines and protect rest time.",
-      "Wood-Metal": "Ideas meet discipline. Good for refining systems, audits, and structured planning. Avoid forcing outcomes too early.",
-      "Wood-Water": "Strong planning with good intuition. Good for research, strategy, and learning. Use emotion as fuel, not noise.",
-      "Fire-Earth": "High energy with stability. Turn enthusiasm into long-term systems and teams. Avoid all drive and no integration.",
-      "Fire-Metal": "Vision plus precision. Good for launches, compliance, and tightening workflows. Tone down urgency.",
-      "Fire-Water": "Creativity meets analysis. Good for design, storytelling, and negotiation. Let ideas cool before pushing hard.",
-      "Earth-Metal": "Reliable and detailed. Good for operations, quality, and steady improvement. Avoid micro-optimisation traps.",
-      "Earth-Water": "Stable and thoughtful. Good for planning, risk review, and studying before acting. Watch for analysis paralysis.",
-      "Metal-Water": "Focused and smart. Good for writing, coding, reports, and focused study. Balance isolation with light social input.",
-      "Metal-Wood": "Structure with new growth. Good for planning sprints and process updates. Let plans breathe; avoid rigidity.",
-      "Water-Earth": "Wise but cautious. Good for mentoring, review, and evidence-based decisions. Ground intuition in facts."
-    };
-    const key1 = strong + "-" + weak;
-    const key2 = weak + "-" + strong;
-    return map[key1] || map[key2] || "Balance the extremes of your profile through small, consistent habits.";
-  }
-
-  function renderCore(dateObj, tob, elementCounts, strongestEl, weakestEl){
-    const card = document.getElementById("coreCard");
-    const dmEl = document.getElementById("coreDayMaster");
-    const tgEl = document.getElementById("coreTenGods");
-    const yongEl = document.getElementById("coreYong");
-    if(!card || !dmEl || !tgEl || !yongEl) return;
-    const base = new Date(dateObj.getTime());
-    const year = base.getUTCFullYear();
-    const month = base.getUTCMonth()+1;
-    const date = base.getUTCDate();
-    let hour = 12, minute = 0;
-    if(tob){ const parts = String(tob).split(':'); hour = parseInt(parts[0],10); minute = parseInt(parts[1],10); }
-    const dayStem = getDayStem(year, month, date);
-    const dayBranch = getDayBranch(year, month, date);
-    const dmEl_ = STEM_ELEMENT[dayStem] || "Wood";
-    const dmName = { 甲:'Jia',乙:'Yi',丙:'Bing',丁:'Ding',戊:'Wu',己:'Ji',庚:'Geng',辛:'Xin',壬:'Ren',癸:'Gui' }[dayStem] || dayStem;
-    const dmBranchName = { 子:'Zi',丑:'Chou',寅:'Yin',卯:'Mao',辰:'Chen',巳:'Si',午:'Wu',未:'Wei',申:'Shen',酉:'You',戌:'Xu',亥:'Hai' }[dayBranch] || dayBranch;
-
-    // Day Master strength: share of the chart held by the DM element + half its Resource (generating) element.
-    const genIdx = (ELEMENT_ORDER.indexOf(dmEl_) - 1 + 5) % 5;
-    const resourceEl = ELEMENT_ORDER[genIdx];
-    const dmShare = elementCounts[dmEl_] || 0;
-    const strength = dmShare + 0.5 * (elementCounts[resourceEl] || 0);
-    const dmStrong = dmShare >= 18; // ~1/5 baseline; above that with resource support = strong
-    card.style.display = "";
-
-    // Ten Gods (十神) — each pillar read relative to the Day Master (its own stem + branch)
-    const stems = [ getHourStem(dayStem, _solarHour), dayStem, getMonthStem(year, month), getYearStem(year) ];
-    const branches = [ getHourBranch(_solarHour), dayBranch, getMonthBranch(month), getYearBranch(year) ];
-    const posOf = (stem) => { const e = STEM_ELEMENT[stem] || 'Wood'; return (ELEMENT_ORDER.indexOf(e) - ELEMENT_ORDER.indexOf(dmEl_) + 12) % 6; };
-    const godNames = { 0:'Companion 比劫', 1:'Resource 印', 2:'Output 食伤', 3:'Wealth 财', 4:'Authority 官杀', 5:'Companion 比劫' };
-    const pillarLabels = ['Hour 时','Day 日','Month 月','Year 年'];
-    const stemNames = { 甲:'Jia',乙:'Yi',丙:'Bing',丁:'Ding',戊:'Wu',己:'Ji',庚:'Geng',辛:'Xin',壬:'Ren',癸:'Gui' };
-    const branchNames = { 子:'Zi',丑:'Chou',寅:'Yin',卯:'Mao',辰:'Chen',巳:'Si',午:'Wu',未:'Wei',申:'Shen',酉:'You',戌:'Xu',亥:'Hai' };
-    let tgRows = "";
-    stems.forEach((s, i) => {
-      const rel = posOf(s);
-      const god = godNames[rel];
-      const cell = `${stemNames[s] || s} ${s} · ${branchNames[branches[i]] || branches[i]}`;
-      tgRows += `<tr><td>${pillarLabels[i]}</td><td>${cell}</td><td>${god}</td></tr>`;
-    });
-    dmEl.innerHTML = `<p><strong>Day Master (日主):</strong> ${dmName} ${dayStem} · ${dmBranchName} — element <strong style="color:${ELEMENT_COLOR[dmEl_]}">${dmEl_}</strong>. Your Day Master is the center of the chart; every other stem is read relative to it.</p>
-      <p style="color:var(--muted); font-size:.85rem; margin-top:.3rem;">Day Master strength: <strong>${dmStrong ? 'Strong 身强' : 'Moderate–Weak 身弱'}</strong> (your ${dmEl_} presence is ${strength}% of the chart). ${dmStrong ? 'You can take on more output/wealth activity.' : 'You benefit from support (Resource/Companion) and pacing.'}</p>`;
-    tgEl.innerHTML = `<p style="margin-top:.6rem;"><strong>Ten Gods (十神)</strong> — each pillar seen from the Day Master:</p>
-      <table class="cmp-table"><thead><tr><th>Pillar</th><th>Day Master</th><th>Ten God</th></tr></thead><tbody>${tgRows}</tbody></table>`;
-
-    // Useful God / Taboo God (用神/忌神): element that balances the Day Master
-    const useful = dmStrong ? weakestEl : strongestEl;
-    const taboo = dmStrong ? strongestEl : weakestEl;
-    yongEl.innerHTML = `<p style="margin-top:.6rem;"><strong>Useful God (用神) & Taboo God (忌神)</strong></p>
-      <p style="font-size:.9rem;">A balanced chart favours the element that supports your Day Master. Here the Useful God is <strong style="color:${ELEMENT_COLOR[useful]}">${useful}</strong> (favour it in timing, environment, and decisions) and the Taboo God is <strong style="color:${ELEMENT_COLOR[taboo]}">${taboo}</strong> (moderate it). This is a simplified reading — a full 用神 analysis also weighs the month branch, 大运 (luck pillars), and 调候 (climate).</p>`;
-  }
-
-  function renderPillars(dateObj, tob, name){
-    const card = document.getElementById("pillarCard");
-    const grid = document.getElementById("pillarGrid");
-    if(!card || !grid) return;
-    grid.innerHTML = "";
-    card.style.display = "";
-    const lang = (window.mppLang && typeof window.mppLang.getLang === 'function') ? window.mppLang.getLang() : 'en';
-    const headers = {
-      en: ['Hour Pillar','Day Pillar','Month Pillar','Year Pillar'],
-      zh: ['时柱','日柱','月柱','年柱'],
-      both: ['Hour Pillar / 时柱','Day Pillar / 日柱','Month Pillar / 月柱','Year Pillar / 年柱']
-    };
-    const labels = headers[lang] || headers.en;
-    const t = (window.mppLang && typeof window.mppLang.t === 'function') ? window.mppLang.t : ((k)=>k);
-
-    const fallbackBase = new Date(dateObj.getTime());
-    const year = fallbackBase.getUTCFullYear();
-    const month = fallbackBase.getUTCMonth()+1;
-    const date = fallbackBase.getUTCDate();
-    let hour = 12, minute = 0;
-    if(tob){
-      const parts = String(tob).split(':');
-      hour = parseInt(parts[0],10);
-      minute = parseInt(parts[1],10);
-    }
-    const yearStem = getYearStem(year);
-    const monthStem = getMonthStem(year, month);
-    const dayStem = getDayStem(year, month, date);
-    const hourStem = getHourStem(dayStem, _solarHour);
-
-    const yearBranch = getYearBranch(year);
-    const monthBranch = getMonthBranch(month);
-    const dayBranch = getDayBranch(year, month, date);
-    const hourBranch = getHourBranch(_solarHour);
-
-    const stems = [hourStem, dayStem, monthStem, yearStem];
-    const branches = [hourBranch, dayBranch, monthBranch, yearBranch];
-
-    const stemNames = { 甲:'Jia',乙:'Yi',丙:'Bing',丁:'Ding',戊:'Wu',己:'Ji',庚:'Geng',辛:'Xin',壬:'Ren',癸:'Gui' };
-    const branchNames = { 子:'Zi',丑:'Chou',寅:'Yin',卯:'Mao',辰:'Chen',巳:'Si',午:'Wu',未:'Wei',申:'Shen',酉:'You',戌:'Xu',亥:'Hai' };
-    const branchNamesZh = { 子:'子',丑:'丑',寅:'寅',卯:'卯',辰:'辰',巳:'巳',午:'午',未:'未',申:'申',酉:'酉',戌:'戌',亥:'亥' };
-
-    const hasTob = !!tob;
-    labels.forEach((label, i) => {
-      const cell = document.createElement('div');
-      cell.className = 'pillar-cell' + (i===0 && !hasTob ? ' unknown' : '');
-      const stem = stems[i];
-      const branch = branches[i];
-      const stemText = stem ? (stemNames[stem] || stem) + ' · ' + stem : 'Unknown / 未知';
-      const branchText = branch ? (branchNames[branch] || branch) + ' · ' + (branchNamesZh[branch] || branch) : '';
-      if(i===0 && !hasTob){
-        cell.innerHTML = `<div class="p-label">${label}</div><div class="p-stem">Unknown / 未知</div><div class="p-branch"></div>`;
-      } else {
-        cell.innerHTML = `<div class="p-label">${label}</div><div class="p-stem">${stemText}</div><div class="p-branch">${branchText}</div>`;
-      }
-      grid.appendChild(cell);
-    });
-  }
-
-  function getYearStem(gy){
-    const STEMS = "甲乙丙丁戊己庚辛壬癸";
-    const idx = ((gy - 4) % 60 + 60) % 60;
-    return STEMS[idx % 10];
-  }
-  function getMonthStem(gy, m){
-    const STEMS = "甲乙丙丁戊己庚辛壬癸";
-    const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
-    const yearStemIdx = STEMS.indexOf(getYearStem(gy));
-    const monthBranchIdx = (m % 12);
-    const idx = (yearStemIdx * 12 + monthBranchIdx) % 60;
-    return STEMS[idx % 10];
-  }
-  function getDayStem(gy, m, d){
-    const base = new Date(1900, 0, 1);
-    const target = new Date(gy, m-1, d);
-    const diff = Math.floor((target - base) / 86400000);
-    const STEMS = "甲乙丙丁戊己庚辛壬癸";
-    const idx = ((diff + 9) % 60 + 60) % 60;
-    return STEMS[idx % 10];
-  }
-  function getHourStem(dayStem, h){
-    const STEMS = "甲乙丙丁戊己庚辛壬癸";
-    const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
-    const dayStemIdx = STEMS.indexOf(dayStem);
-    const hourBranchIdx = Math.floor(((h + 1) % 24) / 2);
-    const idx = (dayStemIdx * 12 + hourBranchIdx) % 60;
-    return STEMS[idx % 10];
-  }
-  function getYearBranch(gy){
-    const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
-    return BRANCHES[((gy - 4) % 12 + 12) % 12];
-  }
-  function getMonthBranch(m){
-    const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
-    return BRANCHES[(m % 12)];
-  }
-  function getDayBranch(gy, m, d){
-    const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
-    const base = new Date(1900, 0, 1);
-    const target = new Date(gy, m-1, d);
-    const diff = Math.floor((target - base) / 86400000);
-    const idx = ((diff + 11) % 60 + 60) % 60;
-    return BRANCHES[idx % 12];
-  }
-  function getHourBranch(h){
-    const BRANCHES = "子丑寅卯辰巳午未申酉戌亥";
-    return BRANCHES[Math.floor(((h + 1) % 24) / 2)];
-  }
-  function animal(y){
-    const m=["鼠","牛","虎","兔","龙","蛇","马","羊","猴","鸡","狗","猪"];
-    return m[((y-4)%12+12)%12];
-  }
-
-  function renderAnnual(birthYear, baseline, strongest, weakest){
-    const card = document.getElementById("annualCard");
-    const cmp = document.getElementById("annualCompare");
-    const areas = document.getElementById("lifeAreas");
-    if(!card || !cmp || !areas) return;
-    const ANALYSIS_YEAR = new Date().getFullYear();
-    const yearStem = getYearStem(ANALYSIS_YEAR);
-    const yearBranch = getYearBranch(ANALYSIS_YEAR);
-    const yearEl = (STEM_ELEMENT[yearStem] || "Earth");
-    const branchEl = (BRANCH_ELEMENT[yearBranch] || "Earth");
-    card.style.display = "";
-    document.getElementById("annualTitle").textContent = `Annual Outlook — ${ANALYSIS_YEAR} vs Baseline`;
-
-    // comparison table: baseline vs analysis-year-influenced element profile
-    let rows = "";
-    ["Wood","Fire","Earth","Metal","Water"].forEach(el => {
-      const base = baseline[el] || 0;
-      let adj = base;
-      if (yearEl === el) adj += 9;
-      if (branchEl === el) adj -= 6;
-      if (adj > 100) adj = 100; if (adj < 0) adj = 0;
-      const delta = adj - base;
-      const cls = delta > 0 ? "delta-up" : (delta < 0 ? "delta-down" : "");
-      const sign = delta > 0 ? "+" : "";
-      rows += `<tr><td>${ELEMENT_ICON[el]} ${el}</td><td>${pct1(base)}%</td><td>${pct1(adj)}%</td><td class="${cls}">${sign}${delta}%</td></tr>`;
-    });
-    cmp.innerHTML = `<p style="color:var(--muted); font-size:.85rem; margin:.2rem 0 0;">${ANALYSIS_YEAR} is a <strong>${yearStem}${yearBranch}</strong> year (${yearEl}${branchEl !== yearEl ? " + " + branchEl : ""}). Below is how the year's element interacts with your baseline 5-element balance.</p>
-      <table class="cmp-table"><thead><tr><th>Element</th><th>Baseline</th><th>${ANALYSIS_YEAR}</th><th>Shift</th></tr></thead><tbody>${rows}</tbody></table>`;
-
-    // life-area readings — one card per element (5 elements → 5 cards)
-    const tag = v => v >= 60 ? "Favorable" : (v >= 45 ? "Workable" : "Watch");
-    const tagColor = v => v >= 60 ? "var(--good)" : (v >= 45 ? "var(--accent)" : "var(--bad)");
-    const AREA = {
-      Wood:  { name: "Health",            icon: "🩺", note: "Wood governs growth, liver, and planning energy. Protect rhythm and recovery; pace new initiatives." },
-      Fire:  { name: "Expression",        icon: "🔥", note: "Fire governs visibility, connection, and heart energy. Good for outreach, warmth, and being seen — watch burnout." },
-      Earth: { name: "Wealth / Stability",icon: "🌏", note: "Earth governs assets, stability, and grounding. Favor structured budgeting and steady terms over speculative moves." },
-      Metal: { name: "Career / Structure",icon: "💼", note: "Metal governs clarity, decisions, and execution. Good for negotiation, reporting, and deliberate launches." },
-      Water: { name: "Wisdom / Learning", icon: "💧", note: "Water governs reflection, strategy, and communication. Good for study, writing, and long-view planning." }
-    };
-    const cards = ["Wood","Fire","Earth","Metal","Water"].map(el => {
-      const score = baseline[el] || 0; // exact %, matches the element grid — no second rounding here
-      return { el, name: AREA[el].name, icon: AREA[el].icon, score, note: AREA[el].note };
-    });
-    areas.innerHTML = "";
-    cards.forEach(c => {
-      const el = document.createElement("div");
-      el.className = "area-card";
-      el.innerHTML = `<h4 style="color:${ELEMENT_COLOR[c.el]};">${ELEMENT_ICON[c.el]} ${c.name}</h4><div class="area-score" style="color:${ELEMENT_COLOR[c.el]};">${pct1(c.score)}<span style="font-size:.9rem; color:var(--muted);">%</span><span class="area-tag" style="color:${tagColor(c.score)};">${tag(c.score)}</span></div><p class="el-foot" style="margin-top:.4rem;">${c.note}</p>`;
-      areas.appendChild(el);
-    });
-  }
-  const baziPersist = (key, value) => {
-    try { if (value) localStorage.setItem(key, value); else localStorage.removeItem(key); } catch (e) {}
-  };
-  [nameEl, dobEl, tobEl, countryEl, tzEl, jobEl, genderEl].forEach(el => {
-    if (!el) return;
-    const save = () => {
-      if (el.id === 'visitorDob') return baziPersist('mpp.dob', el.value);
-      if (el.id === 'visitorTimezone') return baziPersist('mpp.tz', el.value);
-      if (el.id === 'visitorName') return baziPersist('mpp.name', el.value);
-      if (el.id === 'visitorCountry') return baziPersist('mpp.country', el.value);
-      if (el.id === 'visitorJob') return baziPersist('mpp.job', el.value);
-      if (el.id === 'gender') return baziPersist('mpp.gender', el.value);
-      if (el.id === 'visitorTob') return baziPersist('mpp.tob', el.value);
-    };
-    el.addEventListener('input', save);
-    el.addEventListener('change', save);
-  });
-</script>
-<script src="chatbot.js"></script>
 <footer class="footer-bar">
   <div class="footer-inner">
     <div class="social-bar">
@@ -754,5 +222,8 @@
     </div>
   </div>
 </footer>
+
+<script src="lang.js"></script>
+<script src="bazi-profile.js"></script>
 </body>
 </html>
